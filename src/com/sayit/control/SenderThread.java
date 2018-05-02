@@ -1,4 +1,4 @@
-package com.sayit.data;
+package com.sayit.control;
 
 public class SenderThread {
 }
