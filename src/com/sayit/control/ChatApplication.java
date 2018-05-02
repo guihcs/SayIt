@@ -15,6 +15,8 @@ import java.util.List;
 
 public class ChatApplication extends Application implements Presentable {
 
+    private volatile static ChatApplication instance;
+
     private Stage primaryStage;
     private Contact currentContact;
     private ContactDao contactDao;
@@ -23,14 +25,22 @@ public class ChatApplication extends Application implements Presentable {
     private ContactAddScene contactAddScene;
     private ProfileEditScene profileEditScene;
 
-    public ChatApplication(Requestable requestable, ContactDao contactDao) {
-        this.requestCallback = requestable;
-        this.contactDao = contactDao;
+    private ChatApplication() {
+        ChatApplication.instance = this;
+    }
+
+    public synchronized static ChatApplication launchApplication(String[] args, Requestable requestable, ContactDao contactDao) {
+        if(ChatApplication.instance == null) {
+
+            new Thread(() -> Application.launch(ChatApplication.class, args));
+            while (ChatApplication.instance == null) Thread.onSpinWait();
+        }
+        return ChatApplication.instance;
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
-
+    public void start(Stage primaryStage) {
+        primaryStage.show();
     }
 
     public void addMessage(int id, byte[] content, MessageType messageType) {

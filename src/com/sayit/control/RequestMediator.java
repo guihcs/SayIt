@@ -20,7 +20,6 @@ public class RequestMediator implements Requestable {
     private ReceiverRunnable receiverRunnable;
 
     public static void main(String[] args) {
-
     }
 
     public void sendProtocol(MessageProtocol messageProtocol) {
