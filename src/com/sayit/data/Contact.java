@@ -2,22 +2,20 @@ package com.sayit.data;
 
 import javafx.scene.image.Image;
 
-import java.net.InetAddress;
-import java.nio.file.Path;
-
 public class Contact {
 
     private int id;
     private String name;
     private Image photo;
-    private Path path;
-    private InetAddress ipAddress;
+    private String path;
+    private String ipAddress;
 
-    public Contact(String name, Image photo, Path path, InetAddress ipAddress) {
+    public Contact(String name, Image photo, String path, String ipAddress) {
         this.name = name;
         this.photo = photo;
         this.path = path;
         this.ipAddress = ipAddress;
+        //TODO Djan idConstructor
     }
 
     public int getId() {
@@ -32,16 +30,22 @@ public class Contact {
         return photo;
     }
 
-    public Path getPath() {
+    public String getPath() {
         return path;
     }
 
-    public InetAddress getIpAddress() {
+    public String getIpAddress() {
         return ipAddress;
     }
 
+    /**
+     * Retorna a representação string desse contato. Formatada para armazenamento.
+     *
+     * @return
+     */
     @Override
     public String toString() {
+        //TODO Djan toString
         return "Contact{}";
     }
 }

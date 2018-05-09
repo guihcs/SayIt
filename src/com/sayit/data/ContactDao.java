@@ -1,13 +1,20 @@
 package com.sayit.data;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ContactDao {
 
     private Contact userProfile;
     private List<Contact> contactList;
-    private HashMap<Integer, List<Message>> messageMap;
+    private Map<Integer, List<Message>> messageMap;
+
+    public ContactDao() {
+        contactList = new ArrayList<>();
+        messageMap = new HashMap<>();
+    }
 
     public void addContact(Contact contact) {
 
@@ -28,15 +35,15 @@ public class ContactDao {
 
     }
 
-    public String getSaveMessagesData(int id) {
+    public List<String> getMessagesData(int id) {
         return null;
     }
 
-    public String getSaveContactsData() {
+    public List<String> getContactsData() {
         return null;
     }
 
-    public String getSaveHistoryData() {
+    public List<String> getHistoryData() {
         return null;
     }
 }
