@@ -1,5 +1,7 @@
 package com.sayit.data;
 
+import javafx.scene.image.Image;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,7 +11,7 @@ public class ContactDao {
 
     private Contact userProfile;
     private List<Contact> contactList;
-    private Map<Integer, List<Message>> messageMap;
+    private Map<Integer, MessageHistory> messageMap;
 
     public ContactDao() {
         contactList = new ArrayList<>();
@@ -35,6 +37,10 @@ public class ContactDao {
 
     }
 
+    public void editProfile(String name, Image image) {
+
+    }
+
     public List<String> getMessagesData(int id) {
         return null;
     }
@@ -45,5 +51,13 @@ public class ContactDao {
 
     public List<String> getHistoryData() {
         return null;
+    }
+
+    public void loadContactList() {
+
+    }
+
+    public void loadHistoryList() {
+
     }
 }

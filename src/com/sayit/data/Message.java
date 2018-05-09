@@ -1,10 +1,13 @@
 package com.sayit.data;
 
+import java.util.Date;
+
 public class Message {
 
     private Contact receiverProfile;
     private boolean sendByMe;
     private byte[] content;
+    private Date messageDate;
     private MessageType type;
 
     public Message(Contact receiverProfile, boolean sendByMe, byte[] content, MessageType type) {
