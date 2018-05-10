@@ -2,11 +2,11 @@ package com.sayit.control;
 
 import com.sayit.data.MessageType;
 
-import java.net.InetAddress;
-
 public interface Requestable {
 
-    void sendMessage(InetAddress address, byte[] content, MessageType messageType);
+    void sendMessage(String address, byte[] content, MessageType messageType);
+
+    void sendMessage(String address, String message);
 
     void requestContact(String name);
 
