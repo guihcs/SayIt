@@ -14,9 +14,15 @@ public class MessageHistory {
         this.contact = contact;
     }
 
+    /**
+     * Adiciona uma mensagem à lista de mensagens.
+     *
+     * @param message
+     */
     public void addMessage(Message message) {
-
+        //TODO Djan addMessage
     }
+
 
     public Contact getContact() {
         return contact;

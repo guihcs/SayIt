@@ -49,6 +49,11 @@ public class Message {
         this.type = type;
     }
 
+    /**
+     * Retorna uma representação String do objeto.
+     *
+     * @return
+     */
     @Override
     public String toString() {
         return "Message{}";
