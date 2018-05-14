@@ -50,6 +50,8 @@ public class NetworkAdapter {
 
     /**
      * Busca o próximo transmissor na lista e o define como trasmissor atual.
+     * A função só retorna verdadeiro caso o transmissor esteja online e possua mensagens
+     * na stream.
      * Caso o transmissor esteja desconectado, fecha a conexão e retorna
      * false.
      * @return true se a conexão está ativa ou
