@@ -95,6 +95,27 @@ public class ChatApplication extends Application implements Presentable {
     }
 
     /**
+     * Retorna verdadeiro se estiver requisitando contatos.
+     *
+     * @return
+     */
+    public boolean isWaitingForContact() {
+        //TODO Guilherme isWaitingForContact
+        return false;
+    }
+
+    /**
+     * Adiciona uma requisição de contato para a lista.
+     *
+     * @param name
+     * @param image
+     */
+    public void addContactRequest(String name, byte[] image) {
+        //TODO Guilherme addContactRequest
+    }
+
+
+    /**
      * Retorna um contato específico.
      *
      * @param id identificador do contato.
