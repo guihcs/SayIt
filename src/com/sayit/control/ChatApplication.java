@@ -59,6 +59,7 @@ public class ChatApplication extends Application implements Presentable {
      * @param message a mensagem a ser adicionada
      */
     public void addMessage(int id, String message) {
+        //aposcnapoisncaoisnco
         //TODO Guilherme addMessage text
     }
 
