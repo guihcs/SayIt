@@ -1,7 +1,6 @@
 package com.sayit.network;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.*;
 import java.net.Socket;
 
 public class Connection {
@@ -17,7 +16,17 @@ public class Connection {
      * @param socket socket da conexão.
      */
     public Connection(Socket socket) {
+
         this.socket = socket;
+        
+        try {
+
+            dataInputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
+            dataOutputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -29,6 +38,14 @@ public class Connection {
     public Connection(Socket socket, ConnectionStatus status) {
         this.socket = socket;
         connectionStatus = status;
+        try {
+
+            dataInputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
+            dataOutputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -61,7 +78,13 @@ public class Connection {
      *
      */
     public boolean isOnline() {
+
         //TODO Iarly isOnline
+        if(socket.isConnected()) {
+            connectionStatus = ConnectionStatus.ACTIVE;
+            return true;
+        }
+        connectionStatus = ConnectionStatus.CLOSED;
         return false;
     }
 
@@ -69,6 +92,12 @@ public class Connection {
      * Fecha esta conexão.
      */
     public void closeConnection() {
+        try {
+            socket.close();
+            connectionStatus = ConnectionStatus.CLOSED;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         //TODO Iarly closeConnection
     }
 

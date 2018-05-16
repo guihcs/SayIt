@@ -34,7 +34,9 @@ public class NetworkAdapter {
      * @param address Objeto para conversão.
      * @return Representação string do objeto.
      */
+
     public static String getStringAddress(InetAddress address) {
+        
         //TODO Iarly getStringAddress
         return null;
     }
