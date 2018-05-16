@@ -21,8 +21,8 @@ public class Connection {
 
         try {
 
-            dataInputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
             dataOutputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+            dataInputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -36,12 +36,14 @@ public class Connection {
      * @param status
      */
     public Connection(Socket socket, ConnectionStatus status) {
+
         this.socket = socket;
         connectionStatus = status;
+
         try {
 
-            dataInputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
             dataOutputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+            dataInputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -83,7 +85,6 @@ public class Connection {
             connectionStatus = ConnectionStatus.ACTIVE;
             return true;
         }
-        connectionStatus = ConnectionStatus.CLOSED;
         return false;
     }
 
@@ -94,10 +95,13 @@ public class Connection {
         try {
             socket.close();
             connectionStatus = ConnectionStatus.CLOSED;
+
+            dataOutputStream.close();
+            dataInputStream.close();
+
         } catch (IOException e) {
             e.printStackTrace();
         }
-       
     }
 
 
