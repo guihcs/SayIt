@@ -18,7 +18,7 @@ public class Connection {
     public Connection(Socket socket) {
 
         this.socket = socket;
-        
+
         try {
 
             dataInputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
@@ -79,7 +79,6 @@ public class Connection {
      */
     public boolean isOnline() {
 
-        //TODO Iarly isOnline
         if(socket.isConnected()) {
             connectionStatus = ConnectionStatus.ACTIVE;
             return true;
@@ -98,7 +97,7 @@ public class Connection {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //TODO Iarly closeConnection
+       
     }
 
 
