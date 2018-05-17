@@ -1,9 +1,9 @@
 package com.sayit.control;
 
 import com.sayit.data.*;
-import com.sayit.ui.ChatHomeScene;
-import com.sayit.ui.ContactAddScene;
-import com.sayit.ui.ProfileEditScene;
+import com.sayit.ui.frame.ChatHomeScene;
+import com.sayit.ui.frame.ContactAddScene;
+import com.sayit.ui.frame.ProfileEditScene;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -59,7 +59,6 @@ public class ChatApplication extends Application implements Presentable {
      * @param message a mensagem a ser adicionada
      */
     public void addMessage(int id, String message) {
-        //aposcnapoisncaoisnco
         //TODO Guilherme addMessage text
     }
 
@@ -72,6 +71,7 @@ public class ChatApplication extends Application implements Presentable {
      */
     public void addMessage(int id, byte[] content, MessageType messageType) {
         //TODO Guilherme addMessage bytes
+        
     }
 
     /**
