@@ -31,6 +31,7 @@ public class RequestMediator implements Requestable {
 
     /**
      * Envia um protocolo de mensagem.
+     *
      * @param messageProtocol protocolo da mensagem.
      */
     public void sendProtocol(MessageProtocol messageProtocol) {
@@ -39,6 +40,7 @@ public class RequestMediator implements Requestable {
 
     /**
      * Returna se a aplicação está rodando.
+     *
      * @return
      */
     public boolean isRunning() {
@@ -54,8 +56,9 @@ public class RequestMediator implements Requestable {
 
     /**
      * Envia uma mensagem para o receptor atual.
-     * @param address endereço do receptor.
-     * @param content conteudo da mensagem.
+     *
+     * @param address     endereço do receptor.
+     * @param content     conteudo da mensagem.
      * @param messageType tipo da mensagem.
      */
     @Override
@@ -76,6 +79,7 @@ public class RequestMediator implements Requestable {
 
     /**
      * Envia uma requisição de contato a todos os usuários.
+     *
      * @param name nome a ser buscado.
      */
     @Override
@@ -85,6 +89,7 @@ public class RequestMediator implements Requestable {
 
     /**
      * Carrega a lista de mensagens do contato específico.
+     *
      * @param id identificador do usuário.
      */
     @Override
@@ -115,6 +120,7 @@ public class RequestMediator implements Requestable {
 
     /**
      * Carrega o perfil do usuário a partir da memória.
+     *
      * @return
      */
     private String loadProfile() {
@@ -123,6 +129,7 @@ public class RequestMediator implements Requestable {
 
     /**
      * Carrega a lista de contatos do contato específico.
+     *
      * @param id
      * @return
      */
@@ -150,8 +157,6 @@ public class RequestMediator implements Requestable {
     private void startServerThread() {
         //TODO Segundo startServerThread
     }
-
-
 
 
 }

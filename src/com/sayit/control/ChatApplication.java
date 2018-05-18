@@ -1,9 +1,9 @@
 package com.sayit.control;
 
 import com.sayit.data.*;
-import com.sayit.ui.frame.ChatHomeController;
-import com.sayit.ui.frame.ContactAddController;
-import com.sayit.ui.frame.ProfileEditController;
+import com.sayit.ui.control.frame.ChatHomeController;
+import com.sayit.ui.control.frame.ContactAddController;
+import com.sayit.ui.control.frame.ProfileEditController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -14,6 +14,15 @@ import java.io.IOException;
 import java.util.List;
 
 public class ChatApplication extends Application implements Presentable {
+
+    public static final String HOME_LAYOUT = "../resources/layout/window/layout_chat_home.fxml";
+    public static final String START_LAYOUT = "../resources/layout/window/layout_start.fxml";
+    public static final String START_FRAME = "../resources/layout/window/layout_frame_start.fxml";
+    public static final String FIND_CONTACT_LAYOUT = "../resources/layout/window/layout_find_contact.fxml";
+    public static final String EDIT_PROFILE_LAYOUT = "../resources/layout/window/layout_edit_profile.fxml";
+    public static final String CONTACT_VIEW = "/com/sayit/resources/layout/view/view_contact_cell.fxml";
+    public static final String MESSAGE_VIEW = "/com/sayit/resources/layout/view/view_message_cell.fxml";
+
 
     private volatile static ChatApplication instance;
 
@@ -55,7 +64,10 @@ public class ChatApplication extends Application implements Presentable {
     public void start(Stage primaryStage) {
         //TODO Guilherme start
         try {
-            Parent parent = FXMLLoader.load(getClass().getResource("../resources/layout/window/layout_chat_home.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(HOME_LAYOUT));
+            Parent parent = loader.load();
+            chatHome = loader.getController();
+            chatHome.setPresentable(this);
             primaryStage.setScene(new Scene(parent));
         } catch (IOException e) {
             e.printStackTrace();

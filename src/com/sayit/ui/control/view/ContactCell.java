@@ -1,14 +1,15 @@
-package com.sayit.ui.view;
+package com.sayit.ui.control.view;
 
+import com.sayit.control.ChatApplication;
+import com.sayit.data.Contact;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.ListCell;
 
 import java.io.IOException;
 
-public class ContactCell extends ListCell<String> {
+public class ContactCell extends ListCell<Contact> {
 
-    public static final String VIEW_LAYOUT_LOCATION = "/com/sayit/resources/layout/view/view_contact_cell.fxml";
 
     private Parent root;
     private ContactViewController contactController;
@@ -16,7 +17,7 @@ public class ContactCell extends ListCell<String> {
 
     public ContactCell() {
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(VIEW_LAYOUT_LOCATION));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(ChatApplication.CONTACT_VIEW));
 
         try {
             root = fxmlLoader.load();
@@ -28,7 +29,7 @@ public class ContactCell extends ListCell<String> {
 
 
     @Override
-    protected void updateItem(String item, boolean empty) {
+    protected void updateItem(Contact item, boolean empty) {
         super.updateItem(item, empty);
         if(!empty) setGraphic(root);
     }

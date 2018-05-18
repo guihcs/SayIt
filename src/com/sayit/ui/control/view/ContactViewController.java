@@ -1,4 +1,4 @@
-package com.sayit.ui.view;
+package com.sayit.ui.control.view;
 
 public class ContactViewController {
 }

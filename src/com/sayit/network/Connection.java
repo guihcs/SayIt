@@ -33,6 +33,7 @@ public class Connection {
 
     /**
      * Retorna a stream de entrada desta conexão.
+     *
      * @return
      */
     public DataInputStream getDataInputStream() {
@@ -41,6 +42,7 @@ public class Connection {
 
     /**
      * Retorna a stream de saída dessa conexão.
+     *
      * @return
      */
     public DataOutputStream getDataOutputStream() {
@@ -49,6 +51,7 @@ public class Connection {
 
     /**
      * Retorna o estado da conexão.
+     *
      * @return
      */
     public ConnectionStatus getConnectionStatus() {
@@ -57,8 +60,8 @@ public class Connection {
 
     /**
      * Retorna a atividade da conexão.
-     * @return true caso a conexão esteja ativa. false caso esteja inativa.
      *
+     * @return true caso a conexão esteja ativa. false caso esteja inativa.
      */
     public boolean isOnline() {
         //TODO Iarly isOnline

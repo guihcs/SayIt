@@ -1,5 +1,7 @@
-package com.sayit.ui.view;
+package com.sayit.ui.control.view;
 
+import com.sayit.control.ChatApplication;
+import com.sayit.data.Message;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.ListCell;
@@ -7,9 +9,7 @@ import javafx.scene.layout.BorderPane;
 
 import java.io.IOException;
 
-public class MessageCell extends ListCell<String> {
-
-    public static final String VIEW_LAYOUT_LOCATION = "/com/sayit/resources/layout/view/view_message_cell.fxml";
+public class MessageCell extends ListCell<Message> {
 
     private BorderPane container;
     private Parent rootNode;
@@ -18,7 +18,7 @@ public class MessageCell extends ListCell<String> {
 
     public MessageCell() {
         container = new BorderPane();
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(VIEW_LAYOUT_LOCATION));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(ChatApplication.MESSAGE_VIEW));
 
         try {
             rootNode = fxmlLoader.load();
@@ -32,12 +32,8 @@ public class MessageCell extends ListCell<String> {
 
 
     @Override
-    protected void updateItem(String item, boolean empty) {
+    protected void updateItem(Message item, boolean empty) {
         super.updateItem(item, empty);
         if(empty) setGraphic(null);
-        else {
-            messageController.setMain(item);
-            setGraphic(container);
-        }
     }
 }

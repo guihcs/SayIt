@@ -1,4 +1,4 @@
-package com.sayit.ui.frame;
+package com.sayit.ui.control.frame;
 
 public class ContactAddController {
 }

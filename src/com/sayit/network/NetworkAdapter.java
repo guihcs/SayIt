@@ -54,9 +54,9 @@ public class NetworkAdapter {
      * na stream.
      * Caso o transmissor esteja desconectado, fecha a conexão e retorna
      * false.
+     *
      * @return true se a conexão está ativa ou
      * false se a conexão está inativa ou offline.
-     *
      */
     public boolean nextTransmitter() {
         //TODO Iarly nextTransmitter
@@ -65,6 +65,7 @@ public class NetworkAdapter {
 
     /**
      * Envia o texto para todos no grupo de multicasting.
+     *
      * @param text Nome a ser buscado na rede.
      */
     public void multicastString(String text) {
@@ -73,6 +74,7 @@ public class NetworkAdapter {
 
     /**
      * Recebe uma string do grupo multicast.
+     *
      * @return string do grupo multicast. null caso nenhuma.
      */
     public String receiveMulticast() {
@@ -92,6 +94,7 @@ public class NetworkAdapter {
     /**
      * Busca uma conexão na lista e fecha a conexão. Usado também para
      * fechar as conexões inativas.
+     *
      * @param address Endereço da conexão.
      */
     public void closeConnection(InetAddress address) {
@@ -107,6 +110,7 @@ public class NetworkAdapter {
 
     /**
      * Envia informação para o receptor atual.
+     *
      * @param data envia um inteiro.
      */
     public void sendData(int data) {
@@ -115,6 +119,7 @@ public class NetworkAdapter {
 
     /**
      * Envia informação para o receptor atual.
+     *
      * @param data envia uma String.
      */
     public void sendData(String data) {
@@ -123,6 +128,7 @@ public class NetworkAdapter {
 
     /**
      * Envia informação para o receptor atual.
+     *
      * @param data envia um array de bytes.
      */
     public void sendData(byte[] data) {
@@ -131,6 +137,7 @@ public class NetworkAdapter {
 
     /**
      * Envia informação para o receptor atual.
+     *
      * @param data envia um valor booleano.
      */
     public void sendData(boolean data) {
@@ -141,6 +148,7 @@ public class NetworkAdapter {
      * Envia um protocolo de mensagem para o receptor atual.
      * Esse protocolo descreve os tipos de dados a serem enviados.
      * É o primeiro tipo de informação a ser enviada para comunicação.
+     *
      * @param messageProtocol Protocolo de mensagem.
      */
     public void sendProtocol(MessageProtocol messageProtocol) {
@@ -149,6 +157,7 @@ public class NetworkAdapter {
 
     /**
      * Recebe um protocolo de mensagem informando os tipos de dados a receber.
+     *
      * @return Um protocolo de mensagem.
      */
     public MessageProtocol receiveProtocol() {
@@ -158,6 +167,7 @@ public class NetworkAdapter {
 
     /**
      * Recebe um valor inteiro do transmissor atual.
+     *
      * @return um valor inteiro.
      */
     public int receiveInt() {
@@ -167,6 +177,7 @@ public class NetworkAdapter {
 
     /**
      * Recebe um texto do transmissor atual.
+     *
      * @return uma string.
      */
     public String receiveString() {
@@ -176,6 +187,7 @@ public class NetworkAdapter {
 
     /**
      * Recebe um array de bytes do trasmissor atual.
+     *
      * @return array de bytes.
      */
     public byte[] receiveBytes() {
@@ -185,6 +197,7 @@ public class NetworkAdapter {
 
     /**
      * Receve um valor boleano do receptor atual.
+     *
      * @return um valor boleano.
      */
     public boolean receiveBoolean() {

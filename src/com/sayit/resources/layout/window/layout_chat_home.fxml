@@ -6,7 +6,7 @@
 <BorderPane maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity"
             prefHeight="455.0" prefWidth="662.0" style="-fx-background-color: purple;"
             xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.sayit.ui.frame.ChatHomeController">
+            fx:controller="com.sayit.ui.control.frame.ChatHomeController">
     <center>
         <VBox prefHeight="200.0" style="-fx-background-color: lightblue;" BorderPane.alignment="CENTER">
             <children>
@@ -44,27 +44,32 @@
         </VBox>
     </center>
     <right>
-        <VBox prefHeight="455.0" style="-fx-background-color: salmon;" BorderPane.alignment="CENTER">
+        <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
             <children>
-                <HBox alignment="CENTER">
+                <VBox prefHeight="455.0" style="-fx-background-color: salmon;">
                     <children>
-                        <Circle fill="DODGERBLUE" radius="42.0" stroke="BLACK" strokeType="INSIDE"/>
+                        <HBox alignment="CENTER">
+                            <children>
+                                <Circle fill="DODGERBLUE" radius="42.0" stroke="BLACK" strokeType="INSIDE"/>
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER" style="-fx-background-color: lightgreen;">
+                            <children>
+                                <Label text="Label"/>
+                            </children>
+                        </HBox>
+                        <HBox alignment="CENTER" style="-fx-background-color: purple;">
+                            <children>
+                                <Button mnemonicParsing="false" text="Button"/>
+                                <Button mnemonicParsing="false" text="Button"/>
+                                <Button mnemonicParsing="false" text="Button"/>
+                            </children>
+                        </HBox>
+                        <ListView fx:id="historyListView" prefHeight="329.0" VBox.vgrow="ALWAYS"/>
                     </children>
-                </HBox>
-                <HBox alignment="CENTER" style="-fx-background-color: lightgreen;">
-                    <children>
-                        <Label text="Label"/>
-                    </children>
-                </HBox>
-                <HBox alignment="CENTER" style="-fx-background-color: purple;">
-                    <children>
-                        <Button mnemonicParsing="false" text="Button"/>
-                        <Button mnemonicParsing="false" text="Button"/>
-                        <Button mnemonicParsing="false" text="Button"/>
-                    </children>
-                </HBox>
-                <ListView fx:id="historyListView" prefHeight="329.0" VBox.vgrow="ALWAYS"/>
+                </VBox>
+                <Pane prefHeight="200.0" prefWidth="200.0"/>
             </children>
-        </VBox>
+        </StackPane>
     </right>
 </BorderPane>

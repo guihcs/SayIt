@@ -1,9 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.AnchorPane?>
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="com.sayit.ui.frame.ProfileEditController"
-            prefHeight="400.0" prefWidth="600.0">
 
-</AnchorPane>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="600.0"
+      styleClass="bt" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <Button mnemonicParsing="false" text="Button"/>
+        <StackPane prefHeight="150.0" prefWidth="200.0">
+            <children>
+                <Circle fill="DODGERBLUE" radius="100.0" stroke="BLACK" strokeType="INSIDE"/>
+                <Label text="Label" StackPane.alignment="BOTTOM_CENTER"/>
+            </children>
+        </StackPane>
+        <Label text="Label"/>
+        <TextField/>
+        <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="200.0">
+            <children>
+                <Button mnemonicParsing="false" text="Button"/>
+            </children>
+        </HBox>
+    </children>
+</VBox>
