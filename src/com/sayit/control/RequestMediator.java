@@ -24,6 +24,8 @@ public class RequestMediator implements Requestable {
      * @param args argumentos do sistema.
      */
     public static void main(String[] args) {
+        //Application.launch(ChatApplication.class, args);
+        ChatApplication.launchApplication(args, null, null);
         //TODO Segundo main
     }
 

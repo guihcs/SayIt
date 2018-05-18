@@ -1,12 +1,16 @@
 package com.sayit.control;
 
 import com.sayit.data.*;
-import com.sayit.ui.frame.ChatHomeScene;
-import com.sayit.ui.frame.ContactAddScene;
-import com.sayit.ui.frame.ProfileEditScene;
+import com.sayit.ui.frame.ChatHomeController;
+import com.sayit.ui.frame.ContactAddController;
+import com.sayit.ui.frame.ProfileEditController;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.List;
 
 public class ChatApplication extends Application implements Presentable {
@@ -17,11 +21,11 @@ public class ChatApplication extends Application implements Presentable {
     private Contact currentContact;
     private ContactDao contactDao;
     private Requestable requestCallback;
-    private ChatHomeScene chatHome;
-    private ContactAddScene contactAddScene;
-    private ProfileEditScene profileEditScene;
+    private ChatHomeController chatHome;
+    private ContactAddController contactAddController;
+    private ProfileEditController profileEditController;
 
-    private ChatApplication() {
+    public ChatApplication() {
         ChatApplication.instance = this;
     }
 
@@ -35,9 +39,9 @@ public class ChatApplication extends Application implements Presentable {
      */
     public synchronized static ChatApplication launchApplication(String[] args, Requestable requestable, ContactDao contactDao) {
         if(ChatApplication.instance == null) {
-
-            new Thread(() -> Application.launch(ChatApplication.class, args));
+            new Thread(() -> Application.launch(ChatApplication.class, args)).start();
             while (ChatApplication.instance == null) Thread.onSpinWait();
+
         }
         return ChatApplication.instance;
     }
@@ -49,6 +53,13 @@ public class ChatApplication extends Application implements Presentable {
      */
     @Override
     public void start(Stage primaryStage) {
+        //TODO Guilherme start
+        try {
+            Parent parent = FXMLLoader.load(getClass().getResource("../resources/layout/window/layout_chat_home.fxml"));
+            primaryStage.setScene(new Scene(parent));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         primaryStage.show();
     }
 
@@ -71,7 +82,7 @@ public class ChatApplication extends Application implements Presentable {
      */
     public void addMessage(int id, byte[] content, MessageType messageType) {
         //TODO Guilherme addMessage bytes
-        
+
     }
 
     /**
