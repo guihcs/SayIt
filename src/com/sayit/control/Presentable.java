@@ -10,6 +10,8 @@ public interface Presentable {
 
     Contact getContactInfo(int id);
 
+    Contact getUserProfile();
+
     List<Message> requestMessageList(int id);
 
     List<MessageHistory> getHistoryList();
@@ -28,5 +30,8 @@ public interface Presentable {
      */
     void requestContactList(String name);
 
+
     void sendMessage(String message);
+
+    //TODO Add method to send message by bytes
 }

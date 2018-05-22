@@ -2,6 +2,7 @@ package com.sayit.ui.control.frame;
 
 import com.sayit.control.ChatApplication;
 import com.sayit.control.Presentable;
+import com.sayit.data.Contact;
 import com.sayit.data.Message;
 import com.sayit.data.MessageHistory;
 import com.sayit.ui.control.view.HistoryCell;
@@ -10,13 +11,17 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
+import javafx.scene.paint.ImagePattern;
+import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 
 import java.io.IOException;
+import java.util.List;
 
 public class ChatHomeController {
 
@@ -30,6 +35,18 @@ public class ChatHomeController {
     private ListView<Message> messageListView;
     @FXML
     private ListView<MessageHistory> historyListView;
+
+    @FXML
+    private Label userNameLabel;
+    @FXML
+    private Label contactNameLabel;
+    @FXML
+    private Label contactStatusLabel;
+
+    @FXML
+    private Circle userImage;
+    @FXML
+    private Circle contactImage;
 
     private Window parentWindow;
     private Pane findRoot;
@@ -59,8 +76,6 @@ public class ChatHomeController {
             return historyCell;
         });
 
-        historyObservableList.add(new MessageHistory(null));
-
         FXMLLoader loader = ChatApplication.getLoader(ChatApplication.FIND_CONTACT_LAYOUT);
         try {
             findRoot = loader.load();
@@ -77,12 +92,10 @@ public class ChatHomeController {
             e.printStackTrace();
         }
 
-
-
-
     }
 
     public void setPresentable(Presentable presentable) {
+
         this.presentable = presentable;
     }
 
@@ -130,5 +143,22 @@ public class ChatHomeController {
 
     public void setParentWindow(Window parentWindow) {
         this.parentWindow = parentWindow;
+    }
+
+    public void setUserProfile(Contact userProfile) {
+        userImage.setFill(new ImagePattern(userProfile.getPhoto()));
+        userNameLabel.setText(userProfile.getName());
+    }
+
+    public void setReceiverProfile(Contact receiverProfile) {
+        contactImage.setFill(new ImagePattern(receiverProfile.getPhoto()));
+        contactNameLabel.setText(receiverProfile.getName());
+        //fixme add a status to contact
+        contactStatusLabel.setText("");
+    }
+
+    public void setHistoryList(List<MessageHistory> messageHistories) {
+        historyObservableList.clear();
+        if(messageHistories.size() > 0) historyObservableList.addAll(messageHistories);
     }
 }

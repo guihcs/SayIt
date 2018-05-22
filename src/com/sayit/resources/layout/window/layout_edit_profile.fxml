@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.Circle?>
 <VBox minHeight="-Infinity" minWidth="-Infinity" styleClass="bt" xmlns="http://javafx.com/javafx/9"
       xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sayit.ui.control.frame.ProfileEditController">
@@ -18,7 +16,7 @@
         </StackPane>
         <Label text="Label"/>
         <TextField fx:id="nameField"/>
-        <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="200.0">
+        <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
             <children>
                 <Button mnemonicParsing="false" onAction="#confirm" text="Button"/>
             </children>

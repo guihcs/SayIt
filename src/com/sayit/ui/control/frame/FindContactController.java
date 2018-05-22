@@ -54,4 +54,8 @@ public class FindContactController {
     private void setContactResult(ContactManager contactManager) {
         this.contactManager = contactManager;
     }
+
+    public void addContact(Contact contact) {
+        contactObservableList.add(contact);
+    }
 }

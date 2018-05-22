@@ -55,6 +55,7 @@ public class StartFrameController {
     public void loadProfile() {
         if(rootContainter.getChildren().size() > 0) rootContainter.getChildren().clear();
         rootContainter.getChildren().add(profileLayout);
+        VBox.setVgrow(profileLayout, Priority.ALWAYS);
     }
 
     public void setOwnerWindow(Window window) {

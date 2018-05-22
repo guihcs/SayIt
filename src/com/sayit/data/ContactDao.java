@@ -5,13 +5,12 @@ import javafx.scene.image.Image;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 public class ContactDao {
 
     private Contact userProfile;
     private List<Contact> contactList;
-    private Map<Integer, MessageHistory> messageMap;
+    private LinkedHashMap<Integer, MessageHistory> messageMap;
 
     public ContactDao() {
         contactList = new ArrayList<>();
@@ -66,7 +65,7 @@ public class ContactDao {
      */
     public List<MessageHistory> getHistoryList() {
         //TODO Djan getHistoryList
-        return null;
+        return new ArrayList<>();
     }
 
     /**
@@ -95,6 +94,10 @@ public class ContactDao {
 
     public List<Contact> getContactList() {
         return contactList;
+    }
+
+    public void setUserProfile(Contact userProfile) {
+        this.userProfile = userProfile;
     }
 
     public List<String> getMessagesData(int id) {

@@ -15,11 +15,12 @@
                         <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="200.0"
                               style="-fx-background-color: crimson;">
                             <children>
-                                <Circle fill="DODGERBLUE" radius="18.0" stroke="BLACK" strokeType="INSIDE"/>
+                                <Circle fx:id="contactImage" fill="DODGERBLUE" radius="18.0" stroke="BLACK"
+                                        strokeType="INSIDE"/>
                                 <VBox alignment="CENTER_LEFT" prefHeight="200.0" prefWidth="100.0">
                                     <children>
-                                        <Label text="Label"/>
-                                        <Label text="Label"/>
+                                        <Label fx:id="contactNameLabel" text="Label"/>
+                                        <Label fx:id="contactStatusLabel" text="Label"/>
                                     </children>
                                 </VBox>
                             </children>
@@ -50,12 +51,13 @@
                     <children>
                         <HBox alignment="CENTER">
                             <children>
-                                <Circle fill="DODGERBLUE" radius="42.0" stroke="BLACK" strokeType="INSIDE"/>
+                                <Circle fx:id="userImage" fill="DODGERBLUE" radius="42.0" stroke="BLACK"
+                                        strokeType="INSIDE"/>
                             </children>
                         </HBox>
                         <HBox alignment="CENTER" style="-fx-background-color: lightgreen;">
                             <children>
-                                <Label text="Label"/>
+                                <Label fx:id="userNameLabel" text="Label"/>
                             </children>
                         </HBox>
                         <HBox alignment="CENTER" style="-fx-background-color: purple;">

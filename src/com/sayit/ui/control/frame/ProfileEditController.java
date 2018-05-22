@@ -4,6 +4,7 @@ import com.sayit.data.Contact;
 import com.sayit.ui.control.ContactManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
@@ -19,6 +20,10 @@ public class ProfileEditController {
     private Circle roundImage;
     @FXML
     private TextField nameField;
+
+    public void initialize() {
+        contact = new Contact("Antonio", new Image("http://i.imgur.com/jAkOMcB.png"), "192.168.0.1");
+    }
 
     public void close() {
         if(backCallback != null) backCallback.run();
