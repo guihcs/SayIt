@@ -89,6 +89,13 @@ public class ContactDao {
         //TODO Djan editProfile
     }
 
+    public Contact getUserProfile() {
+        return userProfile;
+    }
+
+    public List<Contact> getContactList() {
+        return contactList;
+    }
 
     public List<String> getMessagesData(int id) {
         return null;
