@@ -6,8 +6,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.ListCell;
 
-import java.io.IOException;
-
 public class ContactCell extends ListCell<Contact> {
 
 
@@ -17,20 +15,19 @@ public class ContactCell extends ListCell<Contact> {
 
     public ContactCell() {
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(ChatApplication.CONTACT_VIEW));
+        FXMLLoader fxmlLoader = ChatApplication.getLoader(ChatApplication.CONTACT_VIEW);
 
-        try {
-            root = fxmlLoader.load();
-            contactController = fxmlLoader.getController();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        root = (Parent) ChatApplication.loadFromLoader(fxmlLoader);
+        contactController = fxmlLoader.getController();
     }
 
 
     @Override
     protected void updateItem(Contact item, boolean empty) {
         super.updateItem(item, empty);
-        if(!empty) setGraphic(root);
+        if(!empty) {
+            contactController.setName(item.getName());
+            setGraphic(root);
+        } else setGraphic(null);
     }
 }

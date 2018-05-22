@@ -14,10 +14,18 @@ public interface Presentable {
 
     List<MessageHistory> getHistoryList();
 
+    List<Contact> getContactList();
+
     void openAddScene();
 
+    //fixme add support to edit contacts from contacts list
     void openEditProfileScene();
 
+    /**
+     * Request contact for add scene.
+     *
+     * @param name
+     */
     void requestContactList(String name);
 
     void sendMessage(String message);

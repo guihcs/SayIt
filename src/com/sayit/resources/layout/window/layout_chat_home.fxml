@@ -27,7 +27,7 @@
                         <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0"
                               style="-fx-background-color: chartreuse;" HBox.hgrow="ALWAYS">
                             <children>
-                                <Button mnemonicParsing="false" text="Button"/>
+                                <Button mnemonicParsing="false" onAction="#sendArchive" text="Button"/>
                                 <Button mnemonicParsing="false" text="Button"/>
                             </children>
                         </HBox>
@@ -36,17 +36,17 @@
                 <ListView fx:id="messageListView" prefHeight="283.0" prefWidth="500.0" VBox.vgrow="ALWAYS"/>
                 <HBox alignment="CENTER" prefHeight="52.0" prefWidth="500.0">
                     <children>
-                        <TextField HBox.hgrow="ALWAYS"/>
-                        <Button mnemonicParsing="false" text="Button"/>
+                        <TextField fx:id="messageField" onAction="#sendMessage" HBox.hgrow="ALWAYS"/>
+                        <Button mnemonicParsing="false" onAction="#sendMessage" text="Button"/>
                     </children>
                 </HBox>
             </children>
         </VBox>
     </center>
     <right>
-        <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+        <StackPane BorderPane.alignment="CENTER">
             <children>
-                <VBox prefHeight="455.0" style="-fx-background-color: salmon;">
+                <VBox style="-fx-background-color: salmon;">
                     <children>
                         <HBox alignment="CENTER">
                             <children>
@@ -60,15 +60,15 @@
                         </HBox>
                         <HBox alignment="CENTER" style="-fx-background-color: purple;">
                             <children>
-                                <Button mnemonicParsing="false" text="Button"/>
-                                <Button mnemonicParsing="false" text="Button"/>
-                                <Button mnemonicParsing="false" text="Button"/>
+                                <Button mnemonicParsing="false" onAction="#showFindContact" text="Button"/>
+                                <Button mnemonicParsing="false" onAction="#showAddContact" text="Button"/>
+                                <Button mnemonicParsing="false" onAction="#showEditProfile" text="Button"/>
                             </children>
                         </HBox>
                         <ListView fx:id="historyListView" prefHeight="329.0" VBox.vgrow="ALWAYS"/>
                     </children>
                 </VBox>
-                <Pane prefHeight="200.0" prefWidth="200.0"/>
+                <Pane fx:id="findPane" prefHeight="200.0" prefWidth="200.0" visible="false"/>
             </children>
         </StackPane>
     </right>

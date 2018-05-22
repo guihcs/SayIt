@@ -25,7 +25,8 @@ public class RequestMediator implements Requestable {
      */
     public static void main(String[] args) {
         //Application.launch(ChatApplication.class, args);
-        ChatApplication.launchApplication(args, null, null);
+        ChatApplication app = ChatApplication.launchApplication(args, null, null);
+        app.openStartScene();
         //TODO Segundo main
     }
 

@@ -2,24 +2,30 @@ package com.sayit.control;
 
 import com.sayit.data.*;
 import com.sayit.ui.control.frame.ChatHomeController;
-import com.sayit.ui.control.frame.ContactAddController;
+import com.sayit.ui.control.frame.FindContactController;
 import com.sayit.ui.control.frame.ProfileEditController;
+import com.sayit.ui.control.frame.StartFrameController;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ChatApplication extends Application implements Presentable {
 
-    public static final String HOME_LAYOUT = "../resources/layout/window/layout_chat_home.fxml";
-    public static final String START_LAYOUT = "../resources/layout/window/layout_start.fxml";
-    public static final String START_FRAME = "../resources/layout/window/layout_frame_start.fxml";
-    public static final String FIND_CONTACT_LAYOUT = "../resources/layout/window/layout_find_contact.fxml";
-    public static final String EDIT_PROFILE_LAYOUT = "../resources/layout/window/layout_edit_profile.fxml";
+    public static final String HOME_LAYOUT = "/com/sayit/resources/layout/window/layout_chat_home.fxml";
+    public static final String START_LAYOUT = "/com/sayit/resources/layout/window/layout_start.fxml";
+    public static final String START_FRAME = "/com/sayit/resources/layout/window/layout_frame_start.fxml";
+    public static final String FIND_CONTACT_LAYOUT = "/com/sayit/resources/layout/window/layout_find_contact.fxml";
+    public static final String EDIT_PROFILE_LAYOUT = "/com/sayit/resources/layout/window/layout_edit_profile.fxml";
     public static final String CONTACT_VIEW = "/com/sayit/resources/layout/view/view_contact_cell.fxml";
     public static final String MESSAGE_VIEW = "/com/sayit/resources/layout/view/view_message_cell.fxml";
 
@@ -31,7 +37,7 @@ public class ChatApplication extends Application implements Presentable {
     private ContactDao contactDao;
     private Requestable requestCallback;
     private ChatHomeController chatHome;
-    private ContactAddController contactAddController;
+    private FindContactController findContactController;
     private ProfileEditController profileEditController;
 
     public ChatApplication() {
@@ -56,6 +62,62 @@ public class ChatApplication extends Application implements Presentable {
     }
 
     /**
+     * Get a fxml loader.
+     *
+     * @param path
+     * @return
+     */
+    public static FXMLLoader getLoader(String path) {
+        return new FXMLLoader(ChatApplication.class.getResource(path));
+    }
+
+    /**
+     * Load a node from a loader to reduce try/catch verbosity.
+     *
+     * @param loader
+     * @return
+     */
+    public static Node loadFromLoader(FXMLLoader loader) {
+        try {
+            return loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+    /**
+     * Abre uma janela modal.
+     *
+     * @param root
+     */
+    private Stage createModal(Node root) {
+        Stage stage = new Stage(StageStyle.UNDECORATED);
+        Scene scene = new Scene((Parent) root);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(scene);
+        return stage;
+    }
+
+    /**
+     * Abre uma janela modal especificando o tamanho.
+     *
+     * @param root
+     * @param width
+     * @param height
+     */
+    private Stage createModal(Node root, double width, double height) {
+        Stage stage = new Stage(StageStyle.UNDECORATED);
+        Scene scene = new Scene((Parent) root, width, height);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setScene(scene);
+        return stage;
+    }
+
+
+
+    /**
      * Metodo chamado ao iniciar a aplicação.
      *
      * @param primaryStage
@@ -63,16 +125,8 @@ public class ChatApplication extends Application implements Presentable {
     @Override
     public void start(Stage primaryStage) {
         //TODO Guilherme start
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource(HOME_LAYOUT));
-            Parent parent = loader.load();
-            chatHome = loader.getController();
-            chatHome.setPresentable(this);
-            primaryStage.setScene(new Scene(parent));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        primaryStage.show();
+        this.primaryStage = primaryStage;
+
     }
 
     /**
@@ -110,13 +164,50 @@ public class ChatApplication extends Application implements Presentable {
     }
 
     /**
-     * Abrir tela de edição de perfil.
+     * Abre a tela inicial da aplicação, contendo a tela de edição de perfil.
      *
-     * @param contact
+     * @return O contato editado.
      */
-    public void openEditProfile(Contact contact) {
+    public Contact openStartScene() {
         //TODO Guilherme openEditProfile
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource(START_FRAME));
+            Parent parent = loader.load();
+            StartFrameController startController = loader.getController();
+
+            startController.setConcludeCallback(contact -> {
+                openHomeScene();
+            });
+
+            Platform.runLater(() -> {
+                primaryStage.setScene(new Scene(parent));
+                primaryStage.show();
+            });
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
+
+    /**
+     * Abre a tela de chat.
+     */
+    public void openHomeScene() {
+        //TODO Guilherme openHomeScene
+        var loader = getLoader(HOME_LAYOUT);
+        Parent parent = (Parent) loadFromLoader(loader);
+        chatHome = loader.getController();
+        chatHome.setPresentable(this);
+        chatHome.setParentWindow(primaryStage);
+
+        Platform.runLater(() -> {
+            primaryStage.setScene(new Scene(parent));
+            primaryStage.show();
+        });
+
+    }
+
 
     /**
      * Retorna verdadeiro se estiver requisitando contatos.
@@ -152,7 +243,8 @@ public class ChatApplication extends Application implements Presentable {
     }
 
     /**
-     * Retorna a lista de mensagens de um contato específico.
+     * Retorna a lista de mensagens de um contato específico. E configura o contato
+     * como receptor atual.
      *
      * @param id
      * @return
@@ -175,11 +267,36 @@ public class ChatApplication extends Application implements Presentable {
     }
 
     /**
+     * Retorna a lista de contatos;
+     *
+     * @return
+     */
+    @Override
+    public List<Contact> getContactList() {
+        //TODO Guilherme getContactList
+        List<Contact> contactList = new ArrayList<>();
+        for (int i = 0; i < 100; i++) {
+            contactList.add(new Contact("Lucas", null, null, null));
+        }
+        return contactList;
+    }
+
+
+    /**
      * Abre a tela de adição de contatos.
      */
     @Override
     public void openAddScene() {
-        //TODO Guilherme openAddScene
+
+        FXMLLoader loader = getLoader(FIND_CONTACT_LAYOUT);
+        Node addLayout = loadFromLoader(loader);
+        FindContactController contactController = loader.getController();
+
+        var window = createModal(addLayout, 400, 300);
+        //fixme set button callbacks
+        contactController.setCloseCallback(window::close);
+
+        window.showAndWait();
     }
 
     /**
@@ -187,7 +304,17 @@ public class ChatApplication extends Application implements Presentable {
      */
     @Override
     public void openEditProfileScene() {
-        //TODO Guilherme openEditProfileScene
+
+        FXMLLoader loader = getLoader(EDIT_PROFILE_LAYOUT);
+        Node addLayout = loadFromLoader(loader);
+        ProfileEditController editController = loader.getController();
+        var window = createModal(addLayout, 400, 300);
+
+        editController.setOwnerWindow(window);
+        //fixme set conclude callbacks
+        editController.setBackCallback(window::close);
+
+        window.showAndWait();
     }
 
     /**

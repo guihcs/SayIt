@@ -1,26 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="600.0"
-      styleClass="bt" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1">
+<VBox minHeight="-Infinity" minWidth="-Infinity" styleClass="bt" xmlns="http://javafx.com/javafx/9"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sayit.ui.control.frame.ProfileEditController">
     <children>
-        <Button mnemonicParsing="false" text="Button"/>
+        <Button mnemonicParsing="false" onAction="#close" text="Button"/>
         <StackPane prefHeight="150.0" prefWidth="200.0">
             <children>
-                <Circle fill="DODGERBLUE" radius="100.0" stroke="BLACK" strokeType="INSIDE"/>
-                <Label text="Label" StackPane.alignment="BOTTOM_CENTER"/>
+                <Circle fx:id="roundImage" fill="DODGERBLUE" onMouseClicked="#getImage" radius="100.0" stroke="BLACK"
+                        strokeType="INSIDE"/>
+                <Label onMouseClicked="#getImage" text="Label" StackPane.alignment="BOTTOM_CENTER"/>
             </children>
         </StackPane>
         <Label text="Label"/>
-        <TextField/>
+        <TextField fx:id="nameField"/>
         <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="200.0">
             <children>
-                <Button mnemonicParsing="false" text="Button"/>
+                <Button mnemonicParsing="false" onAction="#confirm" text="Button"/>
             </children>
         </HBox>
     </children>
