@@ -4,18 +4,42 @@ import javafx.scene.image.Image;
 
 public class Contact {
 
-    private int id;
-    private String name;
     private Image photo;
     private String path;
     private String ipAddress;
+    private int id;
+    private String name;
+
+    /* incluido para testes, já que no contrutor paddrão tenho que ter uma imagem*/
+    public Contact() {
+    }
 
     public Contact(String name, Image photo, String path, String ipAddress) {
         this.name = name;
         this.photo = photo;
         this.path = path;
         this.ipAddress = ipAddress;
-        //TODO Djan idConstructor
+
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setPhoto(Image photo) {
+        this.photo = photo;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public void setIpAddress(String ipAddress) {
+        this.ipAddress = ipAddress;
     }
 
     public int getId() {
@@ -39,13 +63,14 @@ public class Contact {
     }
 
     /**
-     * Retorna a representação string desse contato. Formatada para armazenamento.
+     * Retorna a representação string desse contato. Formatada para
+     * armazenamento.
      *
      * @return
      */
     @Override
     public String toString() {
-        //TODO Djan toString
-        return "Contact{}";
+
+        return name + "#" + photo + "#" + path + "#" + ipAddress;
     }
 }

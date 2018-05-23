@@ -1,5 +1,6 @@
 package com.sayit.data;
 
+import java.awt.TrayIcon.MessageType;
 import java.util.Date;
 
 public class Message {
@@ -56,6 +57,7 @@ public class Message {
      */
     @Override
     public String toString() {
-        return "Message{}";
+        return "Message{" + "receiverProfile=" + receiverProfile + ", sendByMe=" + sendByMe + ", content=" + content + ", messageDate=" + messageDate + ", type=" + type + '}';
     }
+
 }
