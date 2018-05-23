@@ -1,5 +1,7 @@
 package com.sayit.network;
 
+import com.sayit.data.MessageType;
+
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.MulticastSocket;
@@ -190,6 +192,14 @@ public class NetworkAdapter {
     public boolean receiveBoolean() {
         //TODO Iarly receiveBoolean
         return false;
+    }
+
+    public void senderEnum(Enum enumeration){
+
+    }
+
+    public MessageType receiverEnum(){
+        return null;
     }
 
 
