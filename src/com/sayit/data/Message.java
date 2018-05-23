@@ -6,10 +6,18 @@ import java.util.Date;
 public class Message {
 
     private Contact receiverProfile;
+    private String textContent;
     private boolean sendByMe;
     private byte[] content;
     private Date messageDate;
     private MessageType type;
+
+    public Message(Contact receiverProfile, boolean sendByMe, String content, MessageType type) {
+        this.receiverProfile = receiverProfile;
+        this.sendByMe = sendByMe;
+        this.textContent = content;
+        this.type = type;
+    }
 
     public Message(Contact receiverProfile, boolean sendByMe, byte[] content, MessageType type) {
         this.receiverProfile = receiverProfile;

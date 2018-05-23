@@ -14,10 +14,9 @@ public class Contact {
     public Contact() {
     }
 
-    public Contact(String name, Image photo, String path, String ipAddress) {
+    public Contact(String name, Image photo, String ipAddress) {
         this.name = name;
         this.photo = photo;
-        this.path = path;
         this.ipAddress = ipAddress;
 
     }
