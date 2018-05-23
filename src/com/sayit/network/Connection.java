@@ -55,6 +55,7 @@ public class Connection {
 
     /**
      * Retorna a stream de entrada desta conexão.
+     *
      * @return
      */
 
@@ -64,6 +65,7 @@ public class Connection {
 
     /**
      * Retorna a stream de saída dessa conexão.
+     *
      * @return
      */
 
@@ -74,6 +76,7 @@ public class Connection {
     /**
      *
      * Retorna o estado da conexão.
+     *
      * @return
      *
      */
@@ -84,8 +87,8 @@ public class Connection {
     /**
      *
      * Retorna a atividade da conexão.
-     * @return true caso a conexão esteja ativa. false caso esteja inativa.
      *
+     * @return true caso a conexão esteja ativa. false caso esteja inativa.
      */
     public boolean isOnline() {
 

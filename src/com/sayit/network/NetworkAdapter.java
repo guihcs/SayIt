@@ -1,9 +1,11 @@
 package com.sayit.network;
 
+
 import java.io.IOException;
 import java.net.*;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
+
 import java.util.List;
 import java.util.Map;
 
@@ -103,7 +105,6 @@ public class NetworkAdapter {
      *
      * @return true se a conexão está ativa ou
      * false se a conexão está inativa ou offline.
-     *
      */
     public boolean nextTransmitter() {
 
@@ -370,6 +371,14 @@ public class NetworkAdapter {
         }
 
         return false;
+    }
+
+    public void senderEnum(Enum enumeration){
+
+    }
+
+    public MessageType receiverEnum(){
+        return null;
     }
 
 
