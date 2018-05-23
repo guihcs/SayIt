@@ -1,7 +1,6 @@
 package com.sayit.network;
 
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
+import java.io.*;
 import java.net.Socket;
 
 public class Connection {
@@ -15,9 +14,20 @@ public class Connection {
      * Constroi uma nova conexão utilizando um socket.
      *
      * @param socket socket da conexão.
+     *
      */
     public Connection(Socket socket) {
+
         this.socket = socket;
+
+        try {
+            dataOutputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+            dataInputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
     }
 
     /**
@@ -25,10 +35,22 @@ public class Connection {
      *
      * @param socket
      * @param status
+     *
      */
+
     public Connection(Socket socket, ConnectionStatus status) {
+
         this.socket = socket;
         connectionStatus = status;
+
+        try {
+
+            dataOutputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+            dataInputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -36,6 +58,7 @@ public class Connection {
      *
      * @return
      */
+
     public DataInputStream getDataInputStream() {
         return dataInputStream;
     }
@@ -45,26 +68,35 @@ public class Connection {
      *
      * @return
      */
+
     public DataOutputStream getDataOutputStream() {
         return dataOutputStream;
     }
 
     /**
+     *
      * Retorna o estado da conexão.
      *
      * @return
+     *
      */
     public ConnectionStatus getConnectionStatus() {
         return connectionStatus;
     }
 
     /**
+     *
      * Retorna a atividade da conexão.
      *
      * @return true caso a conexão esteja ativa. false caso esteja inativa.
      */
     public boolean isOnline() {
-        //TODO Iarly isOnline
+
+        if(socket.isConnected()) {
+
+            connectionStatus = ConnectionStatus.ACTIVE;
+            return true;
+        }
         return false;
     }
 
@@ -72,7 +104,18 @@ public class Connection {
      * Fecha esta conexão.
      */
     public void closeConnection() {
-        //TODO Iarly closeConnection
+
+        try {
+
+            socket.close();
+            dataOutputStream.close();
+            dataInputStream.close();
+            connectionStatus = ConnectionStatus.CLOSED;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
     }
 
 

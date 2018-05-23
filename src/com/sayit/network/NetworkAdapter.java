@@ -1,11 +1,11 @@
 package com.sayit.network;
 
-import com.sayit.data.MessageType;
 
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.MulticastSocket;
-import java.net.ServerSocket;
+import java.io.IOException;
+import java.net.*;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+
 import java.util.List;
 import java.util.Map;
 
@@ -18,15 +18,61 @@ public class NetworkAdapter {
     private List<Connection> connectionList;
     private Connection currentTransmitter;
     private Connection currentReceiver;
+    private InetAddress multicastGrup;
+
+
+    private final String MCAST_ADDR = "239.239.239.239";
+    private final int MCAST_DEST_PORT = 7777;
+    private final int SERVER_SOCKET_DEST_PORT = 5000;
+    private final int DT_SOCKET_DEST_PORT = 5001;
+    private final int BUFFER_SIZE = 1024;
+
+    /**
+     * Instancia a interface Map com um LinkedHashMap.
+     * Instancia a interface List com um LinkedList.
+     * Cria um sevidor que escutará a porta 5000.
+     *
+     **/
+
+
+    public NetworkAdapter() {
+
+        connectionMap = new LinkedHashMap<>();
+        connectionList = new LinkedList<>();
+
+        try {
+
+            serverSocket = new ServerSocket(SERVER_SOCKET_DEST_PORT);
+
+            multicastSocket = new MulticastSocket(MCAST_DEST_PORT);
+
+            datagramSocket = new DatagramSocket(DT_SOCKET_DEST_PORT);
+
+            multicastGrup = InetAddress.getByName(MCAST_ADDR);
+            multicastSocket.joinGroup(multicastGrup);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
+
+    }
 
     /**
      * Converte um IP de texto em um objeto InetAddress.
      *
-     * @param text Texto a ser convertido.
-     * @return Um objeto InetAddress com o mesmo ip.
+     * @param internetProtocol IP a ser convertido.
+     * @return Um objeto InetAddress com o mesmo IP.
      */
-    public static InetAddress parseAddress(String text) {
-        //TODO Iarly parseAddress
+    public static InetAddress parseAddress(String internetProtocol) {
+
+        try {
+            return InetAddress.getByName(internetProtocol);
+
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+
+        }
         return null;
     }
 
@@ -36,9 +82,9 @@ public class NetworkAdapter {
      * @param address Objeto para conversão.
      * @return Representação string do objeto.
      */
+
     public static String getStringAddress(InetAddress address) {
-        //TODO Iarly getStringAddress
-        return null;
+        return address.getHostAddress();
     }
 
     /**
@@ -47,7 +93,7 @@ public class NetworkAdapter {
      * @param address Endereço da conexão.
      */
     public void setCurrentReceiver(InetAddress address) {
-        //TODO Iarly setCurrentReceiver
+        currentReceiver = connectionMap.get(address);
     }
 
     /**
@@ -61,8 +107,24 @@ public class NetworkAdapter {
      * false se a conexão está inativa ou offline.
      */
     public boolean nextTransmitter() {
-        //TODO Iarly nextTransmitter
+
+        for (Connection co : connectionList) {
+            try {
+
+                if (co.isOnline() && !co.getDataInputStream().readAllBytes().equals(null)) {
+                    currentTransmitter = co;
+                    return true;
+                } else {
+                    co.closeConnection();
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
         return false;
+        //TODO Iarly nextTransmitter
     }
 
     /**
@@ -71,25 +133,65 @@ public class NetworkAdapter {
      * @param text Nome a ser buscado na rede.
      */
     public void multicastString(String text) {
+
+        byte[] multicastMessage = text.getBytes();
+
+
+        try {
+
+            DatagramPacket packet = new DatagramPacket(multicastMessage, multicastMessage.length, multicastGrup, MCAST_DEST_PORT);
+            multicastSocket.send(packet);
+
+            // criar close
+
+
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
         //TODO Iarly multicastString
     }
 
     /**
+     *
      * Recebe uma string do grupo multicast.
      *
      * @return string do grupo multicast. null caso nenhuma.
+     *
      */
     public String receiveMulticast() {
-        //TODO Iarly receiveMulticast
+
+        byte[] BUFFER = new byte[BUFFER_SIZE];
+
+        DatagramPacket datagramReceivePacket =  new DatagramPacket(BUFFER, BUFFER_SIZE);
+
+        try {
+
+
+
+            multicastSocket.receive(datagramReceivePacket);
+
+            return new String(datagramReceivePacket.getData());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
     /**
+     *
      * Inicia uma nova conexão.
      *
      * @param address Endereço do socket.
+     *
      */
     public void connect(InetAddress address) {
+
         //TODO Iarly connect
     }
 
@@ -100,13 +202,19 @@ public class NetworkAdapter {
      * @param address Endereço da conexão.
      */
     public void closeConnection(InetAddress address) {
-        //TODO Iarly closeConnection
+
+        connectionMap.get(address).closeConnection();
+
     }
 
     /**
      * Aceita uma nova conexão TCP e adiciona nas listas.
      */
     public void acceptTCPConnection() {
+
+
+
+
         //TODO Iarly acceptTCPConnection
     }
 
@@ -116,7 +224,15 @@ public class NetworkAdapter {
      * @param data envia um inteiro.
      */
     public void sendData(int data) {
-        //TODO Iarly sendData int
+
+        try {
+            currentReceiver.getDataOutputStream().write(data);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
+
     }
 
     /**
@@ -125,7 +241,13 @@ public class NetworkAdapter {
      * @param data envia uma String.
      */
     public void sendData(String data) {
-        //TODO Iarly sendData string
+        try {
+            currentReceiver.getDataOutputStream().writeUTF(data);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
     }
 
     /**
@@ -134,7 +256,13 @@ public class NetworkAdapter {
      * @param data envia um array de bytes.
      */
     public void sendData(byte[] data) {
-        //TODO Iarly sendData byte[]
+        try {
+            currentReceiver.getDataOutputStream().write(data);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
     }
 
     /**
@@ -143,7 +271,14 @@ public class NetworkAdapter {
      * @param data envia um valor booleano.
      */
     public void sendData(boolean data) {
-        //TODO Iarly sendData boolean
+
+        try {
+            currentReceiver.getDataOutputStream().writeBoolean(data);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+
+        }
     }
 
     /**
@@ -154,6 +289,8 @@ public class NetworkAdapter {
      * @param messageProtocol Protocolo de mensagem.
      */
     public void sendProtocol(MessageProtocol messageProtocol) {
+
+
         //TODO Iarly sendProtocol
     }
 
@@ -163,6 +300,7 @@ public class NetworkAdapter {
      * @return Um protocolo de mensagem.
      */
     public MessageProtocol receiveProtocol() {
+
         //TODO Iarly receiveProtocol
         return null;
     }
@@ -173,7 +311,12 @@ public class NetworkAdapter {
      * @return um valor inteiro.
      */
     public int receiveInt() {
-        //TODO Iarly receiveInt
+        try {
+            return currentTransmitter.isOnline() ? currentTransmitter.getDataInputStream().readInt() : 0;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return 0;
     }
 
@@ -183,27 +326,50 @@ public class NetworkAdapter {
      * @return uma string.
      */
     public String receiveString() {
-        //TODO Iarly receiveString
+
+        try {
+            return currentTransmitter.isOnline() ? currentTransmitter.getDataInputStream().readUTF() : null;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         return null;
     }
 
     /**
+     *
      * Recebe um array de bytes do trasmissor atual.
      *
      * @return array de bytes.
+     *
      */
     public byte[] receiveBytes() {
-        //TODO Iarly receiveBytes
+        try {
+            return currentTransmitter.isOnline() ? currentTransmitter.getDataInputStream().readAllBytes() : null;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         return null;
+
     }
 
     /**
-     * Receve um valor boleano do receptor atual.
+     * Recebe um valor boleano do transmissor atual.
      *
      * @return um valor boleano.
      */
     public boolean receiveBoolean() {
-        //TODO Iarly receiveBoolean
+
+        try {
+            return (currentTransmitter.isOnline() && currentTransmitter.getDataInputStream().readBoolean());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         return false;
     }
 
