@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<HBox alignment="CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
+      minWidth="-Infinity" prefHeight="55.0" xmlns="http://javafx.com/javafx/9" xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="com.sayit.ui.control.view.ContactViewController">
+    <children>
+        <Circle fx:id="roundedImage" fill="DODGERBLUE" radius="24.0" stroke="BLACK" strokeType="INSIDE"/>
+        <VBox alignment="CENTER">
+            <children>
+                <Label fx:id="nameLabel" text="Label"/>
+                <Label fx:id="descLabel" text="Label"/>
+            </children>
+        </VBox>
+        <HBox alignment="TOP_RIGHT" HBox.hgrow="SOMETIMES">
+            <children>
+                <Label fx:id="timeLabel" text="Label"/>
+            </children>
+        </HBox>
+    </children>
+</HBox>

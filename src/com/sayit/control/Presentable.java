@@ -10,15 +10,28 @@ public interface Presentable {
 
     Contact getContactInfo(int id);
 
+    Contact getUserProfile();
+
     List<Message> requestMessageList(int id);
 
     List<MessageHistory> getHistoryList();
 
+    List<Contact> getContactList();
+
     void openAddScene();
 
+    //fixme add support to edit contacts from contacts list
     void openEditProfileScene();
 
+    /**
+     * Request contact for add scene.
+     *
+     * @param name
+     */
     void requestContactList(String name);
 
+
     void sendMessage(String message);
+
+    //TODO Add method to send message by bytes
 }

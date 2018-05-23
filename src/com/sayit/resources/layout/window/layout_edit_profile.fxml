@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.Circle?>
+<VBox minHeight="-Infinity" minWidth="-Infinity" styleClass="bt" xmlns="http://javafx.com/javafx/9"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sayit.ui.control.frame.ProfileEditController">
+    <children>
+        <Button mnemonicParsing="false" onAction="#close" text="Button"/>
+        <StackPane prefHeight="150.0" prefWidth="200.0">
+            <children>
+                <Circle fx:id="roundImage" fill="DODGERBLUE" onMouseClicked="#getImage" radius="100.0" stroke="BLACK"
+                        strokeType="INSIDE"/>
+                <Label onMouseClicked="#getImage" text="Label" StackPane.alignment="BOTTOM_CENTER"/>
+            </children>
+        </StackPane>
+        <Label text="Label"/>
+        <TextField fx:id="nameField"/>
+        <HBox alignment="BOTTOM_RIGHT" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+            <children>
+                <Button mnemonicParsing="false" onAction="#confirm" text="Button"/>
+            </children>
+        </HBox>
+    </children>
+</VBox>
