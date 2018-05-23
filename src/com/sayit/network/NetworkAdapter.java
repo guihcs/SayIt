@@ -16,6 +16,14 @@ public class NetworkAdapter {
     private List<Connection> connectionList;
     private Connection currentTransmitter;
     private Connection currentReceiver;
+    private InetAddress multicastGrup;
+
+
+    private final String MCAST_ADDR = "239.239.239.239";
+    private final int MCAST_DEST_PORT = 7777;
+    private final int SERVER_SOCKET_DEST_PORT = 5000;
+    private final int DT_SOCKET_DEST_PORT = 5001;
+    private final int BUFFER_SIZE = 1024;
 
     /**
      * Instancia a interface Map com um LinkedHashMap.
@@ -31,27 +39,20 @@ public class NetworkAdapter {
         connectionList = new LinkedList<>();
 
         try {
-            ServerSocket serverSocket = new ServerSocket(5000);
+
+            serverSocket = new ServerSocket(SERVER_SOCKET_DEST_PORT);
+
+            multicastSocket = new MulticastSocket(MCAST_DEST_PORT);
+
+            datagramSocket = new DatagramSocket(DT_SOCKET_DEST_PORT);
+
+            multicastGrup = InetAddress.getByName(MCAST_ADDR);
+            multicastSocket.joinGroup(multicastGrup);
 
         } catch (IOException e) {
             e.printStackTrace();
 
         }
-
-        try {
-            multicastSocket = new MulticastSocket(5001);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            datagramSocket = new DatagramSocket();
-
-        } catch (SocketException e) {
-            e.printStackTrace();
-        }
-
 
     }
 
@@ -102,11 +103,13 @@ public class NetworkAdapter {
      *
      * @return true se a conexão está ativa ou
      * false se a conexão está inativa ou offline.
+     *
      */
     public boolean nextTransmitter() {
 
         for (Connection co : connectionList) {
             try {
+
                 if (co.isOnline() && !co.getDataInputStream().readAllBytes().equals(null)) {
                     currentTransmitter = co;
                     return true;
@@ -120,7 +123,7 @@ public class NetworkAdapter {
         }
 
         return false;
-
+        //TODO Iarly nextTransmitter
     }
 
     /**
@@ -130,8 +133,25 @@ public class NetworkAdapter {
      */
     public void multicastString(String text) {
 
+        byte[] multicastMessage = text.getBytes();
 
-        multicastSocket.close();
+
+        try {
+
+            DatagramPacket packet = new DatagramPacket(multicastMessage, multicastMessage.length, multicastGrup, MCAST_DEST_PORT);
+            multicastSocket.send(packet);
+
+            // criar close
+
+
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
         //TODO Iarly multicastString
     }
 
@@ -144,9 +164,21 @@ public class NetworkAdapter {
      */
     public String receiveMulticast() {
 
+        byte[] BUFFER = new byte[BUFFER_SIZE];
 
-        multicastSocket.close();
-        //TODO Iarly receiveMulticast
+        DatagramPacket datagramReceivePacket =  new DatagramPacket(BUFFER, BUFFER_SIZE);
+
+        try {
+
+
+
+            multicastSocket.receive(datagramReceivePacket);
+
+            return new String(datagramReceivePacket.getData());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         return null;
     }
 
@@ -158,8 +190,6 @@ public class NetworkAdapter {
      *
      */
     public void connect(InetAddress address) {
-
-
 
         //TODO Iarly connect
     }
@@ -180,6 +210,8 @@ public class NetworkAdapter {
      * Aceita uma nova conexão TCP e adiciona nas listas.
      */
     public void acceptTCPConnection() {
+
+
 
 
         //TODO Iarly acceptTCPConnection
@@ -305,9 +337,11 @@ public class NetworkAdapter {
     }
 
     /**
+     *
      * Recebe um array de bytes do trasmissor atual.
      *
      * @return array de bytes.
+     *
      */
     public byte[] receiveBytes() {
         try {
@@ -318,11 +352,11 @@ public class NetworkAdapter {
         }
 
         return null;
-    
+
     }
 
     /**
-     * Recebe um valor boleano do receptor atual.
+     * Recebe um valor boleano do transmissor atual.
      *
      * @return um valor boleano.
      */
