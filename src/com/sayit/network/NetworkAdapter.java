@@ -12,7 +12,7 @@ public class NetworkAdapter {
 
     private ServerSocket serverSocket;
     private MulticastSocket multicastSocket;
-    private Map<InetAddress, Connection> connectionMap;
+    private Map<String, Connection> connectionMap;
     private List<Connection> connectionList;
     private Connection currentTransmitter;
     private Connection currentReceiver;
@@ -71,8 +71,10 @@ public class NetworkAdapter {
      *
      * @param address Endereço da conexão.
      */
-    public void setCurrentReceiver(InetAddress address) {
+    public boolean setCurrentReceiver(String address) {
+        //TODO Iarly setCurrentReceiver
         currentReceiver = connectionMap.get(address);
+        return false;
     }
 
     /**
@@ -181,7 +183,7 @@ public class NetworkAdapter {
      *
      * @param address Endereço da conexão.
      */
-    public void closeConnection(InetAddress address) {
+    public void closeConnection(String address) {
 
         connectionMap.get(address).closeConnection();
 
