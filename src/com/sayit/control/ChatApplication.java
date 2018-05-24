@@ -30,6 +30,8 @@ public class ChatApplication extends Application implements Presentable {
     public static final String CONTACT_VIEW = "/com/sayit/resources/layout/view/view_contact_cell.fxml";
     public static final String MESSAGE_VIEW = "/com/sayit/resources/layout/view/view_message_cell.fxml";
 
+    public static final String WINDOW_NAME = "Say It";
+
 
     private volatile static ChatApplication instance;
 
@@ -131,6 +133,8 @@ public class ChatApplication extends Application implements Presentable {
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
+
+        primaryStage.setTitle(WINDOW_NAME);
 
         FXMLLoader loader = getLoader(FIND_CONTACT_LAYOUT);
         addView = loadFromLoader(loader);
@@ -316,6 +320,9 @@ public class ChatApplication extends Application implements Presentable {
             isWaitingForContact = false;
             window.close();
         });
+
+        //fixme create addcontact solicitation
+
         isWaitingForContact = true;
         window.showAndWait();
     }
@@ -332,6 +339,12 @@ public class ChatApplication extends Application implements Presentable {
         var window = createModal(addLayout, 400, 300);
 
         editController.setOwnerWindow(window);
+        if(getUserProfile() != null) editController.setContact(getUserProfile());
+        editController.setConcludeCallback(contact -> {
+            contactDao.setUserProfile(contact);
+            chatHome.setUserProfile(contact);
+            window.close();
+        });
         //fixme set conclude callbacks
         editController.setBackCallback(window::close);
 
@@ -355,6 +368,7 @@ public class ChatApplication extends Application implements Presentable {
      */
     @Override
     public void sendMessage(String message) {
+        //fixme null current contact
         requestable.sendMessage(currentContact.getIpAddress(), message);
     }
 

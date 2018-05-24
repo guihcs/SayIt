@@ -25,7 +25,7 @@ import java.util.List;
 
 public class ChatHomeController {
 
-    private Presentable presentable;
+
 
     @FXML
     private TextField messageField;
@@ -51,8 +51,8 @@ public class ChatHomeController {
     private Window parentWindow;
     private Pane findRoot;
 
+    private Presentable presentable;
     private FindContactController findContactController;
-    //TODO Guilherme set observable lists
     private ObservableList<Message> messageObservableList;
     private ObservableList<MessageHistory> historyObservableList;
 
@@ -65,14 +65,14 @@ public class ChatHomeController {
         historyListView.setItems(historyObservableList);
 
         messageListView.setCellFactory(e -> {
-            //TODO Guilherme Set click callback message
             MessageCell messageCell = new MessageCell();
             return messageCell;
         });
         historyListView.setCellFactory(e -> {
-            //TODO Guilherme click callback history load message list
             HistoryCell historyCell = new HistoryCell();
-            //historyCell.setOnMouseClicked(event -> System.out.println("hue"));
+            var historyInfo = historyCell.getItem();
+            setReceiverProfile(historyInfo.getContact());
+            setMessageList(presentable.requestMessageList(historyInfo.getContact().getId()));
             return historyCell;
         });
 
@@ -125,7 +125,7 @@ public class ChatHomeController {
 
     public void sendMessage() {
         if(!messageField.getText().isEmpty()) {
-            //TODO Guilherme sendMessage
+            presentable.sendMessage(messageField.getText());
             messageField.setText("");
         }
     }
@@ -135,7 +135,7 @@ public class ChatHomeController {
     }
 
     public void sendArchive() {
-        //TODO Guilherme sendArchive
+        //fixme sendArchive
         FileChooser fileChooser = new FileChooser();
         fileChooser.showOpenDialog(parentWindow);
     }
@@ -160,5 +160,10 @@ public class ChatHomeController {
     public void setHistoryList(List<MessageHistory> messageHistories) {
         historyObservableList.clear();
         if(messageHistories.size() > 0) historyObservableList.addAll(messageHistories);
+    }
+
+    public void setMessageList(List<Message> messageList) {
+        messageObservableList.clear();
+        if(messageList.size() > 0) messageObservableList.addAll(messageList);
     }
 }
