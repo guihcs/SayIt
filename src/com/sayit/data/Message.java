@@ -1,6 +1,6 @@
 package com.sayit.data;
 
-import java.awt.TrayIcon.MessageType;
+
 import java.util.Date;
 
 public class Message {

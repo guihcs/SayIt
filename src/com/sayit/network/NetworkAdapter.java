@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.net.*;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
-
 import java.util.List;
 import java.util.Map;
 
@@ -13,7 +12,6 @@ public class NetworkAdapter {
 
     private ServerSocket serverSocket;
     private MulticastSocket multicastSocket;
-    private DatagramSocket datagramSocket;
     private Map<InetAddress, Connection> connectionMap;
     private List<Connection> connectionList;
     private Connection currentTransmitter;
@@ -46,8 +44,6 @@ public class NetworkAdapter {
 
             multicastSocket = new MulticastSocket(MCAST_DEST_PORT);
 
-            datagramSocket = new DatagramSocket(DT_SOCKET_DEST_PORT);
-
             multicastGrup = InetAddress.getByName(MCAST_ADDR);
             multicastSocket.joinGroup(multicastGrup);
 
@@ -58,33 +54,16 @@ public class NetworkAdapter {
 
     }
 
+
     /**
-     * Converte um IP de texto em um objeto InetAddress.
-     *
-     * @param internetProtocol IP a ser convertido.
-     * @return Um objeto InetAddress com o mesmo IP.
+     * Retorna a representação string do IP do Transmissor atual.
+     * @return IP do transmissor.
      */
-    public static InetAddress parseAddress(String internetProtocol) {
+    public String getStringAddress() {
+        //TODO Iarly getStringAddress
 
-        try {
-            return InetAddress.getByName(internetProtocol);
-
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-
-        }
         return null;
-    }
 
-    /**
-     * Converte um InetAddress em sua representação String.
-     *
-     * @param address Objeto para conversão.
-     * @return Representação string do objeto.
-     */
-
-    public static String getStringAddress(InetAddress address) {
-        return address.getHostAddress();
     }
 
     /**
@@ -110,7 +89,7 @@ public class NetworkAdapter {
 
         for (Connection co : connectionList) {
             try {
-
+                //TODO Iarly fix available
                 if (co.isOnline() && !co.getDataInputStream().readAllBytes().equals(null)) {
                     currentTransmitter = co;
                     return true;
@@ -185,12 +164,13 @@ public class NetworkAdapter {
 
     /**
      *
-     * Inicia uma nova conexão.
+     * Inicia uma nova conexão TCP através do IP especificado
+     * e a adciona na lista de conecções.
      *
-     * @param address Endereço do socket.
+     * @param ipAddress Endereço ip do socket.
      *
      */
-    public void connect(InetAddress address) {
+    public void connect(String ipAddress) {
 
         //TODO Iarly connect
     }
@@ -208,7 +188,8 @@ public class NetworkAdapter {
     }
 
     /**
-     * Aceita uma nova conexão TCP e adiciona nas listas.
+     * Aceita uma nova conecção à partir do server socket.
+     * Encapsula o socket em uma classe connection e adiciona nas listas.
      */
     public void acceptTCPConnection() {
 
@@ -282,30 +263,6 @@ public class NetworkAdapter {
     }
 
     /**
-     * Envia um protocolo de mensagem para o receptor atual.
-     * Esse protocolo descreve os tipos de dados a serem enviados.
-     * É o primeiro tipo de informação a ser enviada para comunicação.
-     *
-     * @param messageProtocol Protocolo de mensagem.
-     */
-    public void sendProtocol(MessageProtocol messageProtocol) {
-
-
-        //TODO Iarly sendProtocol
-    }
-
-    /**
-     * Recebe um protocolo de mensagem informando os tipos de dados a receber.
-     *
-     * @return Um protocolo de mensagem.
-     */
-    public MessageProtocol receiveProtocol() {
-
-        //TODO Iarly receiveProtocol
-        return null;
-    }
-
-    /**
      * Recebe um valor inteiro do transmissor atual.
      *
      * @return um valor inteiro.
@@ -373,12 +330,13 @@ public class NetworkAdapter {
         return false;
     }
 
-    public void senderEnum(Enum enumeration){
 
-    }
-
-    public MessageType receiverEnum(){
-        return null;
+    /**
+     * Encerra o adaptador liberando todos os recursos
+     * e fechando todas as conexões.
+     */
+    public void closeAdapter() {
+        //TODO Iarly closeAdapter
     }
 
 

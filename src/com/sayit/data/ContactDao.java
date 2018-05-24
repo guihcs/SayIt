@@ -5,6 +5,7 @@ import javafx.scene.image.Image;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ContactDao {
 
@@ -18,6 +19,11 @@ public class ContactDao {
         contactList = new ArrayList<>();
         messageMap = new LinkedHashMap<>();
     }
+
+    public static int parseAddress(String address) {
+        return 0;
+    }
+
 
     /**
      * Adciona o contato na lista de contatos.
@@ -142,11 +148,4 @@ public class ContactDao {
         return null;
     }
 
-    public void loadContactList() {
-
-    }
-
-    public void loadHistoryList() {
-
-    }
 }

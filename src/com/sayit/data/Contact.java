@@ -5,7 +5,6 @@ import javafx.scene.image.Image;
 public class Contact {
 
     private Image photo;
-    private String path;
     private String ipAddress;
     private int id;
     private String name;
@@ -33,10 +32,6 @@ public class Contact {
         this.photo = photo;
     }
 
-    public void setPath(String path) {
-        this.path = path;
-    }
-
     public void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
     }
@@ -53,10 +48,6 @@ public class Contact {
         return photo;
     }
 
-    public String getPath() {
-        return path;
-    }
-
     public String getIpAddress() {
         return ipAddress;
     }
@@ -70,6 +61,6 @@ public class Contact {
     @Override
     public String toString() {
 
-        return name + "#" + photo + "#" + path + "#" + ipAddress;
+        return name + "#" + photo + "#" + "#" + ipAddress;
     }
 }

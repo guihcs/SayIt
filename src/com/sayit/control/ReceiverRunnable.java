@@ -17,7 +17,7 @@ public class ReceiverRunnable implements Runnable {
         //TODO Segundo run
         while(context.isRunning()){
             if(networkAdapter.nextTransmitter()){
-                protocol = networkAdapter.receiveProtocol();
+                //protocol = networkAdapter.receiveInt();
 
                 switch (protocol){
 

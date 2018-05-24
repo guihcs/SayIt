@@ -140,11 +140,11 @@ public class ChatApplication extends Application implements Presentable {
     /**
      * Adiciona uma mensagem de texto ao contato especificado.
      *
-     * @param id      o identificador do contato.
+     * @param sid      o identificador do contato.
      * @param message a mensagem a ser adicionada
      */
-    public void addMessage(int id, String message) {
-        //fixme resolve id
+    public void addMessage(String sid, String message) {
+        int id = ContactDao.parseAddress(sid);
         Contact contact = contactDao.getContact(id);
         Message newMessage = new Message(contact, false, message, MessageType.TEXT);
         contactDao.addMessage(id, newMessage);
@@ -153,12 +153,12 @@ public class ChatApplication extends Application implements Presentable {
     /**
      * Adiciona uma mensagem ao contato específico.
      *
-     * @param id          identificador do contato.
+     * @param sid          identificador do contato.
      * @param content     conteúdo da mensagem.
      * @param messageType tipo da mensagem.
      */
-    public void addMessage(int id, byte[] content, MessageType messageType) {
-        //fixme resolve id
+    public void addMessage(String sid, byte[] content, MessageType messageType) {
+        int id = ContactDao.parseAddress(sid);
         Contact contact = contactDao.getContact(id);
         contactDao.addMessage(id, new Message(contact, false, content, messageType));
     }
