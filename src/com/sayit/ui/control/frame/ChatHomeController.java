@@ -7,6 +7,8 @@ import com.sayit.data.Message;
 import com.sayit.data.MessageHistory;
 import com.sayit.ui.control.view.HistoryCell;
 import com.sayit.ui.control.view.MessageCell;
+import javafx.animation.Interpolator;
+import javafx.animation.TranslateTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -19,6 +21,7 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
+import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.List;
@@ -56,6 +59,10 @@ public class ChatHomeController {
     private ObservableList<Message> messageObservableList;
     private ObservableList<MessageHistory> historyObservableList;
 
+    //Open contact animation
+    private TranslateTransition translateTransition;
+    private Duration transitionDuration;
+
     public void initialize() {
 
         messageObservableList = FXCollections.observableArrayList();
@@ -84,14 +91,21 @@ public class ChatHomeController {
             findPane.getChildren().add(findRoot);
 
 
-            findPane.heightProperty().addListener(e -> {
-
-                findRoot.setPrefHeight(findPane.getHeight());
-            });
+            findPane.heightProperty().addListener(e -> findRoot.setPrefHeight(findPane.getHeight()));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        configSlideAnimation();
+    }
+
+
+    private void configSlideAnimation() {
+        transitionDuration = Duration.millis(300);
+        translateTransition = new TranslateTransition(transitionDuration, findRoot);
+
+
+        translateTransition.setInterpolator(Interpolator.EASE_OUT);
     }
 
     public void setPresentable(Presentable presentable) {
@@ -107,11 +121,25 @@ public class ChatHomeController {
         findRoot.setPrefWidth(findPane.getWidth());
         //findRoot.setLayoutX(50);
         //fixme add slide animation
+
+        translateTransition.setFromX(findPane.getWidth());
+        translateTransition.setToX(0);
+        translateTransition.setOnFinished(null);
+        translateTransition.playFromStart();
     }
 
     public void closeFindContact() {
-        findPane.setManaged(false);
-        findPane.setVisible(false);
+
+        translateTransition.setFromX(0);
+        translateTransition.setToX(findPane.getWidth());
+        translateTransition.setInterpolator(Interpolator.EASE_IN);
+        translateTransition.setOnFinished(e -> {
+            findPane.setManaged(false);
+            findPane.setVisible(false);
+        });
+        translateTransition.playFromStart();
+
+
     }
 
     public void showAddContact() {
