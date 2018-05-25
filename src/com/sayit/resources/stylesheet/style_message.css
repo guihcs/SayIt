@@ -1,0 +1,35 @@
+.message-box {
+
+	-fx-background-radius: 10px;
+	-fx-padding: 6px 6px 6px 6px;
+	-fx-background-color: white;
+
+}
+
+
+.time-box {
+	-fx-padding: 0 0 0 50px;
+
+}
+
+
+#text-message {
+
+	-fx-font-size: 14px;
+
+}
+
+
+
+#time-message {
+
+	-fx-font-size: 12px;
+	-fx-text-fill: gray;
+}
+
+
+#user-message {
+
+
+
+}

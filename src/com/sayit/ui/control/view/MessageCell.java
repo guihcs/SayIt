@@ -33,6 +33,7 @@ public class MessageCell extends ListCell<Message> {
 
     @Override
     protected void updateItem(Message item, boolean empty) {
+        //TODO Guilherme updateItem message
         super.updateItem(item, empty);
         if(empty) setGraphic(null);
     }

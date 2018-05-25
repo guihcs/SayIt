@@ -21,7 +21,9 @@ import java.io.IOException;
 import java.util.List;
 
 public class ChatApplication extends Application implements Presentable {
-
+    //Window Constants
+    public static final String WINDOW_NAME = "Say It";
+    //Layouts
     public static final String HOME_LAYOUT = "/com/sayit/resources/layout/window/layout_chat_home.fxml";
     public static final String START_LAYOUT = "/com/sayit/resources/layout/window/layout_start.fxml";
     public static final String START_FRAME = "/com/sayit/resources/layout/window/layout_frame_start.fxml";
@@ -29,8 +31,9 @@ public class ChatApplication extends Application implements Presentable {
     public static final String EDIT_PROFILE_LAYOUT = "/com/sayit/resources/layout/window/layout_edit_profile.fxml";
     public static final String CONTACT_VIEW = "/com/sayit/resources/layout/view/view_contact_cell.fxml";
     public static final String MESSAGE_VIEW = "/com/sayit/resources/layout/view/view_message_cell.fxml";
+    //Styles
+    public static final String HOME_STYLE = "com/sayit/resources/stylesheet/style_chat_home.css";
 
-    public static final String WINDOW_NAME = "Say It";
 
 
     private volatile static ChatApplication instance;
@@ -93,6 +96,12 @@ public class ChatApplication extends Application implements Presentable {
         }
         return null;
     }
+
+
+    public static String getStyleSheet(String path) {
+        return ChatApplication.class.getResource(path).toExternalForm();
+    }
+
 
     /**
      * Abre uma janela modal especificando o tamanho.
@@ -193,6 +202,10 @@ public class ChatApplication extends Application implements Presentable {
         chatHome = loader.getController();
         chatHome.setPresentable(this);
         chatHome.setParentWindow(primaryStage);
+        //fixme create string constant for stylesheets
+        var res = getClass().getResource("../resources/stylesheet/style_chat_home.css");
+
+        parent.getStylesheets().add(res.toExternalForm());
 
         chatHome.setUserProfile(contactDao.getUserProfile());
         chatHome.setHistoryList(contactDao.getHistoryList());

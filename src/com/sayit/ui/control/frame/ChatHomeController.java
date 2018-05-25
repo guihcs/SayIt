@@ -15,10 +15,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.TextArea;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import javafx.util.Duration;
@@ -31,7 +32,7 @@ public class ChatHomeController {
 
 
     @FXML
-    private TextField messageField;
+    private TextArea messageField;
     @FXML
     private Pane findPane;
     @FXML
@@ -62,6 +63,9 @@ public class ChatHomeController {
     //Open contact animation
     private TranslateTransition translateTransition;
     private Duration transitionDuration;
+
+    //Resize text property
+    private Text messageText = new Text();
 
     public void initialize() {
 
@@ -95,6 +99,8 @@ public class ChatHomeController {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        messageField.setOnKeyReleased(e -> resizeTextArea());
 
         configSlideAnimation();
     }
@@ -139,6 +145,21 @@ public class ChatHomeController {
         });
         translateTransition.playFromStart();
 
+
+    }
+
+
+    public void resizeTextArea() {
+        //fixme upgrade height calculation
+        messageText.setText(messageField.getText());
+        messageText.setWrappingWidth(messageField.getWidth());
+        messageText.setFont(messageField.getFont());
+
+        if(messageText.getLayoutBounds().getHeight() >= (messageText.getFont().getSize() + messageText.getLineSpacing()) * 5) {
+            messageText.setText("\n\n\n\n");
+        }
+
+        messageField.setPrefHeight(messageText.getLayoutBounds().getHeight() + 10);
 
     }
 

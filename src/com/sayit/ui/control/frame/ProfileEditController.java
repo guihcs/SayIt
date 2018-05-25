@@ -25,7 +25,7 @@ public class ProfileEditController {
     private TextField nameField;
 
     public void initialize() {
-        contact = new Contact("Antonio", new Image("http://i.imgur.com/jAkOMcB.png"), "192.168.0.1");
+        contact = new Contact("Antonio", new Image("com/sayit/resources/icons/avatar.png"), "192.168.0.1");
     }
 
     public void close() {

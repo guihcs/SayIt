@@ -1,11 +1,9 @@
 package com.sayit.control;
 
-import com.sayit.data.Contact;
 import com.sayit.data.ContactDao;
 import com.sayit.data.MessageType;
 import com.sayit.network.MessageProtocol;
 import com.sayit.network.NetworkAdapter;
-import javafx.scene.image.Image;
 
 import java.nio.file.Path;
 import java.util.List;
@@ -30,9 +28,8 @@ public class RequestMediator implements Requestable {
         //Application.launch(ChatApplication.class, args);
         ContactDao contactDao = new ContactDao();
 
-
         ChatApplication app = ChatApplication.launchApplication(args, new RequestMediator(), contactDao);
-        contactDao.setUserProfile(new Contact("Antonio", new Image("http://i.imgur.com/jAkOMcB.png"), "192.168.0.1"));
+        //contactDao.setUserProfile();
         app.openStartScene();
         //TODO Segundo main
     }
