@@ -38,10 +38,10 @@ public class NetworkAdapter {
         currentTransmitterControl = 0;
 
         try {
+            //throw  new IOException();
+            //serverSocket = new ServerSocket(8675);
 
-            serverSocket = new ServerSocket(SERVER_SOCKET_DEST_PORT);
-
-            multicastSocket = new MulticastSocket(MCAST_DEST_PORT);
+             multicastSocket = new MulticastSocket(MCAST_DEST_PORT);
 
             multicastGrup = InetAddress.getByName(MCAST_ADDR);
 

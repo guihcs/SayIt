@@ -322,6 +322,12 @@ public class ChatApplication extends Application implements Presentable {
             isWaitingForContact = false;
             window.close();
         });
+
+        findContactController.setContactResult(contact -> {
+            requestable.requestContact("lucas");
+        });
+
+
         //fixme send contact solicitation
         //fixme create addcontact solicitation
 
@@ -375,5 +381,9 @@ public class ChatApplication extends Application implements Presentable {
         requestable.sendMessage(currentContact.getIpAddress(), message);
     }
 
-
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+        requestable.stopServices();
+    }
 }

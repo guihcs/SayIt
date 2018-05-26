@@ -58,6 +58,14 @@ public class Message {
         this.type = type;
     }
 
+    public String getTextContent() {
+        return textContent;
+    }
+
+    public Date getMessageDate() {
+        return messageDate;
+    }
+
     /**
      * Retorna uma representação String do objeto.
      *

@@ -12,8 +12,8 @@ public class ReceiverRunnable implements Runnable {
     private int protocolInt;
 
 
-    public ReceiverRunnable(){
-        this.context = new RequestMediator();
+    public ReceiverRunnable(RequestMediator requestMediator){
+        this.context = requestMediator;
         this.networkAdapter = context.getNetworkAdapter();
     }
 

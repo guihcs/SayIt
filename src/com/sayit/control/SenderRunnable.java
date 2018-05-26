@@ -13,8 +13,8 @@ public class SenderRunnable implements Runnable {
     private LinkedList<RequestEvent> eventList;
 
 
-    public SenderRunnable(){
-        context = new RequestMediator();
+    public SenderRunnable(RequestMediator requestMediator){
+        context = requestMediator;
         networkAdapter = context.getNetworkAdapter();
         eventList = new LinkedList<>();
     }
