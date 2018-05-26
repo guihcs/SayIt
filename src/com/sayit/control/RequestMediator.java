@@ -10,14 +10,20 @@ import java.util.List;
 
 public class RequestMediator implements Requestable {
 
-    private Path historyFolderPath;
-    private Path messagesFolderPath;
-    private Path contactsFolderPath;
     private ChatApplication chatApplication;
     private NetworkAdapter networkAdapter;
     private volatile boolean isRunning;
     private SenderRunnable senderRunnable;
     private ReceiverRunnable receiverRunnable;
+
+    public RequestMediator(){
+        this.isRunning = true;
+        this.networkAdapter = new NetworkAdapter();
+        senderRunnable = new SenderRunnable();
+        receiverRunnable = new ReceiverRunnable();
+
+
+    }
 
     /**
      * Metodo principal
@@ -27,11 +33,14 @@ public class RequestMediator implements Requestable {
     public static void main(String[] args) {
         //Application.launch(ChatApplication.class, args);
         ContactDao contactDao = new ContactDao();
+        RequestMediator mediator = new RequestMediator();
 
         ChatApplication app = ChatApplication.launchApplication(args, new RequestMediator(), contactDao);
-        //contactDao.setUserProfile();
-        app.openStartScene();
+        
         //TODO Segundo main
+
+        mediator.setChatApplication(app);
+        app.openStartScene();
     }
 
     /**
@@ -68,7 +77,15 @@ public class RequestMediator implements Requestable {
      */
     @Override
     public void sendMessage(String address, byte[] content, MessageType messageType) {
-        //TODO Segundo sendMessage
+
+        RequestEvent event = new RequestEvent();
+        event.setIdentifier(address);
+        event.setContent(content);
+        event.setMessageType(messageType);
+        event.setEventType(EventType.SEND_MESSAGE);
+
+        senderRunnable.addEvent(event);
+
     }
 
     /**
@@ -79,7 +96,14 @@ public class RequestMediator implements Requestable {
      */
     @Override
     public void sendMessage(String address, String message) {
-        //TODO Segundo sendMessage
+
+        RequestEvent event = new RequestEvent();
+        event.setMessage(message);
+        event.setIdentifier(address);
+        event.setMessageType(MessageType.TEXT);
+        event.setEventType(EventType.SEND_MESSAGE);
+
+        senderRunnable.addEvent(event);
     }
 
     /**
@@ -163,5 +187,19 @@ public class RequestMediator implements Requestable {
         //TODO Segundo startServerThread
     }
 
+    public NetworkAdapter getNetworkAdapter(){
+        return networkAdapter;
+    }
+
+    public void setChatApplication(ChatApplication chatApplication){
+        this.chatApplication = chatApplication;
+
+    }
+
+    public ChatApplication getChatApplication(){
+        return chatApplication;
+    }
+
 
 }
+

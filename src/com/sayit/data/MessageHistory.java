@@ -11,6 +11,7 @@ public class MessageHistory {
     private Date lastMessageDate;
 
     public MessageHistory(Contact contact) {
+
         this.contact = contact;
     }
 
@@ -20,7 +21,8 @@ public class MessageHistory {
      * @param message
      */
     public void addMessage(Message message) {
-        //TODO Djan addMessage
+
+        messageList.add(message);
     }
 
 

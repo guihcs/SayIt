@@ -116,6 +116,12 @@ public class Connection {
             e.printStackTrace();
 
         }
+
+
+    }
+
+    public String getpIPAddress(){
+        return socket.getLocalAddress().getHostAddress();
     }
 
 
