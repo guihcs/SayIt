@@ -123,6 +123,7 @@ public class RequestMediator implements Requestable {
     @Override
     public void requestContact(String name) {
         //TODO Segundo requestContact
+        System.out.println("mediator: request contact");
         networkAdapter.multicastString(name);
     }
 

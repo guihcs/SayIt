@@ -324,6 +324,7 @@ public class ChatApplication extends Application implements Presentable {
         });
 
         findContactController.setContactResult(contact -> {
+            System.out.println("requestable: request contact");
             requestable.requestContact("lucas");
         });
 
