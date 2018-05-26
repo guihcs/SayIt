@@ -21,7 +21,9 @@ import java.io.IOException;
 import java.util.List;
 
 public class ChatApplication extends Application implements Presentable {
-
+    //Window Constants
+    public static final String WINDOW_NAME = "Say It";
+    //Layouts
     public static final String HOME_LAYOUT = "/com/sayit/resources/layout/window/layout_chat_home.fxml";
     public static final String START_LAYOUT = "/com/sayit/resources/layout/window/layout_start.fxml";
     public static final String START_FRAME = "/com/sayit/resources/layout/window/layout_frame_start.fxml";
@@ -29,7 +31,11 @@ public class ChatApplication extends Application implements Presentable {
     public static final String EDIT_PROFILE_LAYOUT = "/com/sayit/resources/layout/window/layout_edit_profile.fxml";
     public static final String CONTACT_VIEW = "/com/sayit/resources/layout/view/view_contact_cell.fxml";
     public static final String MESSAGE_VIEW = "/com/sayit/resources/layout/view/view_message_cell.fxml";
-
+    //Styles
+    public static final String HOME_STYLE = "/com/sayit/resources/stylesheet/style_chat_home.css";
+    public static final String FIND_CONTACT_STYLE = "/com/sayit/resources/stylesheet/style_find_contact.css";
+    public static final String EDIT_CONTACT_STYLE = "/com/sayit/resources/stylesheet/style_edit_proile.css";
+    public static final String MESSAGE_STYLE = "/com/sayit/resources/stylesheet/style_message.css";
 
     private volatile static ChatApplication instance;
 
@@ -41,8 +47,6 @@ public class ChatApplication extends Application implements Presentable {
     private FindContactController findContactController;
     private ProfileEditController profileEditController;
     private boolean isWaitingForContact;
-
-    private Node addView;
 
     public ChatApplication() {
         ChatApplication.instance = this;
@@ -70,8 +74,8 @@ public class ChatApplication extends Application implements Presentable {
     /**
      * Get a fxml loader.
      *
-     * @param path
-     * @return
+     * @param path Node address
+     * @return FxmlLoader Object
      */
     public static FXMLLoader getLoader(String path) {
         return new FXMLLoader(ChatApplication.class.getResource(path));
@@ -80,8 +84,8 @@ public class ChatApplication extends Application implements Presentable {
     /**
      * Load a node from a loader to reduce try/catch verbosity.
      *
-     * @param loader
-     * @return
+     * @param loader Loader Object
+     * @return inflated Node
      */
     public static Node loadFromLoader(FXMLLoader loader) {
         try {
@@ -93,28 +97,22 @@ public class ChatApplication extends Application implements Presentable {
     }
 
 
-    /**
-     * Abre uma janela modal.
-     *
-     * @param root
-     */
-    private Stage createModal(Node root) {
-        Stage stage = new Stage(StageStyle.UNDECORATED);
-        Scene scene = new Scene((Parent) root);
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setScene(scene);
-        return stage;
+    public static String getStyleSheet(String path) {
+        String css = ChatApplication.class.getResource(path).toExternalForm();
+        if(css == null) System.out.println("null");
+        return css;
     }
+
 
     /**
      * Abre uma janela modal especificando o tamanho.
      *
-     * @param root
-     * @param width
-     * @param height
+     * @param root Node Layout
+     * @param width window width
+     * @param height window height
      */
     private Stage createModal(Node root, double width, double height) {
-        Stage stage = new Stage(StageStyle.UNDECORATED);
+        Stage stage = new Stage();
         Scene scene = new Scene((Parent) root, width, height);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
@@ -126,15 +124,13 @@ public class ChatApplication extends Application implements Presentable {
     /**
      * Metodo chamado ao iniciar a aplicação.
      *
-     * @param primaryStage
+     * @param primaryStage Main Window
      */
     @Override
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
 
-        FXMLLoader loader = getLoader(FIND_CONTACT_LAYOUT);
-        addView = loadFromLoader(loader);
-        findContactController = loader.getController();
+        primaryStage.setTitle(WINDOW_NAME);
     }
 
     /**
@@ -155,12 +151,14 @@ public class ChatApplication extends Application implements Presentable {
      *
      * @param sid          identificador do contato.
      * @param content     conteúdo da mensagem.
-     * @param messageType tipo da mensagem.
+     * @param fileName tipo da mensagem.
      */
-    public void addMessage(String sid, byte[] content, MessageType messageType) {
+    public void addMessage(String sid, byte[] content, String fileName) {
+        //fixme create a request contact list
         int id = ContactDao.parseAddress(sid);
         Contact contact = contactDao.getContact(id);
-        contactDao.addMessage(id, new Message(contact, false, content, messageType));
+        //fixme get file type from name
+        //contactDao.addMessage(id, new Message(contact, false, content, messageType));
     }
 
     /**
@@ -177,8 +175,6 @@ public class ChatApplication extends Application implements Presentable {
 
     /**
      * Abre a tela inicial da aplicação, contendo a tela de edição de perfil.
-     *
-     * @return O contato editado.
      */
     public void openStartScene() {
         FXMLLoader loader = getLoader(START_FRAME);
@@ -205,6 +201,10 @@ public class ChatApplication extends Application implements Presentable {
         chatHome = loader.getController();
         chatHome.setPresentable(this);
         chatHome.setParentWindow(primaryStage);
+        //fixme create string constant for stylesheets
+        var res = getClass().getResource("../resources/stylesheet/style_chat_home.css");
+
+        parent.getStylesheets().add(res.toExternalForm());
 
         chatHome.setUserProfile(contactDao.getUserProfile());
         chatHome.setHistoryList(contactDao.getHistoryList());
@@ -220,7 +220,7 @@ public class ChatApplication extends Application implements Presentable {
     /**
      * Retorna verdadeiro se estiver requisitando contatos.
      *
-     * @return
+     * @return Caso esteja esperando por contatos.
      */
     public boolean isWaitingForContact() {
         return isWaitingForContact;
@@ -229,8 +229,8 @@ public class ChatApplication extends Application implements Presentable {
     /**
      * Adiciona uma requisição de contato para a lista.
      *
-     * @param name
-     * @param image
+     * @param name Contact name
+     * @param image Contact Icon
      */
     public void addContactRequest(String name, byte[] image, String address) {
         if(isWaitingForContact) {
@@ -252,7 +252,7 @@ public class ChatApplication extends Application implements Presentable {
      * Retorna um contato específico.
      *
      * @param id identificador do contato.
-     * @return
+     * @return A contact object
      */
     @Override
     public Contact getContactInfo(int id) {
@@ -262,7 +262,7 @@ public class ChatApplication extends Application implements Presentable {
     /**
      * Retorna o perfil do usuário atual.
      *
-     * @return
+     * @return the current user contact
      */
     @Override
     public Contact getUserProfile() {
@@ -273,11 +273,12 @@ public class ChatApplication extends Application implements Presentable {
      * Retorna a lista de mensagens de um contato específico. E configura o contato
      * como receptor atual.
      *
-     * @param id
-     * @return
+     * @param id User id for search
+     * @return list of messages from contact
      */
     @Override
     public List<Message> requestMessageList(int id) {
+        //fixme addload from database function
         var messageList = contactDao.getMessageList(id);
         if(messageList == null) requestable.loadMessageList(id);
         return messageList;
@@ -286,7 +287,7 @@ public class ChatApplication extends Application implements Presentable {
     /**
      * Retorna a lista de históricos.
      *
-     * @return
+     * @return history list.
      */
     @Override
     public List<MessageHistory> getHistoryList() {
@@ -296,7 +297,7 @@ public class ChatApplication extends Application implements Presentable {
     /**
      * Retorna a lista de contatos;
      *
-     * @return
+     * @return contact list.
      */
     @Override
     public List<Contact> getContactList() {
@@ -310,12 +311,20 @@ public class ChatApplication extends Application implements Presentable {
     @Override
     public void openAddScene() {
 
+        FXMLLoader loader = getLoader(FIND_CONTACT_LAYOUT);
+        Parent addView = (Parent)loadFromLoader(loader);
+        addView.getStylesheets().add(getStyleSheet(FIND_CONTACT_STYLE));
+        findContactController = loader.getController();
+
         var window = createModal(addView, 400, 300);
         //fixme set button callbacks
         findContactController.setCloseCallback(() -> {
             isWaitingForContact = false;
             window.close();
         });
+        //fixme send contact solicitation
+        //fixme create addcontact solicitation
+
         isWaitingForContact = true;
         window.showAndWait();
     }
@@ -327,11 +336,18 @@ public class ChatApplication extends Application implements Presentable {
     public void openEditProfileScene() {
 
         FXMLLoader loader = getLoader(EDIT_PROFILE_LAYOUT);
-        Node addLayout = loadFromLoader(loader);
+        Parent editLayout = (Parent)loadFromLoader(loader);
+        editLayout.getStylesheets().add(getStyleSheet(EDIT_CONTACT_STYLE));
         ProfileEditController editController = loader.getController();
-        var window = createModal(addLayout, 400, 300);
+        var window = createModal(editLayout, 400, 300);
 
         editController.setOwnerWindow(window);
+        if(getUserProfile() != null) editController.setContact(getUserProfile());
+        editController.setConcludeCallback(contact -> {
+            contactDao.setUserProfile(contact);
+            chatHome.setUserProfile(contact);
+            window.close();
+        });
         //fixme set conclude callbacks
         editController.setBackCallback(window::close);
 
@@ -341,7 +357,7 @@ public class ChatApplication extends Application implements Presentable {
     /**
      * Requisita a lista de contatos.
      *
-     * @param name
+     * @param name contact name for add.
      */
     @Override
     public void requestContactList(String name) {
@@ -355,6 +371,7 @@ public class ChatApplication extends Application implements Presentable {
      */
     @Override
     public void sendMessage(String message) {
+        //fixme null current contact
         requestable.sendMessage(currentContact.getIpAddress(), message);
     }
 

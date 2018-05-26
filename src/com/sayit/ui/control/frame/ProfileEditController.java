@@ -5,9 +5,12 @@ import com.sayit.ui.control.ContactManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
+
+import java.nio.file.Path;
 
 public class ProfileEditController {
 
@@ -22,7 +25,8 @@ public class ProfileEditController {
     private TextField nameField;
 
     public void initialize() {
-        contact = new Contact("Antonio", new Image("http://i.imgur.com/jAkOMcB.png"), "192.168.0.1");
+        contact = new Contact("Antonio", new Image("com/sayit/resources/icons/avatar.png"), "192.168.0.1");
+        setContact(contact);
     }
 
     public void close() {
@@ -31,15 +35,22 @@ public class ProfileEditController {
 
     public void confirm() {
         if(concludeCallback != null) {
+            //TODO Guilherme confirm check for empty values
+            contact.setName(nameField.getText());
             concludeCallback.contactResult(contact);
         }
-        //TODO Guilherme confirm (create profile)
     }
 
     public void getImage() {
         FileChooser fileChooser = new FileChooser();
-        fileChooser.showOpenDialog(ownerWindow);
-        //TODO Guilherme getImage
+        fileChooser.setTitle("Load Image");
+        var imagePath = fileChooser.showOpenDialog(ownerWindow);
+        if(imagePath != null) {
+            Path path = imagePath.toPath();
+            Image image = new Image(path.toUri().toString());
+            roundImage.setFill(new ImagePattern(image));
+            contact.setPhoto(image);
+        }
     }
 
     public void setBackCallback(Runnable backCallback) {
@@ -56,5 +67,7 @@ public class ProfileEditController {
 
     public void setContact(Contact contact) {
         this.contact = contact;
+        roundImage.setFill(new ImagePattern(contact.getPhoto()));
+        nameField.setText(contact.getName());
     }
 }

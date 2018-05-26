@@ -27,7 +27,7 @@ public class FindContactController {
         contactListView.setItems(contactObservableList);
         contactListView.setCellFactory(e -> {
             ContactCell contactCell = new ContactCell();
-            //fixme Set click callback contact
+            contactCell.setOnMouseClicked(ev -> contactManager.contactResult(contactCell.getItem()));
 
             return contactCell;
         });
@@ -39,7 +39,11 @@ public class FindContactController {
     }
 
     public void search() {
-        //TODO Guilherme search
+        contactObservableList.sort((c1, c2) -> {
+            if(c1.getName().contains(nameField.getText())) return -1;
+            else if(c2.getName().contains(nameField.getText())) return 1;
+            return 0;
+        });
     }
 
     public void setContactList(List<Contact> contactObservableList) {
@@ -51,7 +55,7 @@ public class FindContactController {
         this.closeCallback = closeCallback;
     }
 
-    private void setContactResult(ContactManager contactManager) {
+    public void setContactResult(ContactManager contactManager) {
         this.contactManager = contactManager;
     }
 

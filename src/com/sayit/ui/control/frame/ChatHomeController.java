@@ -5,30 +5,39 @@ import com.sayit.control.Presentable;
 import com.sayit.data.Contact;
 import com.sayit.data.Message;
 import com.sayit.data.MessageHistory;
+import com.sayit.data.MessageType;
 import com.sayit.ui.control.view.HistoryCell;
 import com.sayit.ui.control.view.MessageCell;
+import javafx.animation.Interpolator;
+import javafx.animation.TranslateTransition;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.TextArea;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
+import javafx.util.Duration;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ChatHomeController {
 
-    private Presentable presentable;
+
 
     @FXML
-    private TextField messageField;
+    private TextArea messageField;
     @FXML
     private Pane findPane;
     @FXML
@@ -51,10 +60,21 @@ public class ChatHomeController {
     private Window parentWindow;
     private Pane findRoot;
 
+    //list glass panel
+    @FXML
+    private VBox listGlassPanel;
+
+    private Presentable presentable;
     private FindContactController findContactController;
-    //TODO Guilherme set observable lists
     private ObservableList<Message> messageObservableList;
     private ObservableList<MessageHistory> historyObservableList;
+
+    //Open contact animation
+    private TranslateTransition translateTransition;
+    private Duration transitionDuration;
+
+    //Resize text property
+    private Text messageText = new Text();
 
     public void initialize() {
 
@@ -65,33 +85,70 @@ public class ChatHomeController {
         historyListView.setItems(historyObservableList);
 
         messageListView.setCellFactory(e -> {
-            //TODO Guilherme Set click callback message
             MessageCell messageCell = new MessageCell();
             return messageCell;
         });
         historyListView.setCellFactory(e -> {
-            //TODO Guilherme click callback history load message list
             HistoryCell historyCell = new HistoryCell();
-            //historyCell.setOnMouseClicked(event -> System.out.println("hue"));
+            var historyInfo = historyCell.getItem();
+            setReceiverProfile(historyInfo.getContact());
+            setMessageList(presentable.requestMessageList(historyInfo.getContact().getId()));
             return historyCell;
         });
 
         FXMLLoader loader = ChatApplication.getLoader(ChatApplication.FIND_CONTACT_LAYOUT);
         try {
             findRoot = loader.load();
+             findRoot.getStylesheets().add(ChatApplication.getStyleSheet(ChatApplication.FIND_CONTACT_STYLE));
             findContactController = loader.getController();
             findContactController.setCloseCallback(this::closeFindContact);
             findPane.getChildren().add(findRoot);
 
 
-            findPane.heightProperty().addListener(e -> {
-
-                findRoot.setPrefHeight(findPane.getHeight());
-            });
+            findPane.heightProperty().addListener(e -> findRoot.setPrefHeight(findPane.getHeight()));
         } catch (IOException e) {
             e.printStackTrace();
         }
 
+        messageField.setOnKeyReleased(e -> resizeTextArea());
+
+        configSlideAnimation();
+
+        List<Message> messages = new ArrayList<>();
+
+
+        //fixme event to listmessage is blocked by glass panel
+        for (int i = 0; i < 100; i++) {
+            String message = "";
+            for (int j = 0; j < Math.random() * 10 + 1; j++) {
+                message += "Escrevi seu nome na areia ";
+            }
+            messages.add(new Message(null, Math.random() * 10 > 5, message, MessageType.TEXT));
+        }
+
+        setMessageList(messages);
+
+//        listGlassPanel.addEventFilter(MouseEvent.ANY, e -> {
+//            messageListView.fireEvent(e);
+//            //System.out.println(e);
+//        });
+//
+//
+//
+//        messageListView.addEventFilter(MouseEvent.ANY, e -> {
+//            System.out.println(e);
+//        });
+
+
+    }
+
+
+    private void configSlideAnimation() {
+        transitionDuration = Duration.millis(300);
+        translateTransition = new TranslateTransition(transitionDuration, findRoot);
+
+
+        translateTransition.setInterpolator(Interpolator.EASE_OUT);
     }
 
     public void setPresentable(Presentable presentable) {
@@ -107,11 +164,40 @@ public class ChatHomeController {
         findRoot.setPrefWidth(findPane.getWidth());
         //findRoot.setLayoutX(50);
         //fixme add slide animation
+
+        translateTransition.setFromX(findPane.getWidth());
+        translateTransition.setToX(0);
+        translateTransition.setOnFinished(null);
+        translateTransition.playFromStart();
     }
 
     public void closeFindContact() {
-        findPane.setManaged(false);
-        findPane.setVisible(false);
+
+        translateTransition.setFromX(0);
+        translateTransition.setToX(findPane.getWidth());
+        translateTransition.setInterpolator(Interpolator.EASE_IN);
+        translateTransition.setOnFinished(e -> {
+            findPane.setManaged(false);
+            findPane.setVisible(false);
+        });
+        translateTransition.playFromStart();
+
+
+    }
+
+
+    public void resizeTextArea() {
+        //fixme upgrade height calculation
+        messageText.setText(messageField.getText());
+        messageText.setWrappingWidth(messageField.getWidth());
+        messageText.setFont(messageField.getFont());
+
+        if(messageText.getLayoutBounds().getHeight() >= (messageText.getFont().getSize() + messageText.getLineSpacing()) * 5) {
+            messageText.setText("\n\n\n\n");
+        }
+
+        messageField.setPrefHeight(messageText.getLayoutBounds().getHeight() + 10);
+
     }
 
     public void showAddContact() {
@@ -125,7 +211,7 @@ public class ChatHomeController {
 
     public void sendMessage() {
         if(!messageField.getText().isEmpty()) {
-            //TODO Guilherme sendMessage
+            presentable.sendMessage(messageField.getText());
             messageField.setText("");
         }
     }
@@ -135,7 +221,7 @@ public class ChatHomeController {
     }
 
     public void sendArchive() {
-        //TODO Guilherme sendArchive
+        //fixme sendArchive
         FileChooser fileChooser = new FileChooser();
         fileChooser.showOpenDialog(parentWindow);
     }
@@ -160,5 +246,10 @@ public class ChatHomeController {
     public void setHistoryList(List<MessageHistory> messageHistories) {
         historyObservableList.clear();
         if(messageHistories.size() > 0) historyObservableList.addAll(messageHistories);
+    }
+
+    public void setMessageList(List<Message> messageList) {
+        messageObservableList.clear();
+        if(messageList.size() > 0) messageObservableList.addAll(messageList);
     }
 }
