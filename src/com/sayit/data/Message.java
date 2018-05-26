@@ -76,4 +76,20 @@ public class Message {
         return "Message{" + "receiverProfile=" + receiverProfile + ", sendByMe=" + sendByMe + ", content=" + content + ", messageDate=" + messageDate + ", type=" + type + '}';
     }
 
+    public void setTextContent(String textContent) {
+        this.textContent = textContent;
+    }
+
+    public void setMessageDate(Date messageDate) {
+        this.messageDate = messageDate;
+    }
+
+    /**
+     * Retorna uma representação de texto formatada da hora em que a mensagem foi transmitida.
+     * @return
+     */
+    public String getFormattedTime(){
+        //TODO Djan getFormattedTime
+        return null;
+    }
 }

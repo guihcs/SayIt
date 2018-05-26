@@ -67,7 +67,7 @@ public class ReceiverRunnable implements Runnable {
 
                         String nameRequest = networkAdapter.receiveString();
                         String adress = networkAdapter.getStringAddress();
-                        byte[] bytes = networkAdapter.receiveBytes();
+                        byte[] bytes = networkAdapter.receiveBytes(0);
 
                         context.getChatApplication().addContactRequest(nameRequest, bytes, adress);
                         break;

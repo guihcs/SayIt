@@ -2,6 +2,7 @@ package com.sayit.ui.control.frame;
 
 import com.sayit.data.Contact;
 import com.sayit.ui.control.ContactManager;
+import com.sayit.ui.control.SearchCallback;
 import com.sayit.ui.control.view.ContactCell;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,6 +16,7 @@ public class FindContactController {
 
     private Runnable closeCallback;
     private ContactManager contactManager;
+    private SearchCallback searchCallback;
 
     @FXML
     private TextField nameField;
@@ -39,12 +41,15 @@ public class FindContactController {
     }
 
     public void search() {
-        //TODO Guilherme expose search callback
-        contactObservableList.sort((c1, c2) -> {
-            if(c1.getName().contains(nameField.getText())) return -1;
-            else if(c2.getName().contains(nameField.getText())) return 1;
-            return 0;
-        });
+        if (searchCallback != null){
+            searchCallback.seachResult(nameField.getText());
+
+            contactObservableList.sort((c1, c2) -> {
+                if(c1.getName().contains(nameField.getText())) return -1;
+                else if(c2.getName().contains(nameField.getText())) return 1;
+                return 0;
+            });
+        }
     }
 
     public void setContactList(List<Contact> contactObservableList) {
@@ -62,5 +67,9 @@ public class FindContactController {
 
     public void addContact(Contact contact) {
         contactObservableList.add(contact);
+    }
+
+    public void setSearchCallback(SearchCallback searchCallback) {
+        this.searchCallback = searchCallback;
     }
 }

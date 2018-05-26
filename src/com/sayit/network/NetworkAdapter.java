@@ -160,7 +160,7 @@ public class NetworkAdapter {
      *
      */
     public String receiveMulticast() {
-
+        //TODO Iarly receiveMulticast
         byte[] BUFFER = new byte[BUFFER_SIZE];
 
         DatagramPacket datagramReceivePacket =  new DatagramPacket(BUFFER, BUFFER_SIZE);
@@ -168,7 +168,7 @@ public class NetworkAdapter {
         try {
 
             multicastSocket.receive(datagramReceivePacket);
-
+            //fixme a string recebe um parâmetro charset no contrutor especificando a codificação do texto. EX: UTF8
             return new String(datagramReceivePacket.getData());
 
         } catch (IOException e) {
@@ -194,8 +194,6 @@ public class NetworkAdapter {
             connectionList.add(connection);
             connectionMap.put(connection.getpIPAddress(),connection);
 
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -327,12 +325,14 @@ public class NetworkAdapter {
 
     /**
      *
-     * Recebe um array de bytes do trasmissor atual.
+     * Recebe um array de bytes de tamanho específico do trasmissor atual.
+     * O parametro expecifíca a quantidade de bytes a ser lido do stream.
      *
      * @return array de bytes.
-     *
+     * @param size quantidade de informação a ser recebida.
      */
-    public byte[] receiveBytes() {
+    public byte[] receiveBytes(int size) {
+        //TODO Iarly receiveBytes
         try {
             return currentTransmitter.isOnline() ? currentTransmitter.getDataInputStream().readAllBytes() : null;
 

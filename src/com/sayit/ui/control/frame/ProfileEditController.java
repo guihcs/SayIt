@@ -3,6 +3,7 @@ package com.sayit.ui.control.frame;
 import com.sayit.data.Contact;
 import com.sayit.ui.control.ContactManager;
 import javafx.fxml.FXML;
+import javafx.scene.control.Alert;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.paint.ImagePattern;
@@ -35,9 +36,17 @@ public class ProfileEditController {
 
     public void confirm() {
         if(concludeCallback != null) {
-            //TODO Guilherme confirm check for empty values
-            contact.setName(nameField.getText());
-            concludeCallback.contactResult(contact);
+            if(!nameField.getText().isEmpty()) {
+
+                contact.setName(nameField.getText());
+                concludeCallback.contactResult(contact);
+            }else {
+                Alert nameAlert = new Alert(Alert.AlertType.WARNING);
+                nameAlert.setTitle("Erro no nome.");
+                nameAlert.setHeaderText(null);
+                nameAlert.setContentText("Nome inválido.");
+                nameAlert.showAndWait();
+            }
         }
     }
 

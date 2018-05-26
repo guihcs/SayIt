@@ -8,7 +8,10 @@ public class RequestEvent {
     private MessageType messageType;
     private String identifier;
     private String message;
+    private String fileName;
     private int id;
+    private int numberInfo;
+    private boolean confirmation;
     private byte[] content;
 
     public EventType getEventType() {
@@ -57,5 +60,29 @@ public class RequestEvent {
 
     public void setContent(byte[] content) {
         this.content = content;
+    }
+
+    public int getNumberInfo() {
+        return numberInfo;
+    }
+
+    public void setNumberInfo(int numberInfo) {
+        this.numberInfo = numberInfo;
+    }
+
+    public boolean isConfirmation() {
+        return confirmation;
+    }
+
+    public void setConfirmation(boolean confirmation) {
+        this.confirmation = confirmation;
+    }
+
+    public String getFileName() {
+        return fileName;
+    }
+
+    public void setFileName(String fileName) {
+        this.fileName = fileName;
     }
 }

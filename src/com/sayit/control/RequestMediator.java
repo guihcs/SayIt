@@ -74,15 +74,15 @@ public class RequestMediator implements Requestable {
      *
      * @param address     endereço do receptor.
      * @param content     conteudo da mensagem.
-     * @param messageType tipo da mensagem.
+     * @param fileName  nome do arquivo.
      */
     @Override
-    public void sendMessage(String address, byte[] content, MessageType messageType) {
-
+    public void sendMessage(String address, byte[] content, String fileName) {
+        //TODO Segundo sendMessage
         RequestEvent event = new RequestEvent();
         event.setIdentifier(address);
         event.setContent(content);
-        event.setMessageType(messageType);
+        event.setMessageType(MessageType.ARCHIVE);
         event.setEventType(EventType.SEND_MESSAGE);
 
         senderRunnable.addEvent(event);
@@ -114,6 +114,17 @@ public class RequestMediator implements Requestable {
      */
     @Override
     public void requestContact(String name) {
+    }
+
+    /**
+     * Envia uma solicitação de adição para um outro contato.
+     * @param ip endereço ip do novo contato.
+     * @param userName nome do usuário atual.
+     * @param imageBytes bytes da imagem do usuário atual.
+     */
+    @Override
+    public void contactAdd(String ip, String userName, byte[] imageBytes) {
+        //TODO Segundo contactAdd
     }
 
     /**

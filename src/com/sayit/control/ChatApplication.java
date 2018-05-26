@@ -152,6 +152,8 @@ public class ChatApplication extends Application implements Presentable {
      * @param fileName tipo da mensagem.
      */
     public void addMessage(String sid, byte[] content, String fileName) {
+
+        //fixme archives will be implemented next
         //fixme create a request contact list
         int id = ContactDao.parseAddress(sid);
         Contact contact = contactDao.getContact(id);
