@@ -39,11 +39,7 @@ public class FindContactController {
     }
 
     public void search() {
-
-        //fixme only for test
-        System.out.println("find controller: search");
-        contactManager.contactResult(null);
-
+        //TODO Guilherme expose search callback
         contactObservableList.sort((c1, c2) -> {
             if(c1.getName().contains(nameField.getText())) return -1;
             else if(c2.getName().contains(nameField.getText())) return 1;

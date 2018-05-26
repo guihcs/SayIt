@@ -42,13 +42,6 @@ public class RequestMediator implements Requestable {
         mediator.setChatApplication(app);
         app.openStartScene();
 
-        var t = new Thread(() -> {
-            while (mediator.isRunning){
-                System.out.println(mediator.networkAdapter.receiveMulticast());
-            }
-        });
-        t.setDaemon(true);
-        t.start();
     }
 
     /**
@@ -74,7 +67,6 @@ public class RequestMediator implements Requestable {
      */
     public void stopApplication() {
         //TODO Segundo stopApplication
-        isRunning = false;
     }
 
     /**
@@ -122,9 +114,6 @@ public class RequestMediator implements Requestable {
      */
     @Override
     public void requestContact(String name) {
-        //TODO Segundo requestContact
-        System.out.println("mediator: request contact");
-        networkAdapter.multicastString(name);
     }
 
     /**
@@ -142,7 +131,6 @@ public class RequestMediator implements Requestable {
     @Override
     public void stopServices() {
         //TODO Segundo stopServices
-        stopApplication();
     }
 
     /**

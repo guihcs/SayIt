@@ -98,9 +98,7 @@ public class ChatApplication extends Application implements Presentable {
 
 
     public static String getStyleSheet(String path) {
-        String css = ChatApplication.class.getResource(path).toExternalForm();
-        if(css == null) System.out.println("null");
-        return css;
+        return ChatApplication.class.getResource(path).toExternalForm();
     }
 
 
@@ -323,11 +321,6 @@ public class ChatApplication extends Application implements Presentable {
             window.close();
         });
 
-        findContactController.setContactResult(contact -> {
-            System.out.println("requestable: request contact");
-            requestable.requestContact("lucas");
-        });
-
 
         //fixme send contact solicitation
         //fixme create addcontact solicitation
@@ -383,8 +376,13 @@ public class ChatApplication extends Application implements Presentable {
     }
 
     @Override
-    public void stop() throws Exception {
-        super.stop();
+    public void stop() {
+        //fixme revise stop method
+        try {
+            super.stop();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         requestable.stopServices();
     }
 }
