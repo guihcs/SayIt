@@ -3,10 +3,7 @@ package com.sayit.network;
 
 import java.io.IOException;
 import java.net.*;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class NetworkAdapter {
 
@@ -19,6 +16,7 @@ public class NetworkAdapter {
     private InetAddress multicastGrup;
 
 
+    private int currentTransmitterControl;
     private final String MCAST_ADDR = "239.239.239.239";
     private final int MCAST_DEST_PORT = 7777;
     private final int SERVER_SOCKET_DEST_PORT = 5000;
@@ -36,7 +34,8 @@ public class NetworkAdapter {
     public NetworkAdapter() {
 
         connectionMap = new LinkedHashMap<>();
-        connectionList = new LinkedList<>();
+        connectionList = new ArrayList<>();
+        currentTransmitterControl = 0;
 
         try {
 
@@ -83,37 +82,46 @@ public class NetworkAdapter {
     }
 
     /**
+     *
      * Busca o próximo transmissor na lista e o define como trasmissor atual.
      * A função só retorna verdadeiro caso o transmissor esteja online e possua mensagens
      * na stream.
      * Caso o transmissor esteja desconectado, fecha a conexão e retorna
      * false.
+     * Fechar e remover todas as conexão offline
      *
      * @return true se a conexão está ativa ou
      * false se a conexão está inativa ou offline.
-     * 
+     *
      */
     public boolean nextTransmitter() {
 
-        for (Connection co : connectionList) {
+        Connection connection = connectionList.get(currentTransmitterControl);
+
+        if(connection.isOnline()){
             try {
+                if(connection.getDataInputStream().available() !=0){
 
-                if (co.isOnline() && co.getDataInputStream().available() != 0) {
-                    currentTransmitter = co;
+                    currentTransmitter = connection;
+                    currentTransmitterControl++;
+
+                    if(connectionList.size() == currentTransmitterControl){
+                        currentTransmitterControl = 0;
+                    }
+
                     return true;
-                }else if (co.isOnline()){
-
-                    ;
-                }else {
-                    co.closeConnection();
-                    connectionList.remove(co);
-                    connectionMap.remove(co.getpIPAddress());
-                    return false;
                 }
 
             } catch (IOException e) {
                 e.printStackTrace();
+
             }
+        }else {
+            
+            connection.closeConnection();
+            connectionList.remove(connection);
+            connectionMap.remove(connection.getpIPAddress());
+
         }
 
         return false;
