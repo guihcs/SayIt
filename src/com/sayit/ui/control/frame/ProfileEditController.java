@@ -26,6 +26,7 @@ public class ProfileEditController {
 
     public void initialize() {
         contact = new Contact("Antonio", new Image("com/sayit/resources/icons/avatar.png"), "192.168.0.1");
+        setContact(contact);
     }
 
     public void close() {
@@ -34,6 +35,7 @@ public class ProfileEditController {
 
     public void confirm() {
         if(concludeCallback != null) {
+            //TODO Guilherme confirm check for empty values
             contact.setName(nameField.getText());
             concludeCallback.contactResult(contact);
         }

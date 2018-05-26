@@ -5,6 +5,7 @@ import com.sayit.control.Presentable;
 import com.sayit.data.Contact;
 import com.sayit.data.Message;
 import com.sayit.data.MessageHistory;
+import com.sayit.data.MessageType;
 import com.sayit.ui.control.view.HistoryCell;
 import com.sayit.ui.control.view.MessageCell;
 import javafx.animation.Interpolator;
@@ -13,10 +14,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
@@ -25,6 +29,7 @@ import javafx.stage.Window;
 import javafx.util.Duration;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ChatHomeController {
@@ -54,6 +59,10 @@ public class ChatHomeController {
 
     private Window parentWindow;
     private Pane findRoot;
+
+    //list glass panel
+    @FXML
+    private VBox listGlassPanel;
 
     private Presentable presentable;
     private FindContactController findContactController;
@@ -90,6 +99,7 @@ public class ChatHomeController {
         FXMLLoader loader = ChatApplication.getLoader(ChatApplication.FIND_CONTACT_LAYOUT);
         try {
             findRoot = loader.load();
+             findRoot.getStylesheets().add(ChatApplication.getStyleSheet(ChatApplication.FIND_CONTACT_STYLE));
             findContactController = loader.getController();
             findContactController.setCloseCallback(this::closeFindContact);
             findPane.getChildren().add(findRoot);
@@ -103,6 +113,33 @@ public class ChatHomeController {
         messageField.setOnKeyReleased(e -> resizeTextArea());
 
         configSlideAnimation();
+
+        List<Message> messages = new ArrayList<>();
+
+
+        //fixme event to listmessage is blocked by glass panel
+        for (int i = 0; i < 100; i++) {
+            String message = "";
+            for (int j = 0; j < Math.random() * 10 + 1; j++) {
+                message += "Escrevi seu nome na areia ";
+            }
+            messages.add(new Message(null, Math.random() * 10 > 5, message, MessageType.TEXT));
+        }
+
+        setMessageList(messages);
+
+//        listGlassPanel.addEventFilter(MouseEvent.ANY, e -> {
+//            messageListView.fireEvent(e);
+//            //System.out.println(e);
+//        });
+//
+//
+//
+//        messageListView.addEventFilter(MouseEvent.ANY, e -> {
+//            System.out.println(e);
+//        });
+
+
     }
 
 

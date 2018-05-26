@@ -32,9 +32,10 @@ public class ChatApplication extends Application implements Presentable {
     public static final String CONTACT_VIEW = "/com/sayit/resources/layout/view/view_contact_cell.fxml";
     public static final String MESSAGE_VIEW = "/com/sayit/resources/layout/view/view_message_cell.fxml";
     //Styles
-    public static final String HOME_STYLE = "com/sayit/resources/stylesheet/style_chat_home.css";
-
-
+    public static final String HOME_STYLE = "/com/sayit/resources/stylesheet/style_chat_home.css";
+    public static final String FIND_CONTACT_STYLE = "/com/sayit/resources/stylesheet/style_find_contact.css";
+    public static final String EDIT_CONTACT_STYLE = "/com/sayit/resources/stylesheet/style_edit_proile.css";
+    public static final String MESSAGE_STYLE = "/com/sayit/resources/stylesheet/style_message.css";
 
     private volatile static ChatApplication instance;
 
@@ -46,8 +47,6 @@ public class ChatApplication extends Application implements Presentable {
     private FindContactController findContactController;
     private ProfileEditController profileEditController;
     private boolean isWaitingForContact;
-
-    private Node addView;
 
     public ChatApplication() {
         ChatApplication.instance = this;
@@ -99,7 +98,9 @@ public class ChatApplication extends Application implements Presentable {
 
 
     public static String getStyleSheet(String path) {
-        return ChatApplication.class.getResource(path).toExternalForm();
+        String css = ChatApplication.class.getResource(path).toExternalForm();
+        if(css == null) System.out.println("null");
+        return css;
     }
 
 
@@ -111,7 +112,7 @@ public class ChatApplication extends Application implements Presentable {
      * @param height window height
      */
     private Stage createModal(Node root, double width, double height) {
-        Stage stage = new Stage(StageStyle.UNDECORATED);
+        Stage stage = new Stage();
         Scene scene = new Scene((Parent) root, width, height);
         stage.initModality(Modality.APPLICATION_MODAL);
         stage.setScene(scene);
@@ -130,10 +131,6 @@ public class ChatApplication extends Application implements Presentable {
         this.primaryStage = primaryStage;
 
         primaryStage.setTitle(WINDOW_NAME);
-
-        FXMLLoader loader = getLoader(FIND_CONTACT_LAYOUT);
-        addView = loadFromLoader(loader);
-        findContactController = loader.getController();
     }
 
     /**
@@ -154,12 +151,14 @@ public class ChatApplication extends Application implements Presentable {
      *
      * @param sid          identificador do contato.
      * @param content     conteúdo da mensagem.
-     * @param messageType tipo da mensagem.
+     * @param fileName tipo da mensagem.
      */
-    public void addMessage(String sid, byte[] content, MessageType messageType) {
+    public void addMessage(String sid, byte[] content, String fileName) {
+        //fixme create a request contact list
         int id = ContactDao.parseAddress(sid);
         Contact contact = contactDao.getContact(id);
-        contactDao.addMessage(id, new Message(contact, false, content, messageType));
+        //fixme get file type from name
+        //contactDao.addMessage(id, new Message(contact, false, content, messageType));
     }
 
     /**
@@ -312,6 +311,11 @@ public class ChatApplication extends Application implements Presentable {
     @Override
     public void openAddScene() {
 
+        FXMLLoader loader = getLoader(FIND_CONTACT_LAYOUT);
+        Parent addView = (Parent)loadFromLoader(loader);
+        addView.getStylesheets().add(getStyleSheet(FIND_CONTACT_STYLE));
+        findContactController = loader.getController();
+
         var window = createModal(addView, 400, 300);
         //fixme set button callbacks
         findContactController.setCloseCallback(() -> {
@@ -332,9 +336,10 @@ public class ChatApplication extends Application implements Presentable {
     public void openEditProfileScene() {
 
         FXMLLoader loader = getLoader(EDIT_PROFILE_LAYOUT);
-        Node addLayout = loadFromLoader(loader);
+        Parent editLayout = (Parent)loadFromLoader(loader);
+        editLayout.getStylesheets().add(getStyleSheet(EDIT_CONTACT_STYLE));
         ProfileEditController editController = loader.getController();
-        var window = createModal(addLayout, 400, 300);
+        var window = createModal(editLayout, 400, 300);
 
         editController.setOwnerWindow(window);
         if(getUserProfile() != null) editController.setContact(getUserProfile());
