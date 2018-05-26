@@ -3,10 +3,7 @@ package com.sayit.network;
 
 import java.io.IOException;
 import java.net.*;
-import java.util.LinkedHashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class NetworkAdapter {
 
@@ -19,6 +16,7 @@ public class NetworkAdapter {
     private InetAddress multicastGrup;
 
 
+    private int currentTransmitterControl;
     private final String MCAST_ADDR = "239.239.239.239";
     private final int MCAST_DEST_PORT = 7777;
     private final int SERVER_SOCKET_DEST_PORT = 5000;
@@ -36,7 +34,8 @@ public class NetworkAdapter {
     public NetworkAdapter() {
 
         connectionMap = new LinkedHashMap<>();
-        connectionList = new LinkedList<>();
+        connectionList = new ArrayList<>();
+        currentTransmitterControl = 0;
 
         try {
 
@@ -45,6 +44,7 @@ public class NetworkAdapter {
             multicastSocket = new MulticastSocket(MCAST_DEST_PORT);
 
             multicastGrup = InetAddress.getByName(MCAST_ADDR);
+
             multicastSocket.joinGroup(multicastGrup);
 
         } catch (IOException e) {
@@ -60,9 +60,8 @@ public class NetworkAdapter {
      * @return IP do transmissor.
      */
     public String getStringAddress() {
-        //TODO Iarly getStringAddress
 
-        return null;
+        return currentTransmitter.getpIPAddress();
 
     }
 
@@ -72,40 +71,60 @@ public class NetworkAdapter {
      * @param address Endereço da conexão.
      */
     public boolean setCurrentReceiver(String address) {
-        //TODO Iarly setCurrentReceiver
-        currentReceiver = connectionMap.get(address);
+
+        Connection tmpReceiver = connectionMap.get(address);
+        if(!tmpReceiver.equals(null)){
+            currentReceiver = tmpReceiver;
+            return true;
+        }
         return false;
+
     }
 
     /**
+     *
      * Busca o próximo transmissor na lista e o define como trasmissor atual.
      * A função só retorna verdadeiro caso o transmissor esteja online e possua mensagens
      * na stream.
      * Caso o transmissor esteja desconectado, fecha a conexão e retorna
      * false.
+     * Fechar e remover todas as conexão offline
      *
      * @return true se a conexão está ativa ou
      * false se a conexão está inativa ou offline.
+     *
      */
     public boolean nextTransmitter() {
 
-        for (Connection co : connectionList) {
+        Connection connection = connectionList.get(currentTransmitterControl);
+
+        if(connection.isOnline()){
             try {
-                //TODO Iarly fix available
-                if (co.isOnline() && !co.getDataInputStream().readAllBytes().equals(null)) {
-                    currentTransmitter = co;
+                if(connection.getDataInputStream().available() !=0){
+
+                    currentTransmitter = connection;
+                    currentTransmitterControl++;
+
+                    if(connectionList.size() == currentTransmitterControl){
+                        currentTransmitterControl = 0;
+                    }
+
                     return true;
-                } else {
-                    co.closeConnection();
                 }
 
             } catch (IOException e) {
                 e.printStackTrace();
+
             }
+        }else {
+            
+            connection.closeConnection();
+            connectionList.remove(connection);
+            connectionMap.remove(connection.getpIPAddress());
+
         }
 
         return false;
-        //TODO Iarly nextTransmitter
     }
 
     /**
@@ -123,9 +142,6 @@ public class NetworkAdapter {
             DatagramPacket packet = new DatagramPacket(multicastMessage, multicastMessage.length, multicastGrup, MCAST_DEST_PORT);
             multicastSocket.send(packet);
 
-            // criar close
-
-
         } catch (UnknownHostException e) {
             e.printStackTrace();
 
@@ -134,7 +150,6 @@ public class NetworkAdapter {
         }
 
 
-        //TODO Iarly multicastString
     }
 
     /**
@@ -151,8 +166,6 @@ public class NetworkAdapter {
         DatagramPacket datagramReceivePacket =  new DatagramPacket(BUFFER, BUFFER_SIZE);
 
         try {
-
-
 
             multicastSocket.receive(datagramReceivePacket);
 
@@ -174,7 +187,19 @@ public class NetworkAdapter {
      */
     public void connect(String ipAddress) {
 
-        //TODO Iarly connect
+        try {
+
+            Socket client = new Socket(InetAddress.getByName(ipAddress),SERVER_SOCKET_DEST_PORT);
+            Connection connection = new Connection(client);
+            connectionList.add(connection);
+            connectionMap.put(connection.getpIPAddress(),connection);
+
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -195,10 +220,14 @@ public class NetworkAdapter {
      */
     public void acceptTCPConnection() {
 
+        try {
+            Connection connection = new Connection(serverSocket.accept());
+            connectionList.add(connection);
+            connectionMap.put(connection.getpIPAddress(),connection);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-
-
-        //TODO Iarly acceptTCPConnection
     }
 
     /**
@@ -338,7 +367,16 @@ public class NetworkAdapter {
      * e fechando todas as conexões.
      */
     public void closeAdapter() {
-        //TODO Iarly closeAdapter
+        try {
+            serverSocket.close();
+            multicastSocket.close();
+            currentReceiver.closeConnection();
+            currentTransmitter.closeConnection();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
 
