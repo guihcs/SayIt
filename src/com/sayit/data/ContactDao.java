@@ -2,10 +2,7 @@ package com.sayit.data;
 
 import javafx.scene.image.Image;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ContactDao {
 
@@ -21,7 +18,14 @@ public class ContactDao {
     }
 
     public static int parseAddress(String address) {
-        return 0;
+        String[] endereco = address.split("\\.");
+        String end = "";
+        for(int i = 0; i < endereco.length; i++){
+            end += endereco[i];
+        }
+        int ip = Integer.parseInt(end);
+
+        return ip;
     }
 
 
@@ -31,6 +35,7 @@ public class ContactDao {
      * @param contact
      */
     public void addContact(Contact contact) {
+
         contactList.add(contact);
     }
 
@@ -41,12 +46,7 @@ public class ContactDao {
      * @param message Mensagen
      */
     public void addMessage(int id, Message message) {
-        //TODO Djan addMessage
-        for(int i = 0; i < contactList.size(); i++){
-            if(id == contactList.get(i).getId()){
-                messageList.add(message);
-            }
-        }
+        messageMap.get(id).addMessage(message);
     }
 
     /**
@@ -64,7 +64,7 @@ public class ContactDao {
             }
 
         }
-        System.out.println("Contato inexistente!");
+
         return null;
     }
 
@@ -75,14 +75,8 @@ public class ContactDao {
      * @return
      */
     public List<Message> getMessageList(int id) {
-        //TODO Djan getMessageList
-        for(int i = 0; i < contactList.size();i++){
-            if(id == contactList.get(i).getId()){
-                return messageList;
-            }
-        }
-        System.out.println("Não há mensagens no seu historico de mensagens");
-        return null;
+
+        return messageMap.get(id).getMessageList();
     }
 
     /**
@@ -91,8 +85,11 @@ public class ContactDao {
      * @return
      */
     public List<MessageHistory> getHistoryList() {
-        //TODO Djan getHistoryList
-        return new ArrayList<>();
+
+
+       Collection<MessageHistory> list =  messageMap.values();
+
+        return new ArrayList<>(list);
     }
 
     /**
