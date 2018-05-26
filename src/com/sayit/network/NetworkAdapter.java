@@ -45,6 +45,7 @@ public class NetworkAdapter {
             multicastSocket = new MulticastSocket(MCAST_DEST_PORT);
 
             multicastGrup = InetAddress.getByName(MCAST_ADDR);
+
             multicastSocket.joinGroup(multicastGrup);
 
         } catch (IOException e) {
@@ -60,9 +61,8 @@ public class NetworkAdapter {
      * @return IP do transmissor.
      */
     public String getStringAddress() {
-        //TODO Iarly getStringAddress
 
-        return null;
+        return currentTransmitter.getpIPAddress();
 
     }
 
@@ -72,9 +72,14 @@ public class NetworkAdapter {
      * @param address Endereço da conexão.
      */
     public boolean setCurrentReceiver(String address) {
-        //TODO Iarly setCurrentReceiver
-        currentReceiver = connectionMap.get(address);
+
+        Connection tmpReceiver = connectionMap.get(address);
+        if(!tmpReceiver.equals(null)){
+            currentReceiver = tmpReceiver;
+            return true;
+        }
         return false;
+
     }
 
     /**
@@ -86,17 +91,24 @@ public class NetworkAdapter {
      *
      * @return true se a conexão está ativa ou
      * false se a conexão está inativa ou offline.
+     * 
      */
     public boolean nextTransmitter() {
 
         for (Connection co : connectionList) {
             try {
-                //TODO Iarly fix available
-                if (co.isOnline() && !co.getDataInputStream().readAllBytes().equals(null)) {
+
+                if (co.isOnline() && co.getDataInputStream().available() != 0) {
                     currentTransmitter = co;
                     return true;
-                } else {
+                }else if (co.isOnline()){
+
+                    ;
+                }else {
                     co.closeConnection();
+                    connectionList.remove(co);
+                    connectionMap.remove(co.getpIPAddress());
+                    return false;
                 }
 
             } catch (IOException e) {
@@ -105,7 +117,6 @@ public class NetworkAdapter {
         }
 
         return false;
-        //TODO Iarly nextTransmitter
     }
 
     /**
@@ -123,9 +134,6 @@ public class NetworkAdapter {
             DatagramPacket packet = new DatagramPacket(multicastMessage, multicastMessage.length, multicastGrup, MCAST_DEST_PORT);
             multicastSocket.send(packet);
 
-            // criar close
-
-
         } catch (UnknownHostException e) {
             e.printStackTrace();
 
@@ -134,7 +142,6 @@ public class NetworkAdapter {
         }
 
 
-        //TODO Iarly multicastString
     }
 
     /**
@@ -151,8 +158,6 @@ public class NetworkAdapter {
         DatagramPacket datagramReceivePacket =  new DatagramPacket(BUFFER, BUFFER_SIZE);
 
         try {
-
-
 
             multicastSocket.receive(datagramReceivePacket);
 
@@ -174,7 +179,19 @@ public class NetworkAdapter {
      */
     public void connect(String ipAddress) {
 
-        //TODO Iarly connect
+        try {
+
+            Socket client = new Socket(InetAddress.getByName(ipAddress),SERVER_SOCKET_DEST_PORT);
+            Connection connection = new Connection(client);
+            connectionList.add(connection);
+            connectionMap.put(connection.getpIPAddress(),connection);
+
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**
@@ -195,10 +212,14 @@ public class NetworkAdapter {
      */
     public void acceptTCPConnection() {
 
+        try {
+            Connection connection = new Connection(serverSocket.accept());
+            connectionList.add(connection);
+            connectionMap.put(connection.getpIPAddress(),connection);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-
-
-        //TODO Iarly acceptTCPConnection
     }
 
     /**
@@ -338,7 +359,16 @@ public class NetworkAdapter {
      * e fechando todas as conexões.
      */
     public void closeAdapter() {
-        //TODO Iarly closeAdapter
+        try {
+            serverSocket.close();
+            multicastSocket.close();
+            currentReceiver.closeConnection();
+            currentTransmitter.closeConnection();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
     }
 
 
