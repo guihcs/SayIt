@@ -1,6 +1,8 @@
 package com.sayit.data;
 
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Message {
@@ -89,7 +91,10 @@ public class Message {
      * @return
      */
     public String getFormattedTime(){
-        //TODO Djan getFormattedTime
-        return null;
+
+        SimpleDateFormat dateForma = new SimpleDateFormat("HH:mm");
+
+        return dateForma.format(messageDate.getTime()).toString();
+
     }
 }
