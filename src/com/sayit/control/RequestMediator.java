@@ -5,7 +5,6 @@ import com.sayit.data.MessageType;
 import com.sayit.network.MessageProtocol;
 import com.sayit.network.NetworkAdapter;
 
-import java.nio.file.Path;
 import java.util.List;
 
 public class RequestMediator implements Requestable {
@@ -31,11 +30,10 @@ public class RequestMediator implements Requestable {
      * @param args argumentos do sistema.
      */
     public static void main(String[] args) {
-        //Application.launch(ChatApplication.class, args);
         ContactDao contactDao = new ContactDao();
         RequestMediator mediator = new RequestMediator();
 
-        ChatApplication app = ChatApplication.launchApplication(args, new RequestMediator(), contactDao);
+        ChatApplication app = ChatApplication.launchApplication(args, mediator, contactDao);
         
         //TODO Segundo main
 

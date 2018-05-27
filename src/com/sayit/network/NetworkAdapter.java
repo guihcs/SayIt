@@ -3,7 +3,10 @@ package com.sayit.network;
 
 import java.io.IOException;
 import java.net.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class NetworkAdapter {
 
@@ -29,8 +32,6 @@ public class NetworkAdapter {
      * Cria um sevidor que escutará a porta 5000.
      *
      **/
-
-
     public NetworkAdapter() {
 
         connectionMap = new LinkedHashMap<>();
@@ -39,9 +40,9 @@ public class NetworkAdapter {
 
         try {
             //throw  new IOException();
-            //serverSocket = new ServerSocket(8675);
+            serverSocket = new ServerSocket(SERVER_SOCKET_DEST_PORT);
 
-             multicastSocket = new MulticastSocket(MCAST_DEST_PORT);
+            multicastSocket = new MulticastSocket(MCAST_DEST_PORT);
 
             multicastGrup = InetAddress.getByName(MCAST_ADDR);
 
@@ -73,7 +74,7 @@ public class NetworkAdapter {
     public boolean setCurrentReceiver(String address) {
 
         Connection tmpReceiver = connectionMap.get(address);
-        if(!tmpReceiver.equals(null)){
+        if(!(tmpReceiver == null)) {
             currentReceiver = tmpReceiver;
             return true;
         }
