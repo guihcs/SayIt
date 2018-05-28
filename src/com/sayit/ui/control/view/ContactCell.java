@@ -19,6 +19,8 @@ public class ContactCell extends ListCell<Contact> {
 
         root = (Parent) ChatApplication.loadFromLoader(fxmlLoader);
         contactController = fxmlLoader.getController();
+
+        getStylesheets().add(ChatApplication.getStyleSheet(ChatApplication.CONTACT_STYLE));
     }
 
 

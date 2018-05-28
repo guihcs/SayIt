@@ -98,7 +98,7 @@ public class ChatHomeController {
         FXMLLoader loader = ChatApplication.getLoader(ChatApplication.FIND_CONTACT_LAYOUT);
         try {
             findRoot = loader.load();
-             findRoot.getStylesheets().add(ChatApplication.getStyleSheet(ChatApplication.FIND_CONTACT_STYLE));
+            findRoot.getStylesheets().add(ChatApplication.getStyleSheet(ChatApplication.FIND_CONTACT_STYLE));
             findContactController = loader.getController();
             findContactController.setCloseCallback(this::closeFindContact);
             findPane.getChildren().add(findRoot);
@@ -133,7 +133,6 @@ public class ChatHomeController {
                 if(e.isShiftDown()) {
                     //fixme resolve caret position on enter
                     messageField.setText(messageField.getText() + "\n");
-                    System.out.println(messageField.getText().length());
                     messageField.positionCaret(messageField.getText().length() - 1);
                 } else {
                     sendMessage();

@@ -59,6 +59,7 @@ public class RequestMediator implements Requestable {
         //TODO Segundo main
 
         mediator.setChatApplication(app);
+        mediator.startMulticastServer();
         app.openStartScene();
 
     }
@@ -139,6 +140,7 @@ public class RequestMediator implements Requestable {
      */
     @Override
     public void requestContact(String name) {
+
         networkAdapter.multicastString(name);
     }
 

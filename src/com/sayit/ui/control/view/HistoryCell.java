@@ -6,8 +6,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.ListCell;
 
-import java.io.IOException;
-
 public class HistoryCell extends ListCell<MessageHistory> {
 
     private Parent root;
@@ -18,12 +16,10 @@ public class HistoryCell extends ListCell<MessageHistory> {
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(ChatApplication.CONTACT_VIEW));
 
-        try {
-            root = fxmlLoader.load();
-            contactController = fxmlLoader.getController();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        root = (Parent) ChatApplication.loadFromLoader(fxmlLoader);
+        contactController = fxmlLoader.getController();
+        getStylesheets().add(ChatApplication.getStyleSheet(ChatApplication.CONTACT_STYLE));
+
     }
 
 

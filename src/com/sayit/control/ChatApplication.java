@@ -366,6 +366,7 @@ public class ChatApplication extends Application implements Presentable {
         });
 
         findContactController.setSearchCallback(searchInput -> {
+
             requestable.requestContact(searchInput);
         });
 

@@ -144,9 +144,8 @@ public class NetworkAdapter {
         try {
 
             DatagramPacket packet = new DatagramPacket(multicastMessage, multicastMessage.length, multicastGrup, MCAST_DEST_PORT);
-            currentPackage = packet;
-            multicastSocket.send(packet);
 
+            multicastSocket.send(packet);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -172,11 +171,11 @@ public class NetworkAdapter {
 
             multicastSocket.receive(datagramReceivePacket);
             //fixme corrigir envio utf8 nos packets (acentos no texto)
-            //fixme setar pacote atual
+            currentPackage = datagramReceivePacket;
             return new String(datagramReceivePacket.getData());
 
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Multicast fechado.");
         }
         return null;
     }

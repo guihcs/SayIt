@@ -52,7 +52,8 @@ url(../icons/search_black.png);
 
 
 #list-view {
-
+	-fx-padding: 3px ;
 	-fx-background-color: transparent;
+	-fx-padding: 0;
 
 }
