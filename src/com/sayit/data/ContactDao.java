@@ -46,6 +46,12 @@ public class ContactDao {
      * @param message Mensagen
      */
     public void addMessage(int id, Message message) {
+        //TODO Djan addMessage
+        /*
+            criar novo objeto MessageHistory caso não esteja na lista.
+            e adicionar na lista.
+        
+        */
         messageMap.get(id).addMessage(message);
     }
 
@@ -56,9 +62,9 @@ public class ContactDao {
      * @return
      */
     public Contact getContact(int id) {
-
+        //TODO Djan getContact
         for (int i = 0; i < contactList.size(); i++) {
-            if (id == contactList.get(i).getId());
+            if (id == contactList.get(i).getId());  //Esse ponto e vírgula faz um estrago imenso.
             {
                 return contactList.get(i);
             }
