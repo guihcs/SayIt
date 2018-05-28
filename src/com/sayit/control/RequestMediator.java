@@ -104,7 +104,19 @@ public class RequestMediator implements Requestable {
 
         senderRunnable.addEvent(event);
     }
-
+    
+    /**
+    * Envia os dados do usuário para um contato específico.
+    *
+    * @param receiverIp ip do usuário.
+    * @param name nome do usuário.
+    * @param image conteúdo da imagem.
+    */
+    @Override
+    public void sendUserInfo(String receiverIp, String name, byte[] image){
+        //TODO Segundo sendUserInfo
+    }
+    
     /**
      * Envia uma requisição de contato a todos os usuários.
      *
