@@ -35,8 +35,10 @@ public class ChatApplication extends Application implements Presentable {
     public static final String HOME_STYLE = "/com/sayit/resources/stylesheet/style_chat_home.css";
     public static final String FIND_CONTACT_STYLE = "/com/sayit/resources/stylesheet/style_find_contact.css";
     public static final String EDIT_CONTACT_STYLE = "/com/sayit/resources/stylesheet/style_edit_proile.css";
+    public static final String CONTACT_STYLE = "/com/sayit/resources/stylesheet/style_contact.css";
     public static final String MESSAGE_STYLE = "/com/sayit/resources/stylesheet/style_message.css";
     public static final String ADD_RESPONSE_STYLE = "/com/sayit/resources/stylesheet/style_add_response.css";
+
 
     private volatile static ChatApplication instance;
 
@@ -213,8 +215,8 @@ public class ChatApplication extends Application implements Presentable {
         chatHome = loader.getController();
         chatHome.setPresentable(this);
         chatHome.setParentWindow(primaryStage);
-        //fixme create string constant for stylesheets
-        var res = getClass().getResource("../resources/stylesheet/style_chat_home.css");
+        //fixme create window set center
+        var res = getClass().getResource(HOME_STYLE);
 
         parent.getStylesheets().add(res.toExternalForm());
 
@@ -269,6 +271,24 @@ public class ChatApplication extends Application implements Presentable {
 
     private void setRequestable(Requestable requestable) {
         this.requestable = requestable;
+    }
+
+    /**
+     * Retorna o nome do usuário atual.
+     *
+     * @return Retorna o nome do usuário atual.
+     */
+    public String getUserName() {
+        return contactDao.getUserProfile().getName();
+    }
+
+    /**
+     * Retorna a imagem do usuário em bytes.
+     *
+     * @return byte[]
+     */
+    public byte[] getUserImageBytes() {
+        return null;
     }
 
     /**

@@ -1,6 +1,6 @@
 package com.sayit.data;
 
-import java.util.Date;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MessageHistory {
@@ -11,8 +11,7 @@ public class MessageHistory {
     private String lastMessageDate;
 
     public MessageHistory(Contact contact) {
-        //TODO Djan MessageHistory
-        //iniciar a messageList com um arraylist
+        messageList = new ArrayList<>();
         this.contact = contact;
     }
 
@@ -22,10 +21,10 @@ public class MessageHistory {
      * @param message
      */
     public void addMessage(Message message) {
-        //TODO Djan addMessage
-        //adicionar a mensagem em last message
-        //adicionar a data em lastmessage date
+
         messageList.add(message);
+        lastMessage = message.getTextContent();
+        lastMessageDate = message.getFormattedTime();
     }
 
 
@@ -41,7 +40,10 @@ public class MessageHistory {
         return lastMessage;
     }
 
-    public Date getLastMessageDate() {
-        return null;
+    public String getLastMessageDate() {
+
+        return lastMessageDate;
     }
+
+
 }

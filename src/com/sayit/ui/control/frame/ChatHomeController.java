@@ -85,9 +85,13 @@ public class ChatHomeController {
         });
         historyListView.setCellFactory(e -> {
             HistoryCell historyCell = new HistoryCell();
-            var historyInfo = historyCell.getItem();
-            setReceiverProfile(historyInfo.getContact());
-            setMessageList(presentable.requestMessageList(historyInfo.getContact().getId()));
+            historyCell.setOnMouseClicked(ev -> {
+                var historyInfo = historyCell.getItem();
+                setReceiverProfile(historyInfo.getContact());
+                setMessageList(presentable.requestMessageList(historyInfo.getContact().getId()));
+
+            });
+
             return historyCell;
         });
 

@@ -2,8 +2,8 @@ package com.sayit.control;
 
 import com.sayit.data.Contact;
 import com.sayit.data.ContactDao;
+import com.sayit.data.Message;
 import com.sayit.data.MessageType;
-import com.sayit.network.MessageProtocol;
 import com.sayit.network.NetworkAdapter;
 import javafx.scene.image.Image;
 
@@ -39,12 +39,27 @@ public class RequestMediator implements Requestable {
 
         ChatApplication app = ChatApplication.launchApplication(args, mediator, contactDao);
 
-        contactDao.setUserProfile(new Contact("lucas",new Image("file:///C:\\Users\\Second\\Pictures\\Saved Pictures\\bug.jpg"), null));
+
+        for (int i = 0; i < 10; i++) {
+
+            Contact c = new Contact("Jovem" + i,
+                    new Image("https://picsum.photos/300/300/?random"),
+                    Integer.toString(i));
+            contactDao.addContact(c);
+
+            for (int j = 0; j < 20; j++) {
+                contactDao.addMessage(i, new Message(c, Math.random() * 10 > 5,
+                        "Pedro nalagoa bebeu agua, passou mal sem saber e ainda está vivo", MessageType.TEXT));
+            }
+
+        }
+
+
 
         //TODO Segundo main
 
         mediator.setChatApplication(app);
-        app.openHomeScene();
+        app.openStartScene();
 
     }
 

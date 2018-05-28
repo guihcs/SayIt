@@ -1,7 +1,6 @@
 package com.sayit.data;
 
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -13,6 +12,7 @@ public class Message {
     private byte[] content;
     private Date messageDate;
     private MessageType type;
+    private SimpleDateFormat dateForma = new SimpleDateFormat("HH:mm");
 
     public Message(Contact receiverProfile, boolean sendByMe, String content, MessageType type) {
         this.receiverProfile = receiverProfile;
@@ -92,9 +92,10 @@ public class Message {
      */
     public String getFormattedTime(){
 
-        SimpleDateFormat dateForma = new SimpleDateFormat("HH:mm");
+        String time = "none";
+        if(messageDate != null) time = dateForma.format(messageDate.getTime());
 
-        return dateForma.format(messageDate.getTime());
+        return time;
 
     }
 }

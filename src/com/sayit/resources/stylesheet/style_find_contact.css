@@ -1,3 +1,10 @@
+
+.root-container {
+
+	-fx-background-color: greenyellow;
+
+}
+
 .app-bar {
 	
 	-fx-background-color: white;
@@ -40,5 +47,12 @@ url(../icons/arrow_back_black.png);
 	-fx-background-image: 
 url(../icons/search_black.png);
 
+
+}
+
+
+#list-view {
+
+	-fx-background-color: transparent;
 
 }

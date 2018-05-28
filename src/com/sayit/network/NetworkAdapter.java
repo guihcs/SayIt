@@ -144,12 +144,9 @@ public class NetworkAdapter {
         try {
 
             DatagramPacket packet = new DatagramPacket(multicastMessage, multicastMessage.length, multicastGrup, MCAST_DEST_PORT);
-            packet.getAddress().getHostAddress();
+            currentPackage = packet;
             multicastSocket.send(packet);
 
-
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -190,8 +187,7 @@ public class NetworkAdapter {
      * @return string contendo endereço ip do pacote.
      */
     public String getPackageAddress() {
-        //TODO Iarly getPackageAddress
-        return null;
+        return currentPackage.getAddress().toString();
     }
 
 
@@ -404,9 +400,9 @@ public class NetworkAdapter {
             serverSocket.close();
             multicastSocket.close();
 
-            if(!currentReceiver.equals(null))
+            if(currentReceiver != null)
                 currentReceiver.closeConnection();
-            if(!currentTransmitter.equals(null))
+            if(currentTransmitter != null)
                 currentTransmitter.closeConnection();
 
         } catch (IOException e) {
