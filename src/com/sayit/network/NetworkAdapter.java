@@ -3,10 +3,8 @@ package com.sayit.network;
 
 import java.io.IOException;
 import java.net.*;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.nio.charset.Charset;
+import java.util.*;
 
 public class NetworkAdapter {
 
@@ -17,9 +15,8 @@ public class NetworkAdapter {
     private Connection currentTransmitter;
     private Connection currentReceiver;
     private InetAddress multicastGrup;
-
-
     private int currentTransmitterControl;
+
     private final String MCAST_ADDR = "239.239.239.239";
     private final int MCAST_DEST_PORT = 7777;
     private final int SERVER_SOCKET_DEST_PORT = 5000;
@@ -27,6 +24,7 @@ public class NetworkAdapter {
     private final int BUFFER_SIZE = 1024;
 
     /**
+     *
      * Instancia a interface Map com um LinkedHashMap.
      * Instancia a interface List com um LinkedList.
      * Cria um sevidor que escutará a porta 5000.
@@ -39,7 +37,7 @@ public class NetworkAdapter {
         currentTransmitterControl = 0;
 
         try {
-            //throw  new IOException();
+
             serverSocket = new ServerSocket(SERVER_SOCKET_DEST_PORT);
 
             multicastSocket = new MulticastSocket(MCAST_DEST_PORT);
@@ -74,7 +72,8 @@ public class NetworkAdapter {
     public boolean setCurrentReceiver(String address) {
 
         Connection tmpReceiver = connectionMap.get(address);
-        if(!(tmpReceiver == null)) {
+        if(tmpReceiver != null) {
+
             currentReceiver = tmpReceiver;
             return true;
         }
@@ -118,7 +117,7 @@ public class NetworkAdapter {
 
             }
         }else {
-            
+
             connection.closeConnection();
             connectionList.remove(connection);
             connectionMap.remove(connection.getpIPAddress());
@@ -135,13 +134,16 @@ public class NetworkAdapter {
      */
     public void multicastString(String text) {
 
+
         byte[] multicastMessage = text.getBytes();
 
 
         try {
 
             DatagramPacket packet = new DatagramPacket(multicastMessage, multicastMessage.length, multicastGrup, MCAST_DEST_PORT);
+            packet.getAddress().getHostAddress();
             multicastSocket.send(packet);
+
 
         } catch (UnknownHostException e) {
             e.printStackTrace();
@@ -161,7 +163,7 @@ public class NetworkAdapter {
      *
      */
     public String receiveMulticast() {
-        //TODO Iarly receiveMulticast
+
         byte[] BUFFER = new byte[BUFFER_SIZE];
 
         DatagramPacket datagramReceivePacket =  new DatagramPacket(BUFFER, BUFFER_SIZE);
@@ -170,6 +172,7 @@ public class NetworkAdapter {
 
             multicastSocket.receive(datagramReceivePacket);
             //fixme a string recebe um parâmetro charset no contrutor especificando a codificação do texto. EX: UTF8
+
             return new String(datagramReceivePacket.getData());
 
         } catch (IOException e) {
@@ -223,6 +226,7 @@ public class NetworkAdapter {
             Connection connection = new Connection(serverSocket.accept());
             connectionList.add(connection);
             connectionMap.put(connection.getpIPAddress(),connection);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -233,6 +237,7 @@ public class NetworkAdapter {
      * Envia informação para o receptor atual.
      *
      * @param data envia um inteiro.
+     *
      */
     public void sendData(int data) {
 
@@ -334,11 +339,21 @@ public class NetworkAdapter {
      */
     public byte[] receiveBytes(int size) {
         //TODO Iarly receiveBytes
+        //fixme ajustar metodo.
+        byte[] returnBytes = new byte[size];
+        byte[] currentBytes = null;
+        int len = size;
         try {
-            return currentTransmitter.isOnline() ? currentTransmitter.getDataInputStream().readAllBytes() : null;
+            if(currentTransmitter.isOnline())
 
+                while(currentTransmitter.getDataInputStream().read(returnBytes) > 0){
+
+                }
+
+            return returnBytes;
         } catch (IOException e) {
             e.printStackTrace();
+
         }
 
         return null;
@@ -366,15 +381,23 @@ public class NetworkAdapter {
     /**
      * Encerra o adaptador liberando todos os recursos
      * e fechando todas as conexões.
+     *
      */
     public void closeAdapter() {
+
         try {
+
             serverSocket.close();
             multicastSocket.close();
-            currentReceiver.closeConnection();
-            currentTransmitter.closeConnection();
+
+            if(!currentReceiver.equals(null))
+                currentReceiver.closeConnection();
+            if(!currentTransmitter.equals(null))
+                currentTransmitter.closeConnection();
+
         } catch (IOException e) {
             e.printStackTrace();
+
         }
 
 

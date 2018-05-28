@@ -45,21 +45,22 @@ public class ReceiverRunnable implements Runnable {
 
 
                             default:
-                                //fixme resolver tamanho do getByte()
                                 String name = networkAdapter.receiveString();
-//                                int sizeInt = networkAdapter.receiveInt();
-//                                byte[] arrayByte = networkAdapter.receiveBytes();
-//
-//                                context.getChatApplication().addMessage(arrayByte, name);
+                                Integer sizeInt = networkAdapter.receiveInt();
+                                byte[] arrayByte = networkAdapter.receiveBytes(sizeInt);
+
+                                context.getChatApplication().addMessage(sizeInt.toString(),arrayByte, name);
                                 break;
                         }
                         break;
 
                     case CONTACT_INFO:
-                        //fixme resolver tamanho do getByte()
                         String name = networkAdapter.receiveString();
-//                        int sizeInt = networkAdapter.receiveInt();
-//                        byte[] arrayByte = networkAdapter.receiveBytes();
+                        Integer sizeInt = networkAdapter.receiveInt();
+                        String ip = networkAdapter.getStringAddress();
+                        byte[] arrayByte = networkAdapter.receiveBytes(sizeInt);
+
+                        context.getChatApplication().addContactRequest(name, arrayByte,ip);
 
                         break;
 
@@ -69,7 +70,7 @@ public class ReceiverRunnable implements Runnable {
                         String adress = networkAdapter.getStringAddress();
                         byte[] bytes = networkAdapter.receiveBytes(0);
 
-                        context.getChatApplication().addContactRequest(nameRequest, bytes, adress);
+                        context.getChatApplication().addContact(nameRequest, bytes, adress);
                         break;
 
                     case ADD_RESPONSE:

@@ -1,9 +1,11 @@
 package com.sayit.control;
 
+import com.sayit.data.Contact;
 import com.sayit.data.ContactDao;
 import com.sayit.data.MessageType;
 import com.sayit.network.MessageProtocol;
 import com.sayit.network.NetworkAdapter;
+import javafx.scene.image.Image;
 
 import java.util.List;
 
@@ -30,25 +32,20 @@ public class RequestMediator implements Requestable {
      * @param args argumentos do sistema.
      */
     public static void main(String[] args) {
+        //fixme carregar do banco de dados o contactDao
+
         ContactDao contactDao = new ContactDao();
         RequestMediator mediator = new RequestMediator();
 
         ChatApplication app = ChatApplication.launchApplication(args, mediator, contactDao);
-        
+
+        contactDao.setUserProfile(new Contact("lucas",new Image("file:///C:\\Users\\Second\\Pictures\\Saved Pictures\\bug.jpg"), null));
+
         //TODO Segundo main
 
         mediator.setChatApplication(app);
-        app.openStartScene();
+        app.openHomeScene();
 
-    }
-
-    /**
-     * Envia um protocolo de mensagem.
-     *
-     * @param messageProtocol protocolo da mensagem.
-     */
-    public void sendProtocol(MessageProtocol messageProtocol) {
-        //TODO Segundo sendProtocol
     }
 
     /**
@@ -64,7 +61,10 @@ public class RequestMediator implements Requestable {
      * Libera os recursos da aplicação e para as threads em background.
      */
     public void stopApplication() {
-        //TODO Segundo stopApplication
+        //fixme salvar no banco antes de fechar.
+        this.isRunning = false;
+        networkAdapter.closeAdapter();
+
     }
 
     /**
@@ -112,6 +112,7 @@ public class RequestMediator implements Requestable {
      */
     @Override
     public void requestContact(String name) {
+        networkAdapter.multicastString(name);
     }
 
     /**
@@ -123,6 +124,13 @@ public class RequestMediator implements Requestable {
     @Override
     public void contactAdd(String ip, String userName, byte[] imageBytes) {
         //TODO Segundo contactAdd
+        RequestEvent event = new RequestEvent();
+        event.setIdentifier(ip);
+        event.setMessage(userName);
+        event.setContent(imageBytes);
+        event.setEventType(EventType.REQUEST_CONTACT);
+
+        senderRunnable.addEvent(event);
     }
 
     /**
@@ -139,21 +147,7 @@ public class RequestMediator implements Requestable {
      */
     @Override
     public void stopServices() {
-        //TODO Segundo stopServices
-    }
-
-    /**
-     * Abre a interface para criar o perfil.
-     */
-    private void openCreateProfile() {
-        //TODO Segundo openCreateProfile
-    }
-
-    /**
-     * Abre a interface principal do chat.
-     */
-    private void openHome() {
-        //TODO Segundo openHome
+        stopApplication();
     }
 
     /**
@@ -179,21 +173,42 @@ public class RequestMediator implements Requestable {
      * Inicia a thread receptora.
      */
     private void startReceiverThread() {
-        //TODO segundo startReceiverThread
+        Thread receiverThread = new Thread(receiverRunnable);
+        receiverThread.start();
     }
 
     /**
      * Inicia a thread transmissora.
      */
     private void startSenderThread() {
-        //TODO Segundo startSenderThread
+        Thread senderThread = new Thread(senderRunnable);
+        senderThread.start();
     }
 
     /**
      * Inicia a thread do servidor.
      */
     private void startServerThread() {
-        //TODO Segundo startServerThread
+        Thread serverThread = new Thread(() -> {
+            while(isRunning){
+                networkAdapter.acceptTCPConnection();
+            }
+        });
+        serverThread.setDaemon(true);
+        serverThread.start();
+    }
+
+    private void startMulticastServer(){
+        //TODO Segundo startMulticastServer
+        //fixme adicionar metodo de verificar contato no chatAplication.
+        Thread multicastServer = new Thread(() -> {
+            while(isRunning){
+                String name = networkAdapter.receiveMulticast();
+                System.out.println(name);
+            }
+        });
+        multicastServer.setDaemon(true);
+        multicastServer.start();
     }
 
     public NetworkAdapter getNetworkAdapter(){
