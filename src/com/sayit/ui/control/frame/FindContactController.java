@@ -33,6 +33,7 @@ public class FindContactController {
 
             return contactCell;
         });
+        //TODO Guilherme fix nameField input size
     }
 
 

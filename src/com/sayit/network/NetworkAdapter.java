@@ -3,8 +3,10 @@ package com.sayit.network;
 
 import java.io.IOException;
 import java.net.*;
-import java.nio.charset.Charset;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 public class NetworkAdapter {
 
@@ -15,6 +17,7 @@ public class NetworkAdapter {
     private Connection currentTransmitter;
     private Connection currentReceiver;
     private InetAddress multicastGrup;
+    private DatagramPacket currentPackage;
     private int currentTransmitterControl;
 
     private final String MCAST_ADDR = "239.239.239.239";
@@ -163,7 +166,7 @@ public class NetworkAdapter {
      *
      */
     public String receiveMulticast() {
-
+        //TODO Iarly receiveMulticast
         byte[] BUFFER = new byte[BUFFER_SIZE];
 
         DatagramPacket datagramReceivePacket =  new DatagramPacket(BUFFER, BUFFER_SIZE);
@@ -171,8 +174,8 @@ public class NetworkAdapter {
         try {
 
             multicastSocket.receive(datagramReceivePacket);
-            //fixme a string recebe um parâmetro charset no contrutor especificando a codificação do texto. EX: UTF8
-
+            //fixme corrigir envio utf8 nos packets (acentos no texto)
+            //fixme setar pacote atual
             return new String(datagramReceivePacket.getData());
 
         } catch (IOException e) {
@@ -180,6 +183,17 @@ public class NetworkAdapter {
         }
         return null;
     }
+
+    /**
+     * Retorna o endereço ip de quem enviou o datagram packet atual.
+     *
+     * @return string contendo endereço ip do pacote.
+     */
+    public String getPackageAddress() {
+        //TODO Iarly getPackageAddress
+        return null;
+    }
+
 
     /**
      *

@@ -252,6 +252,17 @@ public class ChatApplication extends Application implements Presentable {
         }
     }
 
+    /**
+     * Verifica se o usuário atual foi requisitado.
+     *
+     * @param name Nome requisitado.
+     * @return verdadeiro caso seja requisitado.
+     */
+    public boolean checkUserRequest(String name) {
+        //TODO Guilherme checkUserRequest
+        return false;
+    }
+
     private void setContactDao(ContactDao contactDao) {
         this.contactDao = contactDao;
     }
@@ -329,15 +340,19 @@ public class ChatApplication extends Application implements Presentable {
         findContactController = loader.getController();
 
         var window = createModal(addView, 400, 300);
-        //fixme set button callbacks
         findContactController.setCloseCallback(() -> {
             isWaitingForContact = false;
             window.close();
         });
 
+        findContactController.setSearchCallback(searchInput -> {
+            requestable.requestContact(searchInput);
+        });
 
-        //fixme send contact solicitation
-        //fixme create addcontact solicitation
+        findContactController.setContactResult(contact -> {
+            //fixme get image bytes
+            requestable.contactAdd(contact.getIpAddress(), contact.getName(), null);
+        });
 
         isWaitingForContact = true;
         window.showAndWait();
@@ -367,6 +382,7 @@ public class ChatApplication extends Application implements Presentable {
 
         window.showAndWait();
     }
+
 
     /**
      * Requisita a lista de contatos.

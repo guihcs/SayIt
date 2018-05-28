@@ -76,6 +76,7 @@ public class ReceiverRunnable implements Runnable {
                     case ADD_RESPONSE:
                         //fixme resolver metodo de envio para GUI
                         boolean response = networkAdapter.receiveBoolean();
+
                         break;
                 }
             }

@@ -28,6 +28,7 @@ public class ProfileEditController {
     public void initialize() {
         contact = new Contact("Antonio", new Image("com/sayit/resources/icons/avatar.png"), "192.168.0.1");
         setContact(contact);
+        //TODO Guilherme fix nameField input size
     }
 
     public void close() {

@@ -3,9 +3,7 @@ package com.sayit.control;
 import com.sayit.network.MessageProtocol;
 import com.sayit.network.NetworkAdapter;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
-import java.util.List;
 
 public class SenderRunnable implements Runnable {
     private RequestMediator context;
@@ -50,6 +48,7 @@ public class SenderRunnable implements Runnable {
 
                                 case ADD_RESPONSE:
                                     //fixme resolver o envio de solicitaçao.
+                                    //Enviar dados do contato e resposta da solicitação
                                     break;
 
                                 case ADD_REQUEST:
@@ -86,6 +85,9 @@ public class SenderRunnable implements Runnable {
                         byte[] bytes = event.getContent();
                         networkAdapter.sendData(nameRequest);
                         networkAdapter.sendData(bytes);
+                        //fechar conexão. os dados do contato serão enviados
+                        //na resposta de solicitação
+                        //TODO Segundo REQUEST_CONTACT close connection
                         break;
 
                     case LOAD_MESSAGE_LIST:
