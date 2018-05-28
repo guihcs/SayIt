@@ -45,7 +45,7 @@ public class SenderRunnable implements Runnable {
                                     int type = event.getMessageType().getValue();
                                     networkAdapter.sendData(type);
                                     networkAdapter.sendData(event.getMessage());
-                                    eventList.removeFirst();
+//                                    eventList.removeFirst();
                                     break;
 
                                 case ADD_RESPONSE:
@@ -56,33 +56,44 @@ public class SenderRunnable implements Runnable {
                                     networkAdapter.sendData(event.getMessage());
                                     networkAdapter.sendData(event.getId());
                                     networkAdapter.sendData(event.getContent());
-                                    eventList.removeFirst();
+//                                    eventList.removeFirst();
                                     break;
 
                                 case CONTACT_INFO:
                                     networkAdapter.sendData(event.getMessage());
                                     networkAdapter.sendData(event.getId());
                                     networkAdapter.sendData(event.getContent());
-                                    eventList.removeFirst();
+//                                    eventList.removeFirst();
                                     break;
 
                                 default:
                                     networkAdapter.sendData(event.getMessage());
                                     networkAdapter.sendData(event.getId());
                                     networkAdapter.sendData(event.getContent());
-                                    eventList.removeFirst();
+//                                    eventList.removeFirst();
                                     break;
                             }
                         }
                         break;
 
                     case REQUEST_CONTACT:
+                        //fixme fechar conecção ou deixar em estado pendente.
+                        networkAdapter.connect(event.getIdentifier());
+                        networkAdapter.setCurrentReceiver(event.getIdentifier());
+                        networkAdapter.sendData(MessageProtocol.ADD_REQUEST.getValue());
+
+                        String nameRequest = event.getMessage();
+                        byte[] bytes = event.getContent();
+                        networkAdapter.sendData(nameRequest);
+                        networkAdapter.sendData(bytes);
                         break;
 
                     case LOAD_MESSAGE_LIST:
+                        //fixme load messages.
                         break;
 
                 }
+                eventList.removeFirst();
             }
 
         }
