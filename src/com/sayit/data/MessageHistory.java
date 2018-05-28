@@ -42,6 +42,6 @@ public class MessageHistory {
     }
 
     public Date getLastMessageDate() {
-        return lastMessageDate;
+        return null;
     }
 }
