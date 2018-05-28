@@ -30,8 +30,6 @@ public class NetworkAdapter {
      * Cria um sevidor que escutará a porta 5000.
      *
      **/
-
-
     public NetworkAdapter() {
 
         connectionMap = new LinkedHashMap<>();
@@ -74,8 +72,8 @@ public class NetworkAdapter {
     public boolean setCurrentReceiver(String address) {
 
         Connection tmpReceiver = connectionMap.get(address);
+        if(tmpReceiver != null) {
 
-        if(!tmpReceiver.equals(null)){
             currentReceiver = tmpReceiver;
             return true;
         }

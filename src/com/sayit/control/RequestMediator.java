@@ -7,7 +7,6 @@ import com.sayit.network.MessageProtocol;
 import com.sayit.network.NetworkAdapter;
 import javafx.scene.image.Image;
 
-import java.nio.file.Path;
 import java.util.List;
 
 public class RequestMediator implements Requestable {
@@ -34,12 +33,14 @@ public class RequestMediator implements Requestable {
      */
     public static void main(String[] args) {
         //fixme carregar do banco de dados o contactDao
+
         ContactDao contactDao = new ContactDao();
         RequestMediator mediator = new RequestMediator();
 
         ChatApplication app = ChatApplication.launchApplication(args, mediator, contactDao);
 
         contactDao.setUserProfile(new Contact("lucas",new Image("file:///C:\\Users\\Second\\Pictures\\Saved Pictures\\bug.jpg"), null));
+
         //TODO Segundo main
 
         mediator.setChatApplication(app);

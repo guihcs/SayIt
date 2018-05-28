@@ -14,13 +14,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
@@ -59,10 +58,6 @@ public class ChatHomeController {
 
     private Window parentWindow;
     private Pane findRoot;
-
-    //list glass panel
-    @FXML
-    private VBox listGlassPanel;
 
     private Presentable presentable;
     private FindContactController findContactController;
@@ -119,26 +114,32 @@ public class ChatHomeController {
 
         //fixme event to listmessage is blocked by glass panel
         for (int i = 0; i < 100; i++) {
-            String message = "";
+            StringBuilder message = new StringBuilder();
             for (int j = 0; j < Math.random() * 10 + 1; j++) {
-                message += "Escrevi seu nome na areia ";
+                message.append("Escrevi seu nome na areia ");
             }
-            messages.add(new Message(null, Math.random() * 10 > 5, message, MessageType.TEXT));
+            messages.add(new Message(null, Math.random() * 10 > 5, message.toString(), MessageType.TEXT));
         }
 
         setMessageList(messages);
 
-//        listGlassPanel.addEventFilter(MouseEvent.ANY, e -> {
-//            messageListView.fireEvent(e);
-//            //System.out.println(e);
-//        });
-//
-//
-//
-//        messageListView.addEventFilter(MouseEvent.ANY, e -> {
-//            System.out.println(e);
-//        });
 
+        messageField.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
+            if(e.getCode() == KeyCode.ENTER) {
+                if(e.isShiftDown()) {
+                    //fixme resolve caret position on enter
+                    messageField.setText(messageField.getText() + "\n");
+                    System.out.println(messageField.getText().length());
+                    messageField.positionCaret(messageField.getText().length() - 1);
+                } else {
+                    sendMessage();
+                }
+                e.consume();
+
+            }
+        });
+
+        messageField.setOnKeyReleased(e -> resizeTextArea());
 
     }
 

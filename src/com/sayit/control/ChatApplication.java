@@ -14,7 +14,6 @@ import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -31,11 +30,13 @@ public class ChatApplication extends Application implements Presentable {
     public static final String EDIT_PROFILE_LAYOUT = "/com/sayit/resources/layout/window/layout_edit_profile.fxml";
     public static final String CONTACT_VIEW = "/com/sayit/resources/layout/view/view_contact_cell.fxml";
     public static final String MESSAGE_VIEW = "/com/sayit/resources/layout/view/view_message_cell.fxml";
+    public static final String ADD_RESPONSE_LAYOUT = "/com/sayit/resources/layout/window/layout_add_response.fxml";
     //Styles
     public static final String HOME_STYLE = "/com/sayit/resources/stylesheet/style_chat_home.css";
     public static final String FIND_CONTACT_STYLE = "/com/sayit/resources/stylesheet/style_find_contact.css";
     public static final String EDIT_CONTACT_STYLE = "/com/sayit/resources/stylesheet/style_edit_proile.css";
     public static final String MESSAGE_STYLE = "/com/sayit/resources/stylesheet/style_message.css";
+    public static final String ADD_RESPONSE_STYLE = "/com/sayit/resources/stylesheet/style_add_response.css";
 
     private volatile static ChatApplication instance;
 
@@ -171,6 +172,17 @@ public class ChatApplication extends Application implements Presentable {
     public void addContact(String name, byte[] img, String address) {
         Image image = new Image(new ByteArrayInputStream(img));
         contactDao.addContact(new Contact(name, image, address));
+    }
+
+    /**
+     * Abre a tela de confirmação de contato.
+     *
+     * @param contact contato a ser confirmado.
+     */
+    public void openContactRequest(Contact contact) {
+
+        //TODO Guilherme openContactRequest
+        //createModal()
     }
 
     /**
