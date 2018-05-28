@@ -94,7 +94,7 @@ public class Message {
 
         SimpleDateFormat dateForma = new SimpleDateFormat("HH:mm");
 
-        return dateForma.format(messageDate.getTime()).toString();
+        return dateForma.format(messageDate.getTime());
 
     }
 }
