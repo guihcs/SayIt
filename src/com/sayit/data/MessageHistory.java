@@ -8,10 +8,11 @@ public class MessageHistory {
     private Contact contact;
     private List<Message> messageList;
     private String lastMessage;
-    private Date lastMessageDate;
+    private String lastMessageDate;
 
     public MessageHistory(Contact contact) {
-
+        //TODO Djan MessageHistory
+        //iniciar a messageList com um arraylist
         this.contact = contact;
     }
 
@@ -21,7 +22,9 @@ public class MessageHistory {
      * @param message
      */
     public void addMessage(Message message) {
-
+        //TODO Djan addMessage
+        //adicionar a mensagem em last message
+        //adicionar a data em lastmessage date
         messageList.add(message);
     }
 
