@@ -1,11 +1,13 @@
 package com.sayit.control;
 
 import com.sayit.data.MessageType;
+import com.sayit.network.MessageProtocol;
 
 public class RequestEvent {
 
     private EventType eventType;
     private MessageType messageType;
+    private MessageProtocol messageProtocol;
     private String identifier;
     private String message;
     private String fileName;
@@ -20,6 +22,14 @@ public class RequestEvent {
 
     public void setEventType(EventType eventType) {
         this.eventType = eventType;
+    }
+
+    public MessageProtocol getMessageProtocol() {
+        return messageProtocol;
+    }
+
+    public void setMessageProtocol(MessageProtocol messageProtocol) {
+        this.messageProtocol = messageProtocol;
     }
 
     public MessageType getMessageType() {

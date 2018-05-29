@@ -261,8 +261,7 @@ public class ChatApplication extends Application implements Presentable {
      * @return verdadeiro caso seja requisitado.
      */
     public boolean checkUserRequest(String name) {
-        //TODO Guilherme checkUserRequest
-        return false;
+        return contactDao.getUserProfile().getName().toUpperCase().contains(name.toUpperCase());
     }
 
     private void setContactDao(ContactDao contactDao) {
@@ -288,7 +287,7 @@ public class ChatApplication extends Application implements Presentable {
      * @return byte[]
      */
     public byte[] getUserImageBytes() {
-        return null;
+        return new byte[0];
     }
 
     /**

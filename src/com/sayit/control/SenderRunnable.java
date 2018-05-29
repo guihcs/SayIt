@@ -30,16 +30,16 @@ public class SenderRunnable implements Runnable {
                 switch (eventType){
 
                     case SEND_MESSAGE:
+                        networkAdapter.connect("127.0.0.1");
                         boolean isAvaliable = networkAdapter.setCurrentReceiver(event.getIdentifier());
-
+                        System.out.println(isAvaliable);
                         if(isAvaliable){
-                            int protocol = MessageProtocol.MESSAGE.getValue();
-                            MessageProtocol messageProtocol = MessageProtocol.castFrom(protocol);
+                            MessageProtocol messageProtocol = event.getMessageProtocol();
 
                             switch(messageProtocol){
 
                                 case MESSAGE:
-                                    networkAdapter.sendData(protocol);
+                                    networkAdapter.sendData(messageProtocol.getValue());
                                     int type = event.getMessageType().getValue();
                                     networkAdapter.sendData(type);
                                     networkAdapter.sendData(event.getMessage());
@@ -60,9 +60,8 @@ public class SenderRunnable implements Runnable {
 
                                 case CONTACT_INFO:
                                     networkAdapter.sendData(event.getMessage());
-                                    networkAdapter.sendData(event.getId());
-                                    networkAdapter.sendData(event.getContent());
-//                                    eventList.removeFirst();
+                                    //networkAdapter.sendData(event.getId());
+                                    //networkAdapter.sendData(event.getContent());
                                     break;
 
                                 default:
@@ -98,10 +97,16 @@ public class SenderRunnable implements Runnable {
                 eventList.removeFirst();
             }
 
+            try {
+                Thread.sleep(200);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     public void addEvent(RequestEvent event){
         eventList.add(event);
+
     }
 }

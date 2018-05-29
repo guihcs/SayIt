@@ -35,6 +35,8 @@ public class NetworkAdapter {
      **/
     public NetworkAdapter() {
 
+        //fixme get ip adresses for package check
+
         connectionMap = new LinkedHashMap<>();
         connectionList = new ArrayList<>();
         currentTransmitterControl = 0;
@@ -49,8 +51,8 @@ public class NetworkAdapter {
 
             multicastSocket.joinGroup(multicastGrup);
 
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (IOException ea) {
+            ea.printStackTrace();
 
         }
 
@@ -74,11 +76,15 @@ public class NetworkAdapter {
      */
     public boolean setCurrentReceiver(String address) {
 
-        Connection tmpReceiver = connectionMap.get(address);
-        if(tmpReceiver != null) {
+        if(connectionMap.containsKey(address)) {
 
-            currentReceiver = tmpReceiver;
-            return true;
+            Connection c = connectionMap.get(address);
+            if(c.isOnline()) {
+
+                currentReceiver = c;
+                return true;
+            }
+
         }
         return false;
 
@@ -99,32 +105,32 @@ public class NetworkAdapter {
      */
     public boolean nextTransmitter() {
 
-        Connection connection = connectionList.get(currentTransmitterControl);
+        if(connectionList.size() > 0) {
+            Connection connection = connectionList.get(currentTransmitterControl);
 
-        if(connection.isOnline()){
-            try {
-                if(connection.getDataInputStream().available() !=0){
+            if(connection.isOnline()) {
+                try {
+                    if(connection.getDataInputStream().available() > 0) {
 
-                    currentTransmitter = connection;
-                    currentTransmitterControl++;
+                        currentTransmitter = connection;
+                        currentTransmitterControl++;
 
-                    if(connectionList.size() == currentTransmitterControl){
-                        currentTransmitterControl = 0;
+                        if(connectionList.size() == currentTransmitterControl) {
+                            currentTransmitterControl = 0;
+                        }
+                        return true;
                     }
+                } catch (IOException e) {
+                    e.printStackTrace();
 
-                    return true;
                 }
+            } else {
 
-            } catch (IOException e) {
-                e.printStackTrace();
+                connection.closeConnection();
+                connectionList.remove(connection);
+                connectionMap.remove(connection.getpIPAddress());
 
             }
-        }else {
-
-            connection.closeConnection();
-            connectionList.remove(connection);
-            connectionMap.remove(connection.getpIPAddress());
-
         }
 
         return false;
@@ -162,17 +168,21 @@ public class NetworkAdapter {
      *
      */
     public String receiveMulticast() {
-        //TODO Iarly receiveMulticast
-        byte[] BUFFER = new byte[BUFFER_SIZE];
+        byte[] buffer = new byte[BUFFER_SIZE];
 
-        DatagramPacket datagramReceivePacket =  new DatagramPacket(BUFFER, BUFFER_SIZE);
+        DatagramPacket datagramReceivePacket = new DatagramPacket(buffer, BUFFER_SIZE);
+
 
         try {
 
+            //aparentemente os acentos estão sendo enviados.
             multicastSocket.receive(datagramReceivePacket);
-            //fixme corrigir envio utf8 nos packets (acentos no texto)
             currentPackage = datagramReceivePacket;
-            return new String(datagramReceivePacket.getData());
+            int i = 0;
+            while (buffer[i] != 0) i++;
+            byte[] textContent = new byte[i];
+            System.arraycopy(buffer, 0, textContent, 0, i);
+            return new String(textContent);
 
         } catch (IOException e) {
             System.err.println("Multicast fechado.");
@@ -206,7 +216,6 @@ public class NetworkAdapter {
             Connection connection = new Connection(client);
             connectionList.add(connection);
             connectionMap.put(connection.getpIPAddress(),connection);
-
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -268,7 +277,6 @@ public class NetworkAdapter {
     public void sendData(String data) {
         try {
             currentReceiver.getDataOutputStream().writeUTF(data);
-
         } catch (IOException e) {
             e.printStackTrace();
 
