@@ -234,16 +234,8 @@ public class RequestMediator implements Requestable {
                 String name = networkAdapter.receiveMulticast();
 
                 if(isRunning && chatApplication.checkUserRequest(name)) {
-                    RequestEvent re = new RequestEvent();
-                    re.setEventType(EventType.SEND_MESSAGE);
-                    re.setMessageProtocol(MessageProtocol.CONTACT_INFO);
-                    re.setIdentifier("127.0.0.1");
-                    re.setMessage("Lucão das parada");
-                    byte[] usrImg = chatApplication.getUserImageBytes();
-                    re.setNumberInfo(usrImg.length);
-                    re.setContent(usrImg);
 
-                    senderRunnable.addEvent(re);
+                    System.out.println(name);
                 }
             }
         });

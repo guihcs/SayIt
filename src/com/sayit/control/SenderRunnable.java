@@ -30,7 +30,6 @@ public class SenderRunnable implements Runnable {
                 switch (eventType){
 
                     case SEND_MESSAGE:
-                        networkAdapter.connect("127.0.0.1");
                         boolean isAvaliable = networkAdapter.setCurrentReceiver(event.getIdentifier());
                         System.out.println(isAvaliable);
                         if(isAvaliable){

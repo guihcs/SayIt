@@ -315,7 +315,7 @@ public class NetworkAdapter {
     }
 
     /**
-     * Recebe um valor inteiro do transmissor atual.
+     * Recebe um valor inteiro do transmisso r atual.
      *
      * @return um valor inteiro.
      */
