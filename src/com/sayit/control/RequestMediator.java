@@ -224,7 +224,7 @@ public class RequestMediator implements Requestable {
                 networkAdapter.acceptTCPConnection();
             }
         });
-        serverThread.setDaemon(true);
+        //serverThread.setDaemon(true);
         serverThread.start();
     }
 
@@ -233,7 +233,7 @@ public class RequestMediator implements Requestable {
             while(isRunning){
                 String name = networkAdapter.receiveMulticast();
 
-                if(chatApplication.checkUserRequest(name)) {
+                if(isRunning && chatApplication.checkUserRequest(name)) {
                     RequestEvent re = new RequestEvent();
                     re.setEventType(EventType.SEND_MESSAGE);
                     re.setMessageProtocol(MessageProtocol.CONTACT_INFO);
@@ -247,7 +247,7 @@ public class RequestMediator implements Requestable {
                 }
             }
         });
-        multicastServer.setDaemon(true);
+        //multicastServer.setDaemon(true);
         multicastServer.start();
     }
 
