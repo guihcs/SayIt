@@ -29,6 +29,9 @@ public class ContactCell extends ListCell<Contact> {
         super.updateItem(item, empty);
         if(!empty) {
             contactController.setName(item.getName());
+            contactController.setRoundedImage(item.getPhoto());
+            contactController.setDescription("");
+            contactController.setTime("");
             setGraphic(root);
         } else setGraphic(null);
     }

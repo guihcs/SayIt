@@ -26,6 +26,14 @@ public class HistoryCell extends ListCell<MessageHistory> {
     @Override
     protected void updateItem(MessageHistory item, boolean empty) {
         super.updateItem(item, empty);
-        if(!empty) setGraphic(root);
+        if(!empty) {
+            contactController.setName(item.getContact().getName());
+            contactController.setRoundedImage(item.getContact().getPhoto());
+            contactController.setDescription(item.getLastMessage());
+            contactController.setTime(item.getLastMessageDate());
+            setGraphic(root);
+        } else {
+            setGraphic(null);
+        }
     }
 }

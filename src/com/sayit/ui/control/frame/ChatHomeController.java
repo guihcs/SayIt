@@ -5,7 +5,6 @@ import com.sayit.control.Presentable;
 import com.sayit.data.Contact;
 import com.sayit.data.Message;
 import com.sayit.data.MessageHistory;
-import com.sayit.data.MessageType;
 import com.sayit.ui.control.view.HistoryCell;
 import com.sayit.ui.control.view.MessageCell;
 import javafx.animation.Interpolator;
@@ -28,7 +27,6 @@ import javafx.stage.Window;
 import javafx.util.Duration;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ChatHomeController {
@@ -112,21 +110,6 @@ public class ChatHomeController {
         messageField.setOnKeyReleased(e -> resizeTextArea());
 
         configSlideAnimation();
-
-        List<Message> messages = new ArrayList<>();
-
-
-        //fixme event to listmessage is blocked by glass panel
-        for (int i = 0; i < 100; i++) {
-            StringBuilder message = new StringBuilder();
-            for (int j = 0; j < Math.random() * 10 + 1; j++) {
-                message.append("Escrevi seu nome na areia ");
-            }
-            messages.add(new Message(null, Math.random() * 10 > 5, message.toString(), MessageType.TEXT));
-        }
-
-        setMessageList(messages);
-
 
         messageField.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
             if(e.getCode() == KeyCode.ENTER) {
