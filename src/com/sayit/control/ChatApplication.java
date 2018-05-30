@@ -461,7 +461,7 @@ public class ChatApplication extends Application implements Presentable {
         });
 
         findContactController.setContactResult(contact -> {
-            requestable.contactAdd(contact.getIpAddress(), contact.getName(), getUserImageBytes());
+            requestable.contactAdd(contact.getIpAddress(), contact.getName(), getUserImageBytes(), getImageWidth(), getImageHeight());
             window.close();
             isWaitingForContact = false;
         });

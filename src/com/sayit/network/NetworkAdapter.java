@@ -101,30 +101,22 @@ public class NetworkAdapter {
     public boolean nextTransmitter() {
 
         if(connectionList.size() > 0) {
-            Connection connection = connectionList.get(currentTransmitterControl);
-            if(connection.isOnline()) {
-                try {
-                    if(connection.getDataInputStream().available() > 0) {
+            if(currentTransmitterControl >= connectionList.size()) currentTransmitterControl = 0;
 
-                        currentTransmitter = connection;
-                        currentTransmitterControl++;
+            Connection c = connectionList.get(currentTransmitterControl);
 
-                        if(connectionList.size() == currentTransmitterControl) {
-                            currentTransmitterControl = 0;
-                        }
-                        return true;
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-
+            if(c.isOnline()) {
+                if(c.haveMessage()) {
+                    currentTransmitter = c;
+                    return true;
                 }
             } else {
-
-                connection.closeConnection();
-                connectionList.remove(connection);
-                connectionMap.remove(connection.getpIPAddress());
-
+                closeConnection(c.getpIPAddress());
+                currentTransmitterControl--;
             }
+
+            currentTransmitterControl++;
+
         }
 
         return false;
@@ -225,7 +217,11 @@ public class NetworkAdapter {
      */
     public void closeConnection(String address) {
 
-        connectionMap.get(address).closeConnection();
+        Connection c = connectionMap.get(address);
+        c.closeConnection();
+        connectionMap.remove(c);
+        connectionList.remove(c);
+
 
     }
 
@@ -238,7 +234,6 @@ public class NetworkAdapter {
         try {
             Connection connection = new Connection(serverSocket.accept());
             connectionList.add(connection);
-            System.out.println("connected");
             connectionMap.put(connection.getpIPAddress(),connection);
 
         } catch (IOException e) {

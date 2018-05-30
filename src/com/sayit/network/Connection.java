@@ -100,6 +100,17 @@ public class Connection {
         return false;
     }
 
+
+    public boolean haveMessage() {
+        try {
+            return dataInputStream.available() > 0;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return false;
+    }
+
     /**
      * Fecha esta conexão.
      */
