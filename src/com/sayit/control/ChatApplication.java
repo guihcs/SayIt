@@ -176,8 +176,11 @@ public class ChatApplication extends Application implements Presentable {
         Contact contact = contactDao.getContact(id);
         Message newMessage = new Message(contact, false, message, MessageType.TEXT);
         contactDao.addMessage(id, newMessage);
-        chatHome.setMessageList(contactDao.getMessageList(id));
-        chatHome.setHistoryList(contactDao.getHistoryList());
+        Platform.runLater(() -> {
+            chatHome.setMessageList(contactDao.getMessageList(id));
+            chatHome.setHistoryList(contactDao.getHistoryList());
+        });
+
     }
 
     /**
