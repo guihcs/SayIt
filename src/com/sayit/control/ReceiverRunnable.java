@@ -55,7 +55,9 @@ public class ReceiverRunnable implements Runnable {
                         break;
 
                     case CONTACT_INFO:
+                        System.out.println("received info");
                         String name = networkAdapter.receiveString();
+                        System.out.println("received name: " + name);
                         Integer sizeInt = networkAdapter.receiveInt();
                         String ip = networkAdapter.getStringAddress();
                         byte[] arrayByte = networkAdapter.receiveBytes(sizeInt);

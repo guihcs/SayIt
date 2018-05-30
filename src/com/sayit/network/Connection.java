@@ -121,7 +121,7 @@ public class Connection {
     }
 
     public String getpIPAddress(){
-        return socket.getLocalAddress().getHostAddress();
+        return socket.getInetAddress().getHostAddress();
     }
 
 

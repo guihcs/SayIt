@@ -236,12 +236,11 @@ public class RequestMediator implements Requestable {
                 if(isRunning && chatApplication.checkUserRequest(name)) {
                     String packageAddress = networkAdapter.getPackageAddress();
                     networkAdapter.connect(packageAddress);
-                    System.out.println(packageAddress);
                     RequestEvent ev = new RequestEvent();
                     ev.setEventType(EventType.SEND_MESSAGE);
                     ev.setMessageProtocol(MessageProtocol.CONTACT_INFO);
-
-                    ev.setIdentifier(chatApplication.getUserName());
+                    ev.setIdentifier(packageAddress);
+                    ev.setMessage(chatApplication.getUserName());
                     ev.setNumberInfo(10);
                     ev.setContent(new byte[10]);
 

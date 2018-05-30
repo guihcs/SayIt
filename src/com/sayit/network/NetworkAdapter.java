@@ -75,12 +75,9 @@ public class NetworkAdapter {
      * @param address Endereço da conexão.
      */
     public boolean setCurrentReceiver(String address) {
-
         if(connectionMap.containsKey(address)) {
-
             Connection c = connectionMap.get(address);
             if(c.isOnline()) {
-
                 currentReceiver = c;
                 return true;
             }
@@ -216,6 +213,7 @@ public class NetworkAdapter {
             Connection connection = new Connection(client);
             connectionList.add(connection);
             connectionMap.put(connection.getpIPAddress(),connection);
+
         } catch (IOException e) {
             e.printStackTrace();
         }

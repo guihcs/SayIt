@@ -31,7 +31,6 @@ public class SenderRunnable implements Runnable {
 
                     case SEND_MESSAGE:
                         boolean isAvaliable = networkAdapter.setCurrentReceiver(event.getIdentifier());
-                        System.out.println(isAvaliable);
                         if(isAvaliable){
                             MessageProtocol messageProtocol = event.getMessageProtocol();
 
@@ -62,6 +61,7 @@ public class SenderRunnable implements Runnable {
                                     networkAdapter.sendData(event.getMessage());
                                     networkAdapter.sendData(event.getNumberInfo());
                                     networkAdapter.sendData(event.getContent());
+                                    System.out.println("info sended");
                                     //networkAdapter.sendData(event.getId());
                                     //networkAdapter.sendData(event.getContent());
                                     break;
