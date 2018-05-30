@@ -27,7 +27,7 @@ public class ReceiverRunnable implements Runnable {
             if(networkAdapter.nextTransmitter()){
                 protocolInt = networkAdapter.receiveInt();
                 MessageProtocol messageProtocol = MessageProtocol.castFrom(protocolInt);
-
+                System.out.println("Info received");
                 switch (messageProtocol){
 
                     case MESSAGE:

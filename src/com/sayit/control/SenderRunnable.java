@@ -61,6 +61,8 @@ public class SenderRunnable implements Runnable {
                                     networkAdapter.sendData(event.getMessage());
                                     networkAdapter.sendData(event.getNumberInfo());
                                     networkAdapter.sendData(event.getContent());
+
+                                    networkAdapter.flushData();
                                     System.out.println("info sended");
                                     //networkAdapter.sendData(event.getId());
                                     //networkAdapter.sendData(event.getContent());
