@@ -238,6 +238,7 @@ public class NetworkAdapter {
         try {
             Connection connection = new Connection(serverSocket.accept());
             connectionList.add(connection);
+            System.out.println("connected");
             connectionMap.put(connection.getpIPAddress(),connection);
 
         } catch (IOException e) {

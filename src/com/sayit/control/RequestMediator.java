@@ -1,10 +1,10 @@
 package com.sayit.control;
 
-import com.sayit.data.ContactDao;
 import com.sayit.data.MessageType;
 import com.sayit.network.NetworkAdapter;
 
 import java.util.List;
+import java.util.Scanner;
 
 public class RequestMediator implements Requestable {
 
@@ -31,36 +31,22 @@ public class RequestMediator implements Requestable {
     public static void main(String[] args) {
         //fixme carregar do banco de dados o contactDao
 
-        ContactDao contactDao = new ContactDao();
         RequestMediator mediator = new RequestMediator();
 
-        ChatApplication app = ChatApplication.launchApplication(args, mediator, contactDao);
+        NetworkAdapter networkAdapter = mediator.getNetworkAdapter();
+
+        Scanner s = new Scanner(System.in);
+
+        System.out.println("receive?");
+
+        if(s.equals("s")) {
+
+            networkAdapter.acceptTCPConnection();
 
 
-//        for (int i = 0; i < 10; i++) {
-//
-//            Contact c = new Contact("Jovem" + i,
-//                    new Image("https://picsum.photos/300/300/?random"),
-//                    Integer.toString(i));
-//            contactDao.addContact(c);
-//
-//            for (int j = 0; j < 20; j++) {
-//                contactDao.addMessage(i, new Message(c, Math.random() * 10 > 5,
-//                        "Pedro nalagoa bebeu agua, passou mal sem saber e ainda está vivo", MessageType.TEXT));
-//            }
-//
-//        }
-
-
-
-        //TODO Segundo main
-
-        mediator.setChatApplication(app);
-        mediator.startMulticastServer();
-        mediator.startReceiverThread();
-        mediator.startSenderThread();
-        mediator.startServerThread();
-        app.openStartScene();
+        } else {
+            networkAdapter.connect(s.nextLine());
+        }
 
     }
 
@@ -233,11 +219,12 @@ public class RequestMediator implements Requestable {
                 String name = networkAdapter.receiveMulticast();
 
                 String address = networkAdapter.getPackageAddress();
-
+                System.out.println("sending info");
                 networkAdapter.connect(address);
                 networkAdapter.setCurrentReceiver(address);
                 networkAdapter.sendData(12);
                 networkAdapter.flushData();
+                System.out.println("info sended");
             }
         });
         //multicastServer.setDaemon(true);

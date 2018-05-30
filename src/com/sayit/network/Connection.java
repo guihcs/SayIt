@@ -108,8 +108,6 @@ public class Connection {
         try {
 
             socket.close();
-            dataOutputStream.close();
-            dataInputStream.close();
             connectionStatus = ConnectionStatus.CLOSED;
 
         } catch (IOException e) {

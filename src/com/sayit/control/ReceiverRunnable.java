@@ -23,6 +23,7 @@ public class ReceiverRunnable implements Runnable {
         //TODO Segundo run
         while(context.isRunning()){
             if(networkAdapter.nextTransmitter()){
+                System.out.println("receiving int");
                 System.out.println(networkAdapter.receiveInt());
             }
             try {
