@@ -232,10 +232,20 @@ public class RequestMediator implements Requestable {
         Thread multicastServer = new Thread(() -> {
             while(isRunning){
                 String name = networkAdapter.receiveMulticast();
-
+                System.out.println(name);
                 if(isRunning && chatApplication.checkUserRequest(name)) {
+                    String packageAddress = networkAdapter.getPackageAddress();
+                    networkAdapter.connect(packageAddress);
+                    System.out.println(packageAddress);
+                    RequestEvent ev = new RequestEvent();
+                    ev.setEventType(EventType.SEND_MESSAGE);
+                    ev.setMessageProtocol(MessageProtocol.CONTACT_INFO);
 
-                    System.out.println(name);
+                    ev.setIdentifier(chatApplication.getUserName());
+                    ev.setNumberInfo(10);
+                    ev.setContent(new byte[10]);
+
+                    senderRunnable.addEvent(ev);
                 }
             }
         });

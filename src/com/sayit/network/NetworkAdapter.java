@@ -196,7 +196,7 @@ public class NetworkAdapter {
      * @return string contendo endereço ip do pacote.
      */
     public String getPackageAddress() {
-        return currentPackage.getAddress().toString();
+        return currentPackage.getAddress().getHostAddress();
     }
 
 
@@ -401,7 +401,7 @@ public class NetworkAdapter {
      *
      */
     public void closeAdapter() {
-
+        //fixme resolve so timeout
         try {
 
             serverSocket.close();
