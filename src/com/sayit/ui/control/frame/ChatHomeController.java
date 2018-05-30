@@ -222,8 +222,10 @@ public class ChatHomeController {
     }
 
     public void setReceiverProfile(Contact receiverProfile) {
+        receiverProfile = presentable.getContactInfo(receiverProfile.getId());
         contactImage.setFill(new ImagePattern(receiverProfile.getPhoto()));
         contactNameLabel.setText(receiverProfile.getName());
+
         //fixme add a status to contact
         contactStatusLabel.setText("");
     }

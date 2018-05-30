@@ -396,7 +396,8 @@ public class ChatApplication extends Application implements Presentable {
      */
     @Override
     public Contact getContactInfo(int id) {
-        return contactDao.getContact(id);
+        currentContact = contactDao.getContact(id);
+        return currentContact;
     }
 
     /**
