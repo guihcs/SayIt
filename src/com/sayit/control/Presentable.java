@@ -33,5 +33,5 @@ public interface Presentable {
 
     void sendMessage(String message);
 
-    //TODO Add method to send message by bytes
+    //fixme Add method to send message by bytes
 }

@@ -9,7 +9,6 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
 
 import java.util.List;
 
@@ -30,7 +29,10 @@ public class FindContactController {
         contactListView.setItems(contactObservableList);
         contactListView.setCellFactory(e -> {
             ContactCell contactCell = new ContactCell();
-            contactCell.setOnMouseClicked(ev -> contactManager.contactResult(contactCell.getItem()));
+            contactCell.setOnMouseClicked(ev -> {
+                if(contactManager != null) contactManager.contactResult(contactCell.getItem());
+            });
+
 
             return contactCell;
         });

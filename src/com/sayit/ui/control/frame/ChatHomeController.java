@@ -26,7 +26,6 @@ import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import javafx.util.Duration;
 
-import java.io.IOException;
 import java.util.List;
 
 public class ChatHomeController {
@@ -93,19 +92,18 @@ public class ChatHomeController {
             return historyCell;
         });
 
+        //config contact list
         FXMLLoader loader = ChatApplication.getLoader(ChatApplication.FIND_CONTACT_LAYOUT);
-        try {
-            findRoot = loader.load();
-            findRoot.getStylesheets().add(ChatApplication.getStyleSheet(ChatApplication.FIND_CONTACT_STYLE));
-            findContactController = loader.getController();
-            findContactController.setCloseCallback(this::closeFindContact);
-            findPane.getChildren().add(findRoot);
+
+        findRoot = (Pane) ChatApplication.loadFromLoader(loader);
+        findRoot.getStylesheets().add(ChatApplication.getStyleSheet(ChatApplication.FIND_CONTACT_STYLE));
+        findContactController = loader.getController();
+        findContactController.setContactResult(this::setReceiverProfile);
+        findContactController.setCloseCallback(this::closeFindContact);
+        findPane.getChildren().add(findRoot);
 
 
-            findPane.heightProperty().addListener(e -> findRoot.setPrefHeight(findPane.getHeight()));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        findPane.heightProperty().addListener(e -> findRoot.setPrefHeight(findPane.getHeight()));
 
         messageField.setOnKeyReleased(e -> resizeTextArea());
 

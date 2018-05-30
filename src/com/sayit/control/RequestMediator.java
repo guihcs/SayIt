@@ -1,6 +1,7 @@
 package com.sayit.control;
 
 import com.sayit.data.ContactDao;
+import com.sayit.data.MessageType;
 import com.sayit.network.MessageProtocol;
 import com.sayit.network.NetworkAdapter;
 
@@ -86,7 +87,13 @@ public class RequestMediator implements Requestable {
     @Override
     public void sendMessage(String address, String message) {
 
-        //TODO sendMessage
+        RequestEvent messageEvent = new RequestEvent(EventType.SEND_MESSAGE, MessageProtocol.MESSAGE);
+        messageEvent.setMessageType(MessageType.TEXT);
+        messageEvent.setReceiverAddress(address);
+        messageEvent.setTextMessage(message);
+
+        senderRunnable.addEvent(messageEvent);
+
     }
     
     /**

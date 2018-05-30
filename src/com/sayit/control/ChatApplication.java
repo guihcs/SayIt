@@ -521,7 +521,9 @@ public class ChatApplication extends Application implements Presentable {
     @Override
     public void sendMessage(String message) {
         //fixme null current contact
+        Message sendMessage = new Message(currentContact, true, message, MessageType.TEXT);
         requestable.sendMessage(currentContact.getIpAddress(), message);
+        contactDao.addMessage(currentContact.getId(), sendMessage);
     }
 
     @Override

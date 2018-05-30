@@ -57,6 +57,16 @@ public class SenderRunnable implements Runnable {
             case ADD_RESPONSE:
                 sendContactInfo(event);
                 break;
+            case MESSAGE:
+                switch (event.getMessageType()) {
+                    case TEXT:
+                        networkAdapter.setCurrentReceiver(event.getReceiverAddress());
+                        networkAdapter.sendData(event.getMessageProtocol().getValue());
+                        networkAdapter.sendData(event.getMessageType().getValue());
+                        networkAdapter.sendData(event.getTextMessage());
+                        break;
+                }
+                break;
         }
     }
 

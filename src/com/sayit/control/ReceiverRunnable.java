@@ -1,5 +1,6 @@
 package com.sayit.control;
 
+import com.sayit.data.MessageType;
 import com.sayit.network.MessageProtocol;
 import com.sayit.network.NetworkAdapter;
 
@@ -74,6 +75,18 @@ public class ReceiverRunnable implements Runnable {
 
                 context.getChatApplication().addContactResult(contactName, address, imgBytes, width, height);
                 break;
+
+            case MESSAGE:
+                MessageType messageType = MessageType.castFrom(networkAdapter.receiveInt());
+
+                switch (messageType) {
+                    case TEXT:
+                        String textMessage = networkAdapter.receiveString();
+                        String senderAddress = networkAdapter.getStringAddress();
+
+                        context.getChatApplication().addMessage(senderAddress, textMessage);
+                        break;
+                }
         }
     }
 
