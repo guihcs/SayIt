@@ -119,8 +119,15 @@ public class RequestMediator implements Requestable {
      * @param imageBytes bytes da imagem do usuário atual.
      */
     @Override
-    public void contactAdd(String ip, String userName, byte[] imageBytes) {
-        //TODO contactAdd
+    public void contactAdd(String ip, String userName, byte[] imageBytes, int width, int height) {
+        RequestEvent requestEvent = new RequestEvent(EventType.SEND_MESSAGE, MessageProtocol.CONTACT_INFO);
+        requestEvent.setReceiverAddress(ip);
+        requestEvent.setTextMessage(userName);
+        requestEvent.setImageHeight(height);
+        requestEvent.setImageWidth(width);
+        requestEvent.setByteContent(imageBytes);
+
+        senderRunnable.addEvent(requestEvent);
 
     }
 
@@ -193,7 +200,7 @@ public class RequestMediator implements Requestable {
         Thread multicastServer = new Thread(() -> {
             while(isRunning){
                 String name = networkAdapter.receiveMulticast();
-                if(chatApplication.checkUserRequest(name)) {
+                if(isRunning && chatApplication.checkUserRequest(name)) {
 
                     RequestEvent requestEvent = new RequestEvent(EventType.SEND_MESSAGE, MessageProtocol.CONTACT_INFO);
                     requestEvent.setReceiverAddress(networkAdapter.getPackageAddress());

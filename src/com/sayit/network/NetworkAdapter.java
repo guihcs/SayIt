@@ -24,8 +24,7 @@ public class NetworkAdapter {
 
     private final String MCAST_ADDR = "239.239.239.239";
     private final int MCAST_DEST_PORT = 7777;
-    private final int SERVER_SOCKET_DEST_PORT = 5000;
-    private final int DT_SOCKET_DEST_PORT = 5001;
+    private final int SERVER_SOCKET_DEST_PORT = 6000;
     private final int BUFFER_SIZE = 1024;
 
     /**

@@ -22,7 +22,7 @@ public interface Requestable {
      * @param userName
      * @param imageBytes
      */
-    void contactAdd(String ip, String userName, byte[] imageBytes);
+    void contactAdd(String ip, String userName, byte[] imageBytes, int width, int height);
 
     void loadMessageList(int id);
 
