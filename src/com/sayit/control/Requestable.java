@@ -6,7 +6,7 @@ public interface Requestable {
 
     void sendMessage(String address, String message);
 
-    void sendContactResult(String receiverIp, String name, byte[] image);
+    void sendContactResult(String receiverIp, String name, byte[] image, int width, int height);
 
     /**
      * Requisita dados do contato em todos os usuários do grupo.

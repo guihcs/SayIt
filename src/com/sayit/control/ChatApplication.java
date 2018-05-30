@@ -229,6 +229,9 @@ public class ChatApplication extends Application implements Presentable {
      */
     public void addContactResult(String name, String address, byte[] image, int width, int height) {
 
+        Contact requesterContact = new Contact(name, writeImageBytes(image, width, height), address);
+        contactDao.addContact(requesterContact);
+
     }
 
 
@@ -241,7 +244,10 @@ public class ChatApplication extends Application implements Presentable {
     public void openContactRequest(Contact contact) {
 
         var loader = getLoader(ADD_RESPONSE_LAYOUT);
-        Node node = loadFromLoader(loader);
+        Parent node = (Parent) loadFromLoader(loader);
+        node.getStylesheets().add(getStyleSheet(ADD_RESPONSE_STYLE));
+
+
         AddResponseController addController = loader.getController();
 
         addController.setContact(contact);
@@ -250,7 +256,8 @@ public class ChatApplication extends Application implements Presentable {
 
 
         addController.setConfirmCallback(contact1 -> {
-            requestable.sendContactResult(contact.getIpAddress(), getUserName(), getUserImageBytes());
+            requestable.sendContactResult(contact.getIpAddress(), getUserName(), getUserImageBytes(), getImageWidth(), getImageHeight());
+            contactDao.addContact(contact1);
             requestWindow.close();
         });
         addController.setCancelCallback(e -> requestWindow.close());
@@ -461,7 +468,7 @@ public class ChatApplication extends Application implements Presentable {
         });
 
         findContactController.setContactResult(contact -> {
-            requestable.contactAdd(contact.getIpAddress(), contact.getName(), getUserImageBytes(), getImageWidth(), getImageHeight());
+            requestable.contactAdd(contact.getIpAddress(), getUserName(), getUserImageBytes(), getImageWidth(), getImageHeight());
             window.close();
             isWaitingForContact = false;
         });

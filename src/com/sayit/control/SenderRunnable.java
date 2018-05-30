@@ -53,32 +53,24 @@ public class SenderRunnable implements Runnable {
     private void digestMessageEvent(RequestEvent event) {
         switch (event.getMessageProtocol()) {
             case CONTACT_INFO:
-                //send contact info
-                networkAdapter.connect(event.getReceiverAddress());
-                networkAdapter.setCurrentReceiver(event.getReceiverAddress());
-
-                networkAdapter.sendData(event.getMessageProtocol().getValue());
-
-                networkAdapter.sendData(event.getTextMessage());
-                networkAdapter.sendData(event.getImageHeight());
-                networkAdapter.sendData(event.getImageWidth());
-                networkAdapter.sendData(event.getContentSize());
-                networkAdapter.sendData(event.getByteContent());
-                break;
-
             case ADD_REQUEST:
-                //send add_request
-                networkAdapter.connect(event.getReceiverAddress());
-                networkAdapter.setCurrentReceiver(event.getReceiverAddress());
-
-                networkAdapter.sendData(event.getMessageProtocol().getValue());
-
-                networkAdapter.sendData(event.getTextMessage());
-                networkAdapter.sendData(event.getImageHeight());
-                networkAdapter.sendData(event.getImageWidth());
-                networkAdapter.sendData(event.getContentSize());
-                networkAdapter.sendData(event.getByteContent());
+            case ADD_RESPONSE:
+                sendContactInfo(event);
                 break;
         }
+    }
+
+
+    private void sendContactInfo(RequestEvent event) {
+        networkAdapter.connect(event.getReceiverAddress());
+        networkAdapter.setCurrentReceiver(event.getReceiverAddress());
+
+        networkAdapter.sendData(event.getMessageProtocol().getValue());
+
+        networkAdapter.sendData(event.getTextMessage());
+        networkAdapter.sendData(event.getImageHeight());
+        networkAdapter.sendData(event.getImageWidth());
+        networkAdapter.sendData(event.getContentSize());
+        networkAdapter.sendData(event.getByteContent());
     }
 }

@@ -97,8 +97,15 @@ public class RequestMediator implements Requestable {
     * @param image conteúdo da imagem.
     */
     @Override
-    public void sendContactResult(String receiverIp, String name, byte[] image) {
-        //TODO Segundo sendContactResult
+    public void sendContactResult(String receiverIp, String name, byte[] image, int width, int height) {
+        RequestEvent requestEvent = new RequestEvent(EventType.SEND_MESSAGE, MessageProtocol.ADD_RESPONSE);
+        requestEvent.setReceiverAddress(receiverIp);
+        requestEvent.setTextMessage(name);
+        requestEvent.setImageHeight(height);
+        requestEvent.setImageWidth(width);
+        requestEvent.setByteContent(image);
+
+        senderRunnable.addEvent(requestEvent);
     }
     
     /**
@@ -120,7 +127,7 @@ public class RequestMediator implements Requestable {
      */
     @Override
     public void contactAdd(String ip, String userName, byte[] imageBytes, int width, int height) {
-        RequestEvent requestEvent = new RequestEvent(EventType.SEND_MESSAGE, MessageProtocol.CONTACT_INFO);
+        RequestEvent requestEvent = new RequestEvent(EventType.SEND_MESSAGE, MessageProtocol.ADD_REQUEST);
         requestEvent.setReceiverAddress(ip);
         requestEvent.setTextMessage(userName);
         requestEvent.setImageHeight(height);
