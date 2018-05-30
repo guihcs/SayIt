@@ -50,6 +50,19 @@ public class ReceiverRunnable implements Runnable {
                 context.getChatApplication().addContactRequest(contactName, address, imgBytes, width, height);
                 networkAdapter.closeConnection(address);
                 break;
+
+            case ADD_REQUEST:
+                //contact info received
+                contactName = networkAdapter.receiveString();
+                address = networkAdapter.getStringAddress();
+                height = networkAdapter.receiveInt();
+                width = networkAdapter.receiveInt();
+                contentSize = networkAdapter.receiveInt();
+                imgBytes = networkAdapter.receiveBytes(contentSize);
+
+                context.getChatApplication().addContact(contactName, address, imgBytes, width, height);
+                networkAdapter.closeConnection(address);
+                break;
         }
     }
 

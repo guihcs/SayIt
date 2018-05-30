@@ -1,10 +1,7 @@
 package com.sayit.control;
 
 import com.sayit.data.*;
-import com.sayit.ui.control.frame.ChatHomeController;
-import com.sayit.ui.control.frame.FindContactController;
-import com.sayit.ui.control.frame.ProfileEditController;
-import com.sayit.ui.control.frame.StartFrameController;
+import com.sayit.ui.control.frame.*;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -18,9 +15,9 @@ import javafx.scene.image.WritableImage;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.LinkedList;
 import java.util.List;
 
 public class ChatApplication extends Application implements Presentable {
@@ -53,7 +50,10 @@ public class ChatApplication extends Application implements Presentable {
     private ChatHomeController chatHome;
     private FindContactController findContactController;
     private ProfileEditController profileEditController;
+
     private boolean isWaitingForContact;
+    private final LinkedList<Contact> requestList = new LinkedList<>();
+    private volatile boolean processingRequests = false;
 
     public ChatApplication() {
         ChatApplication.instance = this;
@@ -188,24 +188,50 @@ public class ChatApplication extends Application implements Presentable {
     public void addMessage(String sid, byte[] content, String fileName) {
 
         //fixme archives will be implemented next
-        //fixme create a request contact list
         int id = ContactDao.parseAddress(sid);
         Contact contact = contactDao.getContact(id);
         //fixme get file type from name
         //contactDao.addMessage(id, new Message(contact, false, content, messageType));
     }
 
+
+    /**
+     * Adiciona um contato na lista de requisições de contato.
+     * @param name
+     * @param address
+     * @param image
+     * @param width
+     * @param height
+     */
+    public void addContact(String name, String address, byte[] image, int width, int height) {
+        Contact requesterContact = new Contact(name, writeImageBytes(image, width, height), address);
+        requestList.add(requesterContact);
+
+        if(!processingRequests) {
+            Platform.runLater(() -> {
+                processingRequests = true;
+                while (processingRequests && requestList.size() > 0) {
+                    openContactRequest(requestList.pollFirst());
+                }
+                processingRequests = false;
+            });
+        }
+    }
+
     /**
      * Adiciona um contato na lista de contatos.
      *
-     * @param img     imagem do contato.
-     * @param name    nome do contato.
-     * @param address endereço do contato.
+     * @param name
+     * @param address
+     * @param image
+     * @param width
+     * @param height
      */
-    public void addContact(String name, byte[] img, String address) {
-        Image image = new Image(new ByteArrayInputStream(img));
-        contactDao.addContact(new Contact(name, image, address));
+    public void addContactResult(String name, String address, byte[] image, int width, int height) {
+
     }
+
+
 
     /**
      * Abre a tela de confirmação de contato.
@@ -214,8 +240,23 @@ public class ChatApplication extends Application implements Presentable {
      */
     public void openContactRequest(Contact contact) {
 
-        //TODO Guilherme openContactRequest
-        //createModal()
+        var loader = getLoader(ADD_RESPONSE_LAYOUT);
+        Node node = loadFromLoader(loader);
+        AddResponseController addController = loader.getController();
+
+        addController.setContact(contact);
+
+        Stage requestWindow = createModal(node, 300, 400);
+
+
+        addController.setConfirmCallback(contact1 -> {
+            requestable.sendContactResult(contact.getIpAddress(), getUserName(), getUserImageBytes());
+            requestWindow.close();
+        });
+        addController.setCancelCallback(e -> requestWindow.close());
+
+
+        requestWindow.showAndWait();
     }
 
     /**
@@ -420,8 +461,7 @@ public class ChatApplication extends Application implements Presentable {
         });
 
         findContactController.setContactResult(contact -> {
-            //fixme get image bytes
-            requestable.contactAdd(contact.getIpAddress(), contact.getName(), null);
+            requestable.contactAdd(contact.getIpAddress(), contact.getName(), getUserImageBytes());
         });
 
         isWaitingForContact = true;

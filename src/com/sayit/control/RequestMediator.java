@@ -97,8 +97,8 @@ public class RequestMediator implements Requestable {
     * @param image conteúdo da imagem.
     */
     @Override
-    public void sendUserInfo(String receiverIp, String name, byte[] image){
-        //TODO Segundo sendUserInfo
+    public void sendContactResult(String receiverIp, String name, byte[] image) {
+        //TODO Segundo sendContactResult
     }
     
     /**

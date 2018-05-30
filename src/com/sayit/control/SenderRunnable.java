@@ -3,6 +3,7 @@ package com.sayit.control;
 import com.sayit.network.NetworkAdapter;
 
 import java.util.LinkedList;
+import java.util.Objects;
 
 public class SenderRunnable implements Runnable {
     private RequestMediator context;
@@ -22,8 +23,7 @@ public class SenderRunnable implements Runnable {
         while(context.isRunning()){
             if(eventList.size() > 0){
 
-                digestEvent(eventList.getFirst());
-                eventList.removeFirst();
+                digestEvent(Objects.requireNonNull(eventList.pollFirst()));
             }
 
             try {
@@ -54,6 +54,20 @@ public class SenderRunnable implements Runnable {
         switch (event.getMessageProtocol()) {
             case CONTACT_INFO:
                 //send contact info
+                networkAdapter.connect(event.getReceiverAddress());
+                networkAdapter.setCurrentReceiver(event.getReceiverAddress());
+
+                networkAdapter.sendData(event.getMessageProtocol().getValue());
+
+                networkAdapter.sendData(event.getTextMessage());
+                networkAdapter.sendData(event.getImageHeight());
+                networkAdapter.sendData(event.getImageWidth());
+                networkAdapter.sendData(event.getContentSize());
+                networkAdapter.sendData(event.getByteContent());
+                break;
+
+            case ADD_REQUEST:
+                //send add_request
                 networkAdapter.connect(event.getReceiverAddress());
                 networkAdapter.setCurrentReceiver(event.getReceiverAddress());
 

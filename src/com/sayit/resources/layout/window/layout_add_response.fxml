@@ -14,12 +14,12 @@
         </HBox>
         <HBox styleClass="image-container" VBox.vgrow="ALWAYS">
             <children>
-                <Circle fill="DODGERBLUE" radius="100.0" stroke="BLACK" strokeType="INSIDE"/>
+                <Circle fx:id="imageView" fill="DODGERBLUE" radius="100.0" stroke="BLACK" strokeType="INSIDE"/>
             </children>
         </HBox>
         <HBox styleClass="name-container">
             <children>
-                <Label id="name-text" text="Label"/>
+                <Label fx:id="nameLabel" id="name-text" text="Label"/>
             </children>
         </HBox>
         <HBox styleClass="buttons-container">

@@ -4,6 +4,7 @@ import com.sayit.data.Contact;
 import com.sayit.ui.control.ContactManager;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 
 public class AddResponseController {
@@ -15,9 +16,7 @@ public class AddResponseController {
     @FXML
     private Label nameLabel;
 
-    @FXML
     private ContactManager cancelCallback;
-    @FXML
     private ContactManager confirmCallback;
 
 
@@ -39,5 +38,7 @@ public class AddResponseController {
 
     public void setContact(Contact contact) {
         this.contact = contact;
+        nameLabel.setText(contact.getName());
+        imageView.setFill(new ImagePattern(contact.getPhoto()));
     }
 }
