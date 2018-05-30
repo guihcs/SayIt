@@ -40,8 +40,15 @@ public class ReceiverRunnable implements Runnable {
         switch (protocol) {
             case CONTACT_INFO:
                 //contact info received
+                String contactName = networkAdapter.receiveString();
+                String address = networkAdapter.getStringAddress();
+                int height = networkAdapter.receiveInt();
+                int width = networkAdapter.receiveInt();
+                int contentSize = networkAdapter.receiveInt();
+                byte[] imgBytes = networkAdapter.receiveBytes(contentSize);
 
-                System.out.println("Contact info event received.");
+                context.getChatApplication().addContactRequest(contactName, address, imgBytes, width, height);
+                networkAdapter.closeConnection(address);
                 break;
         }
     }

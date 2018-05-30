@@ -47,6 +47,7 @@ public class SenderRunnable implements Runnable {
                 break;
         }
 
+        networkAdapter.flushData();
     }
 
 
@@ -55,7 +56,11 @@ public class SenderRunnable implements Runnable {
         switch (event.getMessageProtocol()) {
             case CONTACT_INFO:
                 //send contact info
-                System.out.println("contact info sended.");
+                networkAdapter.sendData(event.getTextMessage());
+                networkAdapter.sendData(event.getImageHeight());
+                networkAdapter.sendData(event.getImageWidth());
+                networkAdapter.sendData(event.getContentSize());
+                networkAdapter.sendData(event.getByteContent());
                 break;
         }
     }

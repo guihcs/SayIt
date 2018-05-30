@@ -12,11 +12,15 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.image.PixelReader;
+import javafx.scene.image.PixelWriter;
+import javafx.scene.image.WritableImage;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.util.List;
 
 public class ChatApplication extends Application implements Presentable {
@@ -104,6 +108,33 @@ public class ChatApplication extends Application implements Presentable {
         return ChatApplication.class.getResource(path).toExternalForm();
     }
 
+
+    private byte[] readImageBytes(Image image) {
+        ByteBuffer pixelBuffer = ByteBuffer.allocate((int) (image.getWidth() * image.getHeight()) * 4);
+        PixelReader pixelReader = image.getPixelReader();
+
+        for (int h = 0; h < image.getHeight(); h++) {
+            for (int w = 0; w < image.getWidth(); w++) {
+                pixelBuffer.putInt(pixelReader.getArgb(w, h));
+            }
+        }
+
+        return pixelBuffer.array();
+    }
+
+    private Image writeImageBytes(byte[] buffer, int width, int height) {
+        WritableImage writableImage = new WritableImage(width, height);
+        ByteBuffer pixelBuffer = ByteBuffer.wrap(buffer);
+        PixelWriter pixelWriter = writableImage.getPixelWriter();
+
+        for (int h = 0; h < height; h++) {
+            for (int w = 0; w < width; w++) {
+                pixelWriter.setArgb(w, h, pixelBuffer.getInt());
+            }
+        }
+
+        return writableImage;
+    }
 
     /**
      * Abre uma janela modal especificando o tamanho.
@@ -246,11 +277,10 @@ public class ChatApplication extends Application implements Presentable {
      * @param name Contact name
      * @param image Contact Icon
      */
-    public void addContactRequest(String name, byte[] image, String address) {
+    public void addContactRequest(String name, String address, byte[] image, int width, int height) {
         if(isWaitingForContact) {
-            System.out.println("is waiting for contact");
-            Image contactImage = new Image(new ByteArrayInputStream(image));
-            Contact requestContact = new Contact(name, new Image("/com/sayit/resources/icons/avatar.png"), "123");
+            Image contactImage = writeImageBytes(image, width, height);
+            Contact requestContact = new Contact(name, contactImage, address);
             findContactController.addContact(requestContact);
         }
     }
@@ -288,8 +318,27 @@ public class ChatApplication extends Application implements Presentable {
      * @return byte[]
      */
     public byte[] getUserImageBytes() {
-        return new byte[0];
+        return readImageBytes(contactDao.getUserProfile().getPhoto());
     }
+
+    /**
+     * Retorna largura da foto do usuário.
+     *
+     * @return largura da image
+     */
+    public int getImageWidth() {
+        return (int) contactDao.getUserProfile().getPhoto().getWidth();
+    }
+
+    /**
+     * Retorna a altura da imagem.
+     *
+     * @return altura da imagem.
+     */
+    public int getImageHeight() {
+        return (int) contactDao.getUserProfile().getPhoto().getHeight();
+    }
+
 
     /**
      * Retorna um contato específico.

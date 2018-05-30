@@ -180,7 +180,7 @@ public class NetworkAdapter {
             return new String(textContent);
 
         } catch (IOException e) {
-            System.err.println("Multicast fechado.");
+            System.out.println("Multicast fechado.");
         }
         return null;
     }
@@ -243,7 +243,7 @@ public class NetworkAdapter {
             connectionMap.put(connection.getpIPAddress(),connection);
 
         } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("Server socket is closed.");
         }
 
     }
@@ -410,9 +410,6 @@ public class NetworkAdapter {
     public void closeAdapter() {
         //fixme resolve so timeout
         try {
-            multicastSocket.setSoTimeout(2000);
-            serverSocket.setSoTimeout(2000);
-
             serverSocket.close();
             multicastSocket.close();
 

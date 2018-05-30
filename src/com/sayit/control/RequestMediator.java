@@ -1,5 +1,6 @@
 package com.sayit.control;
 
+import com.sayit.data.ContactDao;
 import com.sayit.network.MessageProtocol;
 import com.sayit.network.NetworkAdapter;
 
@@ -29,30 +30,19 @@ public class RequestMediator implements Requestable {
      */
     public static void main(String[] args) {
         //fixme carregar do banco de dados o contactDao
-        final String pcAddress = "192.168.0.114";
-
         RequestMediator mediator = new RequestMediator();
+        ContactDao contactDao = new ContactDao();
 
-        NetworkAdapter adapter = mediator.networkAdapter;
-        SenderRunnable senderRunnable = mediator.senderRunnable;
+        var chatApp = ChatApplication.launchApplication(args, mediator, contactDao);
+        mediator.setChatApplication(chatApp);
 
+        mediator.startServerThread();
+        mediator.startMulticastServer();
         mediator.startSenderThread();
+        mediator.startReceiverThread();
 
-        adapter.connect(pcAddress);
+        chatApp.openStartScene();
 
-        RequestEvent event = new RequestEvent(EventType.SEND_MESSAGE, MessageProtocol.CONTACT_INFO);
-        event.setReceiverAddress(pcAddress);
-        event.setTextMessage("Test message.");
-        senderRunnable.addEvent(event);
-
-
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        mediator.stopServices();
     }
 
     /**
@@ -203,7 +193,17 @@ public class RequestMediator implements Requestable {
         Thread multicastServer = new Thread(() -> {
             while(isRunning){
                 String name = networkAdapter.receiveMulticast();
+                if(chatApplication.checkUserRequest(name)) {
 
+                    RequestEvent requestEvent = new RequestEvent(EventType.SEND_MESSAGE, MessageProtocol.CONTACT_INFO);
+                    requestEvent.setReceiverAddress(networkAdapter.getPackageAddress());
+                    requestEvent.setTextMessage(chatApplication.getUserName());
+                    requestEvent.setImageHeight(chatApplication.getImageHeight());
+                    requestEvent.setImageWidth(chatApplication.getImageWidth());
+                    requestEvent.setByteContent(chatApplication.getUserImageBytes());
+
+                    senderRunnable.addEvent(requestEvent);
+                }
 
             }
         });

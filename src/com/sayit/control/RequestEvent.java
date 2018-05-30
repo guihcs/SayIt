@@ -13,6 +13,10 @@ public class RequestEvent {
     private String textMessage;
     private String dataName;
 
+    private int numberInfo;
+    private int imageWidth;
+    private int imageHeight;
+
     private boolean confirmation;
     private byte[] byteContent;
 
@@ -86,6 +90,30 @@ public class RequestEvent {
 
     public String getDataName() {
         return dataName;
+    }
+
+    public int getNumberInfo() {
+        return numberInfo;
+    }
+
+    public void setNumberInfo(int numberInfo) {
+        this.numberInfo = numberInfo;
+    }
+
+    public int getImageWidth() {
+        return imageWidth;
+    }
+
+    public void setImageWidth(int imageWidth) {
+        this.imageWidth = imageWidth;
+    }
+
+    public int getImageHeight() {
+        return imageHeight;
+    }
+
+    public void setImageHeight(int imageHeight) {
+        this.imageHeight = imageHeight;
     }
 
     public boolean isConfirmation() {
