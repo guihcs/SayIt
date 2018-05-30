@@ -4,15 +4,14 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sayit.ui.control.frame.StartController"
-      minHeight="-Infinity"
-      minWidth="-Infinity" style="-fx-background-color: green;" xmlns="http://javafx.com/javafx/9">
+<VBox minHeight="-Infinity" minWidth="-Infinity" style="-fx-background-color: green;" xmlns="http://javafx.com/javafx/9"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sayit.ui.control.frame.StartController">
     <children>
-        <Label text="Label"/>
-        <Label text="Label"/>
+        <Label text="Say It"/>
+        <Label text="Crie um perfil para iniciar."/>
         <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
             <children>
-                <Button fx:id="startButton" mnemonicParsing="false" text="Button"/>
+                <Button fx:id="startButton" mnemonicParsing="false" text="Criar"/>
             </children>
         </HBox>
     </children>
