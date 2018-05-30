@@ -8,11 +8,11 @@ import java.util.List;
 
 public interface Presentable {
 
-    Contact getContactInfo(int id);
+    Contact getContactInfo(long id);
 
     Contact getUserProfile();
 
-    List<Message> requestMessageList(int id);
+    List<Message> requestMessageList(long id);
 
     List<MessageHistory> getHistoryList();
 

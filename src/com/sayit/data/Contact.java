@@ -6,7 +6,7 @@ public class Contact {
 
     private Image photo;
     private String ipAddress;
-    private int id;
+    private long id;
     private String name;
 
     /* incluido para testes, já que no contrutor paddrão tenho que ter uma imagem*/
@@ -21,7 +21,7 @@ public class Contact {
 
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -37,7 +37,7 @@ public class Contact {
         this.ipAddress = ipAddress;
     }
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 

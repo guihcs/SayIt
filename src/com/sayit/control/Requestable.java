@@ -24,7 +24,7 @@ public interface Requestable {
      */
     void contactAdd(String ip, String userName, byte[] imageBytes, int width, int height);
 
-    void loadMessageList(int id);
+    void loadMessageList(long id);
 
     void stopServices();
 }

@@ -98,7 +98,10 @@ public class ChatHomeController {
         findRoot = (Pane) ChatApplication.loadFromLoader(loader);
         findRoot.getStylesheets().add(ChatApplication.getStyleSheet(ChatApplication.FIND_CONTACT_STYLE));
         findContactController = loader.getController();
-        findContactController.setContactResult(this::setReceiverProfile);
+        findContactController.setContactResult(contact -> {
+            setReceiverProfile(contact);
+            closeFindContact();
+        });
         findContactController.setCloseCallback(this::closeFindContact);
         findPane.getChildren().add(findRoot);
 

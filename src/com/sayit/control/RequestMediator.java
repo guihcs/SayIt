@@ -151,7 +151,7 @@ public class RequestMediator implements Requestable {
      * @param id identificador do usuário.
      */
     @Override
-    public void loadMessageList(int id) {
+    public void loadMessageList(long id) {
     }
 
     /**

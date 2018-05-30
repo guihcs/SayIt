@@ -172,10 +172,12 @@ public class ChatApplication extends Application implements Presentable {
      * @param message a mensagem a ser adicionada
      */
     public void addMessage(String sid, String message) {
-        int id = ContactDao.parseAddress(sid);
+        long id = ContactDao.parseAddress(sid);
         Contact contact = contactDao.getContact(id);
         Message newMessage = new Message(contact, false, message, MessageType.TEXT);
         contactDao.addMessage(id, newMessage);
+        chatHome.setMessageList(contactDao.getMessageList(id));
+        chatHome.setHistoryList(contactDao.getHistoryList());
     }
 
     /**
@@ -188,7 +190,7 @@ public class ChatApplication extends Application implements Presentable {
     public void addMessage(String sid, byte[] content, String fileName) {
 
         //fixme archives will be implemented next
-        int id = ContactDao.parseAddress(sid);
+        long id = ContactDao.parseAddress(sid);
         Contact contact = contactDao.getContact(id);
         //fixme get file type from name
         //contactDao.addMessage(id, new Message(contact, false, content, messageType));
@@ -395,7 +397,7 @@ public class ChatApplication extends Application implements Presentable {
      * @return A contact object
      */
     @Override
-    public Contact getContactInfo(int id) {
+    public Contact getContactInfo(long id) {
         currentContact = contactDao.getContact(id);
         return currentContact;
     }
@@ -418,7 +420,7 @@ public class ChatApplication extends Application implements Presentable {
      * @return list of messages from contact
      */
     @Override
-    public List<Message> requestMessageList(int id) {
+    public List<Message> requestMessageList(long id) {
         //fixme addload from database function
         var messageList = contactDao.getMessageList(id);
         if(messageList == null) requestable.loadMessageList(id);
@@ -521,10 +523,11 @@ public class ChatApplication extends Application implements Presentable {
      */
     @Override
     public void sendMessage(String message) {
-        //fixme null current contact
         Message sendMessage = new Message(currentContact, true, message, MessageType.TEXT);
         requestable.sendMessage(currentContact.getIpAddress(), message);
         contactDao.addMessage(currentContact.getId(), sendMessage);
+        chatHome.setMessageList(contactDao.getMessageList(currentContact.getId()));
+        chatHome.setHistoryList(contactDao.getHistoryList());
     }
 
     @Override

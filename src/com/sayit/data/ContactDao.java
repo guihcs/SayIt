@@ -8,7 +8,7 @@ public class ContactDao {
 
     private Contact userProfile;
     private List<Contact> contactList;
-    private Map<Integer, MessageHistory> messageMap;
+    private Map<Long, MessageHistory> messageMap;
     private List<Message> messageList;
 
 
@@ -17,13 +17,13 @@ public class ContactDao {
         messageMap = new LinkedHashMap<>();
     }
 
-    public static int parseAddress(String address) {
+    public static long parseAddress(String address) {
         String[] endereco = address.split("\\.");
         String end = "";
         for(int i = 0; i < endereco.length; i++){
             end += endereco[i];
         }
-        int ip = Integer.parseInt(end);
+        long ip = Long.parseLong(end);
 
         return ip;
     }
@@ -45,10 +45,10 @@ public class ContactDao {
      * @param id Identificador do contato
      * @param message Mensagen
      */
-    public void addMessage(int id, Message message) {
+    public void addMessage(long id, Message message) {
 
         if(!messageMap.containsKey(id)) {
-            messageMap.put(id, new MessageHistory(contactList.get(id)));
+            messageMap.put(id, new MessageHistory(getContact(id)));
         }
 
         messageMap.get(id).addMessage(message);
@@ -60,7 +60,7 @@ public class ContactDao {
      * @param id Identificador do contato
      * @return
      */
-    public Contact getContact(int id) {
+    public Contact getContact(long id) {
         for (int i = 0; i < contactList.size(); i++) {
             if(id == contactList.get(i).getId()) {
                 return contactList.get(i);
@@ -77,7 +77,7 @@ public class ContactDao {
      * @param id Id do contato.
      * @return
      */
-    public List<Message> getMessageList(int id) {
+    public List<Message> getMessageList(long id) {
 
         return messageMap.get(id).getMessageList();
     }
