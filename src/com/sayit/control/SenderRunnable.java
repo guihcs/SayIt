@@ -40,7 +40,6 @@ public class SenderRunnable implements Runnable {
     }
 
     private void digestEvent(RequestEvent event) {
-        networkAdapter.setCurrentReceiver(event.getReceiverAddress());
         switch (event.getEventType()) {
             case SEND_MESSAGE:
                 digestMessageEvent(event);
@@ -52,10 +51,14 @@ public class SenderRunnable implements Runnable {
 
 
     private void digestMessageEvent(RequestEvent event) {
-        networkAdapter.sendData(event.getMessageProtocol().getValue());
         switch (event.getMessageProtocol()) {
             case CONTACT_INFO:
                 //send contact info
+                networkAdapter.connect(event.getReceiverAddress());
+                networkAdapter.setCurrentReceiver(event.getReceiverAddress());
+
+                networkAdapter.sendData(event.getMessageProtocol().getValue());
+
                 networkAdapter.sendData(event.getTextMessage());
                 networkAdapter.sendData(event.getImageHeight());
                 networkAdapter.sendData(event.getImageWidth());

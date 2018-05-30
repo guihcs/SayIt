@@ -202,7 +202,6 @@ public class RequestMediator implements Requestable {
                     requestEvent.setImageWidth(chatApplication.getImageWidth());
                     requestEvent.setByteContent(chatApplication.getUserImageBytes());
 
-                    networkAdapter.connect(networkAdapter.getPackageAddress());
                     senderRunnable.addEvent(requestEvent);
                 }
 
