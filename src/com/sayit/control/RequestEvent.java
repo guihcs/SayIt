@@ -6,93 +6,97 @@ import com.sayit.network.MessageProtocol;
 public class RequestEvent {
 
     private EventType eventType;
-    private MessageType messageType;
     private MessageProtocol messageProtocol;
-    private String identifier;
-    private String message;
-    private String fileName;
-    private int id;
-    private int numberInfo;
+    private MessageType messageType;
+
+    private String receiverAddress;
+    private String textMessage;
+    private String dataName;
+
     private boolean confirmation;
-    private byte[] content;
+    private byte[] byteContent;
 
-    public EventType getEventType() {
-        return eventType;
-    }
-
-    public void setEventType(EventType eventType) {
+    public RequestEvent(EventType eventType, MessageProtocol messageProtocol) {
         this.eventType = eventType;
-    }
-
-    public MessageProtocol getMessageProtocol() {
-        return messageProtocol;
-    }
-
-    public void setMessageProtocol(MessageProtocol messageProtocol) {
         this.messageProtocol = messageProtocol;
     }
 
-    public MessageType getMessageType() {
-        return messageType;
+    //Send text message
+    public RequestEvent(EventType eventType, MessageProtocol messageProtocol, MessageType messageType, String receiverAddress, String textMessage) {
+        this.eventType = eventType;
+        this.messageProtocol = messageProtocol;
+        this.messageType = messageType;
+        this.receiverAddress = receiverAddress;
+        this.textMessage = textMessage;
+    }
+
+    //Send bynary file
+    public RequestEvent(EventType eventType, MessageProtocol messageProtocol, MessageType messageType, String receiverAddress, String dataName, byte[] byteContent) {
+        this.eventType = eventType;
+        this.messageProtocol = messageProtocol;
+        this.messageType = messageType;
+        this.receiverAddress = receiverAddress;
+        this.dataName = dataName;
+        this.byteContent = byteContent;
     }
 
     public void setMessageType(MessageType messageType) {
         this.messageType = messageType;
     }
 
-    public String getIdentifier() {
-        return identifier;
+    public void setReceiverAddress(String receiverAddress) {
+        this.receiverAddress = receiverAddress;
     }
 
-    public void setIdentifier(String identifier) {
-        this.identifier = identifier;
+    public void setTextMessage(String textMessage) {
+        this.textMessage = textMessage;
     }
 
-    public String getMessage() {
-        return message;
-    }
-
-    public void setMessage(String message) {
-        this.message = message;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public byte[] getContent() {
-        return content;
-    }
-
-    public void setContent(byte[] content) {
-        this.content = content;
-    }
-
-    public int getNumberInfo() {
-        return numberInfo;
-    }
-
-    public void setNumberInfo(int numberInfo) {
-        this.numberInfo = numberInfo;
-    }
-
-    public boolean isConfirmation() {
-        return confirmation;
+    public void setDataName(String dataName) {
+        this.dataName = dataName;
     }
 
     public void setConfirmation(boolean confirmation) {
         this.confirmation = confirmation;
     }
 
-    public String getFileName() {
-        return fileName;
+    public void setByteContent(byte[] byteContent) {
+        this.byteContent = byteContent;
     }
 
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
+    public EventType getEventType() {
+        return eventType;
+    }
+
+    public MessageProtocol getMessageProtocol() {
+        return messageProtocol;
+    }
+
+    public MessageType getMessageType() {
+        return messageType;
+    }
+
+    public String getReceiverAddress() {
+        return receiverAddress;
+    }
+
+    public String getTextMessage() {
+        return textMessage;
+    }
+
+    public String getDataName() {
+        return dataName;
+    }
+
+    public boolean isConfirmation() {
+        return confirmation;
+    }
+
+    public byte[] getByteContent() {
+        return byteContent;
+    }
+
+    public int getContentSize() {
+        return byteContent != null ? byteContent.length : -1;
     }
 }

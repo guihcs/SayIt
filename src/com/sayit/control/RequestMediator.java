@@ -1,6 +1,6 @@
 package com.sayit.control;
 
-import com.sayit.data.MessageType;
+import com.sayit.network.MessageProtocol;
 import com.sayit.network.NetworkAdapter;
 
 import java.util.List;
@@ -29,8 +29,28 @@ public class RequestMediator implements Requestable {
      */
     public static void main(String[] args) {
         //fixme carregar do banco de dados o contactDao
+        final String pcAddress = "192.168.0.114";
+
         RequestMediator mediator = new RequestMediator();
 
+        NetworkAdapter adapter = mediator.networkAdapter;
+        SenderRunnable senderRunnable = mediator.senderRunnable;
+
+        mediator.startSenderThread();
+
+        adapter.connect(pcAddress);
+
+        RequestEvent event = new RequestEvent(EventType.SEND_MESSAGE, MessageProtocol.CONTACT_INFO);
+        event.setReceiverAddress(pcAddress);
+        event.setTextMessage("Test message.");
+        senderRunnable.addEvent(event);
+
+
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         mediator.stopServices();
     }
@@ -63,14 +83,7 @@ public class RequestMediator implements Requestable {
      */
     @Override
     public void sendMessage(String address, byte[] content, String fileName) {
-        //TODO Segundo sendMessage
-        RequestEvent event = new RequestEvent();
-        event.setIdentifier(address);
-        event.setContent(content);
-        event.setMessageType(MessageType.ARCHIVE);
-        event.setEventType(EventType.SEND_MESSAGE);
-
-        senderRunnable.addEvent(event);
+        //TODO sendMessage
 
     }
 
@@ -83,13 +96,7 @@ public class RequestMediator implements Requestable {
     @Override
     public void sendMessage(String address, String message) {
 
-        RequestEvent event = new RequestEvent();
-        event.setMessage(message);
-        event.setIdentifier(address);
-        event.setMessageType(MessageType.TEXT);
-        event.setEventType(EventType.SEND_MESSAGE);
-
-        senderRunnable.addEvent(event);
+        //TODO sendMessage
     }
     
     /**
@@ -123,14 +130,8 @@ public class RequestMediator implements Requestable {
      */
     @Override
     public void contactAdd(String ip, String userName, byte[] imageBytes) {
-        //TODO Segundo contactAdd
-        RequestEvent event = new RequestEvent();
-        event.setIdentifier(ip);
-        event.setMessage(userName);
-        event.setContent(imageBytes);
-        event.setEventType(EventType.REQUEST_CONTACT);
+        //TODO contactAdd
 
-        senderRunnable.addEvent(event);
     }
 
     /**
