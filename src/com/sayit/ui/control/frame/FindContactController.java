@@ -9,6 +9,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 
 import java.util.List;
 
@@ -34,6 +35,7 @@ public class FindContactController {
             return contactCell;
         });
         //TODO Guilherme fix nameField input size
+
     }
 
 
