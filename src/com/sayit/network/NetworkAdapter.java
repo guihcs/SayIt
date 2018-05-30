@@ -12,8 +12,9 @@ public class NetworkAdapter {
 
     private ServerSocket serverSocket;
     private MulticastSocket multicastSocket;
-    private Map<String, Connection> connectionMap;
-    private List<Connection> connectionList;
+    private final Map<String, Connection> connectionMap = new LinkedHashMap<>();
+    ;
+    private final List<Connection> connectionList = new ArrayList<>();
     private Connection currentTransmitter;
     private Connection currentReceiver;
     private InetAddress multicastGrup;
@@ -36,9 +37,6 @@ public class NetworkAdapter {
     public NetworkAdapter() {
 
         //fixme get ip adresses for package check
-
-        connectionMap = new LinkedHashMap<>();
-        connectionList = new ArrayList<>();
         currentTransmitterControl = 0;
 
         try {

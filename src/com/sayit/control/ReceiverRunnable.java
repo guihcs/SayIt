@@ -26,6 +26,7 @@ public class ReceiverRunnable implements Runnable {
         while(context.isRunning()){
             if(networkAdapter.nextTransmitter()){
                 protocolInt = networkAdapter.receiveInt();
+                System.out.println(protocolInt);
                 MessageProtocol messageProtocol = MessageProtocol.castFrom(protocolInt);
                 System.out.println("Info received");
                 switch (messageProtocol){
@@ -56,13 +57,7 @@ public class ReceiverRunnable implements Runnable {
 
                     case CONTACT_INFO:
                         System.out.println("received info");
-                        String name = networkAdapter.receiveString();
-                        System.out.println("received name: " + name);
-                        Integer sizeInt = networkAdapter.receiveInt();
-                        String ip = networkAdapter.getStringAddress();
-                        byte[] arrayByte = networkAdapter.receiveBytes(sizeInt);
-
-                        context.getChatApplication().addContactRequest(name, arrayByte,ip);
+                        System.out.println(networkAdapter.receiveInt());
 
                         break;
 

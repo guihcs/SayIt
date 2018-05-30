@@ -57,15 +57,8 @@ public class SenderRunnable implements Runnable {
                                     break;
 
                                 case CONTACT_INFO:
-                                    networkAdapter.sendData(MessageProtocol.CONTACT_INFO.getValue());
-                                    networkAdapter.sendData(event.getMessage());
-                                    networkAdapter.sendData(event.getNumberInfo());
-                                    networkAdapter.sendData(event.getContent());
-
+                                    networkAdapter.sendData(12);
                                     networkAdapter.flushData();
-                                    System.out.println("info sended");
-                                    //networkAdapter.sendData(event.getId());
-                                    //networkAdapter.sendData(event.getContent());
                                     break;
 
                                 default:
