@@ -1,6 +1,7 @@
 package com.sayit.network;
 
 
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.*;
 import java.util.ArrayList;
@@ -248,13 +249,12 @@ public class NetworkAdapter {
     }
 
     public void flushData(){
-        if(currentReceiver != null){
-            try {
-                currentReceiver.getDataOutputStream().flush();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+        try {
+            currentReceiver.getDataOutputStream().flush();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
     }
 
     /**
@@ -266,7 +266,7 @@ public class NetworkAdapter {
     public void sendData(int data) {
 
         try {
-            currentReceiver.getDataOutputStream().write(data);
+            currentReceiver.getDataOutputStream().writeInt(data);
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -327,7 +327,7 @@ public class NetworkAdapter {
      */
     public int receiveInt() {
         try {
-            return currentTransmitter.isOnline() ? currentTransmitter.getDataInputStream().readInt() : 0;
+            return currentTransmitter.getDataInputStream().readInt();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -343,7 +343,7 @@ public class NetworkAdapter {
     public String receiveString() {
 
         try {
-            return currentTransmitter.isOnline() ? currentTransmitter.getDataInputStream().readUTF() : null;
+            return currentTransmitter.getDataInputStream().readUTF();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -361,22 +361,23 @@ public class NetworkAdapter {
      * @param size quantidade de informação a ser recebida.
      */
     public byte[] receiveBytes(int size) {
-        //TODO Iarly receiveBytes
-        //fixme ajustar metodo.
-        byte[] returnBytes = new byte[size];
-        byte[] currentBytes = null;
-        int len = size;
+        byte[] buffer = new byte[size];
+        DataInputStream stream = currentTransmitter.getDataInputStream();
+
         try {
-            if(currentTransmitter.isOnline())
 
-                while(currentTransmitter.getDataInputStream().read(returnBytes) > 0){
+            int readBytes;
+            int offset = 0;
+            int curLen = size;
 
-                }
+            while ((readBytes = stream.read(buffer, offset, curLen)) > -1 && offset < size) {
+                offset += readBytes;
+                curLen -= readBytes;
+            }
 
-            return returnBytes;
+            return buffer;
         } catch (IOException e) {
             e.printStackTrace();
-
         }
 
         return null;
@@ -391,7 +392,7 @@ public class NetworkAdapter {
     public boolean receiveBoolean() {
 
         try {
-            return (currentTransmitter.isOnline() && currentTransmitter.getDataInputStream().readBoolean());
+            return currentTransmitter.getDataInputStream().readBoolean();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -409,6 +410,8 @@ public class NetworkAdapter {
     public void closeAdapter() {
         //fixme resolve so timeout
         try {
+            multicastSocket.setSoTimeout(2000);
+            serverSocket.setSoTimeout(2000);
 
             serverSocket.close();
             multicastSocket.close();

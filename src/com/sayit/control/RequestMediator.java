@@ -4,7 +4,6 @@ import com.sayit.data.MessageType;
 import com.sayit.network.NetworkAdapter;
 
 import java.util.List;
-import java.util.Scanner;
 
 public class RequestMediator implements Requestable {
 
@@ -30,24 +29,10 @@ public class RequestMediator implements Requestable {
      */
     public static void main(String[] args) {
         //fixme carregar do banco de dados o contactDao
-
         RequestMediator mediator = new RequestMediator();
 
-        NetworkAdapter networkAdapter = mediator.getNetworkAdapter();
 
-        Scanner s = new Scanner(System.in);
-
-        System.out.println("receive?");
-
-        if(s.equals("s")) {
-
-            networkAdapter.acceptTCPConnection();
-
-
-        } else {
-            networkAdapter.connect(s.nextLine());
-        }
-
+        mediator.stopServices();
     }
 
     /**
@@ -218,13 +203,7 @@ public class RequestMediator implements Requestable {
             while(isRunning){
                 String name = networkAdapter.receiveMulticast();
 
-                String address = networkAdapter.getPackageAddress();
-                System.out.println("sending info");
-                networkAdapter.connect(address);
-                networkAdapter.setCurrentReceiver(address);
-                networkAdapter.sendData(12);
-                networkAdapter.flushData();
-                System.out.println("info sended");
+
             }
         });
         //multicastServer.setDaemon(true);

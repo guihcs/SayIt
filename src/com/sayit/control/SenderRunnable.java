@@ -7,23 +7,22 @@ import java.util.LinkedList;
 public class SenderRunnable implements Runnable {
     private RequestMediator context;
     private NetworkAdapter networkAdapter;
-    private LinkedList<RequestEvent> eventList;
+    private final LinkedList<RequestEvent> eventList = new LinkedList<>();
 
 
     public SenderRunnable(RequestMediator requestMediator){
         context = requestMediator;
         networkAdapter = context.getNetworkAdapter();
-        eventList = new LinkedList<>();
     }
     /**
      * Inicia a função de transmissão.
      */
     @Override
     public void run() {
-        //TODO Segundo run
         while(context.isRunning()){
             if(eventList.size() > 0){
 
+                digestEvent(eventList.getFirst());
                 eventList.removeFirst();
             }
 
@@ -38,5 +37,26 @@ public class SenderRunnable implements Runnable {
     public void addEvent(RequestEvent event){
         eventList.add(event);
 
+    }
+
+    private void digestEvent(RequestEvent event) {
+
+        switch (event.getEventType()) {
+            case SEND_MESSAGE:
+                digestMessageEvent(event);
+                break;
+        }
+
+    }
+
+
+    private void digestMessageEvent(RequestEvent event) {
+        switch (event.getMessageProtocol()) {
+            case CONTACT_INFO:
+                //send contact info
+                networkAdapter.sendData(event.getMessageProtocol().getValue());
+                System.out.println("contact info sended.");
+                break;
+        }
     }
 }

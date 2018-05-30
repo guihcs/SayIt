@@ -75,7 +75,7 @@ public class Message {
      */
     @Override
     public String toString() {
-        return "Message{" + "receiverProfile=" + receiverProfile + ", sendByMe=" + sendByMe + ", content=" + content + ", messageDate=" + messageDate + ", type=" + type + '}';
+        return "Message{" + "receiverProfile=" + receiverProfile + ", sendByMe=" + sendByMe + ", content=" + textContent + ", messageDate=" + messageDate + ", type=" + type + '}';
     }
 
     public void setTextContent(String textContent) {

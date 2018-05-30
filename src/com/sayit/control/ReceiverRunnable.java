@@ -1,5 +1,6 @@
 package com.sayit.control;
 
+import com.sayit.network.MessageProtocol;
 import com.sayit.network.NetworkAdapter;
 
 public class ReceiverRunnable implements Runnable {
@@ -23,8 +24,9 @@ public class ReceiverRunnable implements Runnable {
         //TODO Segundo run
         while(context.isRunning()){
             if(networkAdapter.nextTransmitter()){
-                System.out.println("receiving int");
-                System.out.println(networkAdapter.receiveInt());
+
+                MessageProtocol messageProtocol = MessageProtocol.castFrom(networkAdapter.receiveInt());
+                digestProtocol(messageProtocol);
             }
             try {
                 Thread.sleep(200);
@@ -33,6 +35,18 @@ public class ReceiverRunnable implements Runnable {
             }
         }
     }
+
+    private void digestProtocol(MessageProtocol protocol) {
+        switch (protocol) {
+            case CONTACT_INFO:
+                //contact info received
+
+                System.out.println("Contact info event received.");
+                break;
+        }
+    }
+
+
 }
 
 

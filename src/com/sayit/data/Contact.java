@@ -17,6 +17,7 @@ public class Contact {
         this.name = name;
         this.photo = photo;
         this.ipAddress = ipAddress;
+        id = ContactDao.parseAddress(ipAddress);
 
     }
 
