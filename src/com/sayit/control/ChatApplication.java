@@ -248,6 +248,7 @@ public class ChatApplication extends Application implements Presentable {
      */
     public void addContactRequest(String name, byte[] image, String address) {
         if(isWaitingForContact) {
+            System.out.println("is waiting for contact");
             Image contactImage = new Image(new ByteArrayInputStream(image));
             Contact requestContact = new Contact(name, contactImage, address);
             findContactController.addContact(requestContact);
