@@ -102,10 +102,8 @@ public class NetworkAdapter {
 
         if(connectionList.size() > 0) {
             Connection connection = connectionList.get(currentTransmitterControl);
-            System.out.println("have connection");
             if(connection.isOnline()) {
                 try {
-                    System.out.println("available: " + connection.getDataInputStream().available());
                     if(connection.getDataInputStream().available() > 0) {
 
                         currentTransmitter = connection;

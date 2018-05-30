@@ -2,7 +2,6 @@ package com.sayit.control;
 
 import com.sayit.data.ContactDao;
 import com.sayit.data.MessageType;
-import com.sayit.network.MessageProtocol;
 import com.sayit.network.NetworkAdapter;
 
 import java.util.List;
@@ -232,19 +231,13 @@ public class RequestMediator implements Requestable {
         Thread multicastServer = new Thread(() -> {
             while(isRunning){
                 String name = networkAdapter.receiveMulticast();
-                if(isRunning && chatApplication.checkUserRequest(name)) {
-                    String packageAddress = networkAdapter.getPackageAddress();
-                    networkAdapter.connect(packageAddress);
-                    RequestEvent ev = new RequestEvent();
-                    ev.setEventType(EventType.SEND_MESSAGE);
-                    ev.setMessageProtocol(MessageProtocol.CONTACT_INFO);
-                    ev.setIdentifier(packageAddress);
-                    ev.setMessage(chatApplication.getUserName());
-                    ev.setNumberInfo(10);
-                    ev.setContent(new byte[10]);
 
-                    senderRunnable.addEvent(ev);
-                }
+                String address = networkAdapter.getPackageAddress();
+
+                networkAdapter.connect(address);
+                networkAdapter.setCurrentReceiver(address);
+                networkAdapter.sendData(12);
+                networkAdapter.flushData();
             }
         });
         //multicastServer.setDaemon(true);
