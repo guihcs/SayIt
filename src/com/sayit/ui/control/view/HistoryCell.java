@@ -30,7 +30,7 @@ public class HistoryCell extends ListCell<MessageHistory> {
             contactController.setName(item.getContact().getName());
             contactController.setRoundedImage(item.getContact().getPhoto());
             contactController.setDescription(item.getLastMessage());
-            contactController.setTime(item.getLastMessageDate());
+            contactController.setTime(item.getLastDateText());
             setGraphic(root);
         } else {
             setGraphic(null);

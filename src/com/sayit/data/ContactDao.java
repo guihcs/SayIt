@@ -78,8 +78,9 @@ public class ContactDao {
      * @return
      */
     public List<Message> getMessageList(long id) {
-
-        return messageMap.get(id).getMessageList();
+        var messageList = messageMap.get(id).getMessageList();
+        messageList.sort(Comparator.comparing(Message::getMessageDate));
+        return messageList;
     }
 
     /**
@@ -89,10 +90,10 @@ public class ContactDao {
      */
     public List<MessageHistory> getHistoryList() {
 
-
-       Collection<MessageHistory> list =  messageMap.values();
-
-        return new ArrayList<>(list);
+        Collection<MessageHistory> list = messageMap.values();
+        var historyList = new ArrayList<>(list);
+        historyList.sort(Comparator.comparing(MessageHistory::getLastDateTime).reversed());
+        return historyList;
     }
 
     /**

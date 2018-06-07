@@ -22,7 +22,9 @@ import java.util.List;
 
 public class ChatApplication extends Application implements Presentable {
     //Window Constants
-    public static final String WINDOW_NAME = "Say It";
+    public static final String HOME_TITLE = "Say It";
+    public static final String ADD_TITLE = "Adicionar Contato";
+    public static final String EDIT_TITLE = "Editar Perfil";
     //Layouts
     public static final String HOME_LAYOUT = "/com/sayit/resources/layout/window/layout_chat_home.fxml";
     public static final String START_LAYOUT = "/com/sayit/resources/layout/window/layout_start.fxml";
@@ -35,11 +37,13 @@ public class ChatApplication extends Application implements Presentable {
     //Styles
     public static final String HOME_STYLE = "/com/sayit/resources/stylesheet/style_chat_home.css";
     public static final String FIND_CONTACT_STYLE = "/com/sayit/resources/stylesheet/style_find_contact.css";
-    public static final String EDIT_CONTACT_STYLE = "/com/sayit/resources/stylesheet/style_edit_proile.css";
+    public static final String EDIT_CONTACT_STYLE = "/com/sayit/resources/stylesheet/style_edit_profile.css";
     public static final String CONTACT_STYLE = "/com/sayit/resources/stylesheet/style_contact.css";
     public static final String MESSAGE_STYLE = "/com/sayit/resources/stylesheet/style_message.css";
     public static final String ADD_RESPONSE_STYLE = "/com/sayit/resources/stylesheet/style_add_response.css";
 
+    //Constants
+    public static final int MAX_NAME_LENGTH = 20;
 
     private volatile static ChatApplication instance;
 
@@ -162,7 +166,7 @@ public class ChatApplication extends Application implements Presentable {
     public void start(Stage primaryStage) {
         this.primaryStage = primaryStage;
 
-        primaryStage.setTitle(WINDOW_NAME);
+        primaryStage.setTitle(HOME_TITLE);
     }
 
     /**
@@ -260,8 +264,7 @@ public class ChatApplication extends Application implements Presentable {
         addController.setContact(contact);
 
         Stage requestWindow = createModal(node, 300, 400);
-
-
+        //fixme add request title
         addController.setConfirmCallback(contact1 -> {
             requestable.sendContactResult(contact.getIpAddress(), getUserName(), getUserImageBytes(), getImageWidth(), getImageHeight());
             contactDao.addContact(contact1);
@@ -465,6 +468,8 @@ public class ChatApplication extends Application implements Presentable {
         findContactController = loader.getController();
 
         var window = createModal(addView, 400, 300);
+        window.setTitle(ADD_TITLE);
+
         findContactController.setCloseCallback(() -> {
             isWaitingForContact = false;
             window.close();
@@ -481,6 +486,8 @@ public class ChatApplication extends Application implements Presentable {
             isWaitingForContact = false;
         });
 
+        findContactController.requestSearchFocus();
+
         isWaitingForContact = true;
         window.showAndWait();
     }
@@ -495,7 +502,9 @@ public class ChatApplication extends Application implements Presentable {
         Parent editLayout = (Parent)loadFromLoader(loader);
         editLayout.getStylesheets().add(getStyleSheet(EDIT_CONTACT_STYLE));
         ProfileEditController editController = loader.getController();
+
         var window = createModal(editLayout, 400, 300);
+        window.setTitle(EDIT_TITLE);
 
         editController.setOwnerWindow(window);
         if(getUserProfile() != null) editController.setContact(getUserProfile());
@@ -504,7 +513,6 @@ public class ChatApplication extends Application implements Presentable {
             chatHome.setUserProfile(contact);
             window.close();
         });
-        //fixme set conclude callbacks
         editController.setBackCallback(window::close);
 
         window.showAndWait();
@@ -537,7 +545,6 @@ public class ChatApplication extends Application implements Presentable {
 
     @Override
     public void stop() {
-        //fixme revise stop method
         try {
             super.stop();
         } catch (Exception e) {

@@ -3,6 +3,8 @@
 
 	-fx-spacing: 20px;
 	-fx-background-color: white;
+	-fx-border-width: 0 0 2px 0;
+	-fx-border-color: black;
 }
 
 .header-container {

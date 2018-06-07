@@ -1,3 +1,7 @@
+@font-face{
+	src: url(../fonts/WorkSans-Light.ttf);
+}
+
 .root {
     primary: #c2185b;
     primary-light: #f95688;
@@ -10,10 +14,10 @@
 .message-box {
 
 	-fx-background-radius: 10px;
-	-fx-padding: 6px 6px 6px 6px;
+	-fx-padding: 12px;
 	-fx-background-color: white;
 	-fx-effect: 
-dropshadow(gaussian, rgba(0, 0, 0, 0.24), 6, 0.3, 0, 2);
+dropshadow(gaussian, rgba(100, 100, 100, 0.34), 4, 0.3, 0, 2);
 }
 
 
@@ -24,8 +28,8 @@ dropshadow(gaussian, rgba(0, 0, 0, 0.24), 6, 0.3, 0, 2);
 
 
 #text-message {
-
-	-fx-font-size: 14px;
+	-fx-font-family: 'Work Sans Light';
+	-fx-font-size: 15px;
 
 }
 
@@ -33,7 +37,7 @@ dropshadow(gaussian, rgba(0, 0, 0, 0.24), 6, 0.3, 0, 2);
 
 #time-message {
 
-	-fx-font-size: 12px;
+	-fx-font-size: 10px;
 	-fx-text-fill: gray;
 }
 

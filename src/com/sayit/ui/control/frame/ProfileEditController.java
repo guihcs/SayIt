@@ -1,5 +1,6 @@
 package com.sayit.ui.control.frame;
 
+import com.sayit.control.ChatApplication;
 import com.sayit.data.Contact;
 import com.sayit.ui.control.ContactManager;
 import javafx.fxml.FXML;
@@ -26,10 +27,15 @@ public class ProfileEditController {
     private TextField nameField;
 
     public void initialize() {
-        contact = new Contact("Antonio", new Image("com/sayit/resources/icons/avatar.png"), "192.168.0.1");
+        //fixme remove default name
+        contact = new Contact("Lucas", new Image("com/sayit/resources/icons/avatar.png"), "127.0.1.1");
         setContact(contact);
-        //TODO Guilherme fix nameField input size
     }
+
+    public void requestEditFocus() {
+        nameField.requestFocus();
+    }
+
 
     public void close() {
         if(backCallback != null) backCallback.run();
@@ -41,14 +47,20 @@ public class ProfileEditController {
 
                 contact.setName(nameField.getText());
                 concludeCallback.contactResult(contact);
+            } else if(nameField.getText().length() > ChatApplication.MAX_NAME_LENGTH) {
+                showNameAlert("Nome muito grande.");
             }else {
-                Alert nameAlert = new Alert(Alert.AlertType.WARNING);
-                nameAlert.setTitle("Erro no nome.");
-                nameAlert.setHeaderText(null);
-                nameAlert.setContentText("Nome inválido.");
-                nameAlert.showAndWait();
+                showNameAlert("Nome inválido.");
             }
         }
+    }
+
+    private void showNameAlert(String text) {
+        Alert nameAlert = new Alert(Alert.AlertType.WARNING);
+        nameAlert.setTitle("Erro no nome.");
+        nameAlert.setHeaderText(null);
+        nameAlert.setContentText(text);
+        nameAlert.showAndWait();
     }
 
     public void getImage() {

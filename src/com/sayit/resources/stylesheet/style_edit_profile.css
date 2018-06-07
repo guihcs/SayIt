@@ -12,6 +12,11 @@
 linear-gradient(from 10px 20px to -10px 80px, secondary-dark, primary, #f95688 80%, white)
 }
 
+.header {
+	-fx-padding: 10px;
+}
+
+
 .icon-button {
 	-fx-background-color: transparent;
 	-fx-background-repeat: no-repeat;

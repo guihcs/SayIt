@@ -9,6 +9,7 @@ import com.sayit.ui.control.view.HistoryCell;
 import com.sayit.ui.control.view.MessageCell;
 import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -63,41 +64,71 @@ public class ChatHomeController {
 
     //Open contact animation
     private TranslateTransition translateTransition;
-    private Duration transitionDuration;
 
     //Resize text property
     private Text messageText = new Text();
 
     public void initialize() {
 
+        //Start list views
         messageObservableList = FXCollections.observableArrayList();
         historyObservableList = FXCollections.observableArrayList();
 
         messageListView.setItems(messageObservableList);
         historyListView.setItems(historyObservableList);
 
-        messageListView.setCellFactory(e -> {
-            MessageCell messageCell = new MessageCell();
-            return messageCell;
-        });
+        //Config cell factories
+        messageListView.setCellFactory(e -> new MessageCell());
+
         historyListView.setCellFactory(e -> {
             HistoryCell historyCell = new HistoryCell();
             historyCell.setOnMouseClicked(ev -> {
                 var historyInfo = historyCell.getItem();
                 setReceiverProfile(historyInfo.getContact());
-                setMessageList(presentable.requestMessageList(historyInfo.getContact().getId()));
 
             });
 
             return historyCell;
         });
 
+        //Config message box line break
+        messageField.setOnKeyReleased(e -> resizeTextArea());
+
+        messageField.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
+            if(e.getCode() == KeyCode.ENTER) {
+                if(e.isShiftDown()) {
+                    messageField.insertText(messageField.getCaretPosition(), "\n");
+                } else {
+                    sendMessage();
+                }
+                e.consume();
+
+            }
+        });
+
+        //load content
+
+        loadContactView();
+        setStartupPage();
+    }
+
+
+    private void setStartupPage() {
+        //fixme set startup page
+        contactImage.setVisible(false);
+        contactNameLabel.setText("");
+        contactStatusLabel.setText("");
+    }
+
+
+    private void loadContactView() {
         //config contact list
         FXMLLoader loader = ChatApplication.getLoader(ChatApplication.FIND_CONTACT_LAYOUT);
 
         findRoot = (Pane) ChatApplication.loadFromLoader(loader);
         findRoot.getStylesheets().add(ChatApplication.getStyleSheet(ChatApplication.FIND_CONTACT_STYLE));
         findContactController = loader.getController();
+
         findContactController.setContactResult(contact -> {
             setReceiverProfile(contact);
             closeFindContact();
@@ -108,31 +139,12 @@ public class ChatHomeController {
 
         findPane.heightProperty().addListener(e -> findRoot.setPrefHeight(findPane.getHeight()));
 
-        messageField.setOnKeyReleased(e -> resizeTextArea());
-
         configSlideAnimation();
-
-        messageField.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
-            if(e.getCode() == KeyCode.ENTER) {
-                if(e.isShiftDown()) {
-                    //fixme resolve caret position on enter
-                    messageField.setText(messageField.getText() + "\n");
-                    messageField.positionCaret(messageField.getText().length() - 1);
-                } else {
-                    sendMessage();
-                }
-                e.consume();
-
-            }
-        });
-
-        messageField.setOnKeyReleased(e -> resizeTextArea());
-
     }
 
 
     private void configSlideAnimation() {
-        transitionDuration = Duration.millis(300);
+        Duration transitionDuration = Duration.millis(300);
         translateTransition = new TranslateTransition(transitionDuration, findRoot);
 
 
@@ -150,8 +162,6 @@ public class ChatHomeController {
         findPane.setManaged(true);
         findPane.setVisible(true);
         findRoot.setPrefWidth(findPane.getWidth());
-        //findRoot.setLayoutX(50);
-        //fixme add slide animation
 
         translateTransition.setFromX(findPane.getWidth());
         translateTransition.setToX(0);
@@ -159,7 +169,7 @@ public class ChatHomeController {
         translateTransition.playFromStart();
     }
 
-    public void closeFindContact() {
+    private void closeFindContact() {
 
         translateTransition.setFromX(0);
         translateTransition.setToX(findPane.getWidth());
@@ -174,7 +184,7 @@ public class ChatHomeController {
     }
 
 
-    public void resizeTextArea() {
+    private void resizeTextArea() {
         //fixme upgrade height calculation
         messageText.setText(messageField.getText());
         messageText.setWrappingWidth(messageField.getWidth());
@@ -224,13 +234,29 @@ public class ChatHomeController {
         userNameLabel.setText(userProfile.getName());
     }
 
-    public void setReceiverProfile(Contact receiverProfile) {
-        receiverProfile = presentable.getContactInfo(receiverProfile.getId());
+    private void setReceiverProfile(Contact receiverProfile) {
+
+        final var profileId = receiverProfile.getId();
+
+        receiverProfile = presentable.getContactInfo(profileId);
         contactImage.setFill(new ImagePattern(receiverProfile.getPhoto()));
         contactNameLabel.setText(receiverProfile.getName());
-
+        contactImage.setVisible(true);
         //fixme add a status to contact
-        contactStatusLabel.setText("");
+
+        Platform.runLater(() -> {
+
+            for (int i = 0; i < historyObservableList.size(); i++) {
+                if(profileId == historyObservableList.get(i).getContact().getId()) {
+                    historyListView.getSelectionModel().select(i);
+                    historyListView.scrollTo(i);
+                    break;
+                }
+            }
+        });
+
+        setMessageList(presentable.requestMessageList(profileId));
+        messageListView.scrollTo(messageObservableList.size() - 1);
     }
 
     public void setHistoryList(List<MessageHistory> messageHistories) {

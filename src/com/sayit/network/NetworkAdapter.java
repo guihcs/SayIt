@@ -237,7 +237,7 @@ public class NetworkAdapter {
             connectionMap.put(connection.getpIPAddress(),connection);
 
         } catch (IOException e) {
-            System.out.println("Server socket is closed.");
+            System.out.println("Servidor fechado.");
         }
 
     }

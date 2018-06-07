@@ -36,7 +36,6 @@ public class FindContactController {
 
             return contactCell;
         });
-        //TODO Guilherme fix nameField input size
 
     }
 
@@ -46,15 +45,17 @@ public class FindContactController {
     }
 
     public void search() {
-        if (searchCallback != null){
-            searchCallback.seachResult(nameField.getText());
+        if(searchCallback != null) searchCallback.seachResult(nameField.getText());
 
+        if(contactObservableList.size() > 0) {
             contactObservableList.sort((c1, c2) -> {
+                //fixme resolve match size
                 if(c1.getName().contains(nameField.getText())) return -1;
                 else if(c2.getName().contains(nameField.getText())) return 1;
                 return 0;
             });
         }
+
     }
 
     public void setContactList(List<Contact> contactObservableList) {
@@ -76,5 +77,9 @@ public class FindContactController {
 
     public void setSearchCallback(SearchCallback searchCallback) {
         this.searchCallback = searchCallback;
+    }
+
+    public void requestSearchFocus() {
+        nameField.requestFocus();
     }
 }

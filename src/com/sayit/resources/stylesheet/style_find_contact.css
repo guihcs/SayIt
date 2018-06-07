@@ -1,7 +1,7 @@
 
 .root-container {
 
-	-fx-background-color: greenyellow;
+	-fx-background-color: white;
 
 }
 
@@ -57,3 +57,4 @@ url(../icons/search_black.png);
 	-fx-padding: 0;
 
 }
+
