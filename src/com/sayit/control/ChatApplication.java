@@ -41,7 +41,7 @@ public class ChatApplication extends Application implements Presentable {
     public static final String CONTACT_STYLE = "/com/sayit/resources/stylesheet/style_contact.css";
     public static final String MESSAGE_STYLE = "/com/sayit/resources/stylesheet/style_message.css";
     public static final String ADD_RESPONSE_STYLE = "/com/sayit/resources/stylesheet/style_add_response.css";
-
+    public static final String START_STYLE = "/com/sayit/resources/stylesheet/style_start.css";
     //Constants
     public static final int MAX_NAME_LENGTH = 20;
 
@@ -282,6 +282,7 @@ public class ChatApplication extends Application implements Presentable {
     public void openStartScene() {
         FXMLLoader loader = getLoader(START_FRAME);
         Parent parent = (Parent) loadFromLoader(loader);
+        parent.getStylesheets().add(getStyleSheet(START_STYLE));
         StartFrameController startController = loader.getController();
 
         startController.setConcludeCallback(contact -> {

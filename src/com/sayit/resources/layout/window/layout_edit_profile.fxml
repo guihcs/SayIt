@@ -19,7 +19,7 @@
                 <Circle id="image-view" fx:id="roundImage" fill="DODGERBLUE" onMouseClicked="#getImage" radius="70.0"
                         stroke="BLACK" strokeType="INSIDE">
                     <cursor>
-                        <Cursor fx:constant="HAND"/>
+                        <Cursor fx:constant="DEFAULT"/>
                     </cursor>
                 </Circle>
                 <Label id="add-photo-icon" onMouseClicked="#getImage" prefHeight="26.0" prefWidth="26.0" styleClass="icon-button" StackPane.alignment="BOTTOM_CENTER">
@@ -27,7 +27,7 @@
                   <Insets bottom="20.0" left="60.0" />
                </StackPane.margin>
                     <cursor>
-                        <Cursor fx:constant="HAND"/>
+                        <Cursor fx:constant="DEFAULT"/>
                     </cursor>
                 </Label>
             </children>
@@ -39,12 +39,12 @@
          <children>
              <Label id="name-label" onMouseClicked="#requestEditFocus" text="Nome">
                  <cursor>
-                     <Cursor fx:constant="HAND"/>
+                     <Cursor fx:constant="DEFAULT"/>
                  </cursor>
              </Label>
              <Label id="edit-icon" onMouseClicked="#requestEditFocus" prefHeight="15.0" prefWidth="15.0">
                  <cursor>
-                     <Cursor fx:constant="HAND"/>
+                     <Cursor fx:constant="DEFAULT"/>
                  </cursor>
              </Label>
          </children>

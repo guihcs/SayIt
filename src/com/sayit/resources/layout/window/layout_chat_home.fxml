@@ -31,7 +31,8 @@
                                         </VBox>
                                     </children>
                                 </HBox>
-                                <HBox id="contact-action-container" alignment="CENTER_RIGHT" HBox.hgrow="ALWAYS">
+                                <HBox id="contact-action-container" fx:id="tabButtonsContainer" alignment="CENTER_RIGHT"
+                                      HBox.hgrow="ALWAYS">
                                     <children>
                                         <Button id="archive-button" mnemonicParsing="false" onAction="#sendArchive" prefHeight="26.0" prefWidth="26.0" styleClass="icon-button" />
                                         <Button id="more-button" mnemonicParsing="false" prefHeight="26.0" prefWidth="26.0" styleClass="icon-button">
@@ -58,7 +59,8 @@
                                 </ListView>
                             </children>
                         </VBox>
-                        <HBox id="input-container" alignment="BOTTOM_CENTER" VBox.vgrow="SOMETIMES">
+                        <HBox id="input-container" fx:id="inputContainer" alignment="BOTTOM_CENTER"
+                              VBox.vgrow="SOMETIMES">
                             <children>
                                 <TextArea id="text-input" fx:id="messageField" minHeight="-Infinity" prefHeight="25.0" promptText="Digite uma mensagem..." wrapText="true" HBox.hgrow="ALWAYS" />
                                 <Button id="send-button" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#sendMessage" prefHeight="26.0" prefWidth="26.0" styleClass="icon-button" />

@@ -1,4 +1,11 @@
 
+@font-face {
+	src: url(../fonts/WorkSans-Bold.ttf);
+}
+@font-face {
+	src: url(../fonts/WorkSans-Regular.ttf);
+}
+
 .root-container {
 
 	-fx-background-color: transparent;
@@ -42,14 +49,14 @@
 }
 
 .name-label {
+	-fx-font-family: 'Work Sans Bold';
 	-fx-text-fill: black;
-	-fx-font-weight: bold;
 	-fx-font-size: 14px;
 }	
 
 
 .desc-label {
-
+	-fx-font-family: 'Work Sans Regular';
 	-fx-font-size: 12px;
 	-fx-text-fill: gray;
 }	

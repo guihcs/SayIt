@@ -29,6 +29,7 @@ public class StartFrameController {
         try {
             startLayout = startLoader.load();
             startController = startLoader.getController();
+            startLayout.getStylesheets().add(ChatApplication.getStyleSheet(ChatApplication.START_STYLE));
             profileLayout = profileLoader.load();
             profileLayout.getStylesheets().add(ChatApplication.getStyleSheet(ChatApplication.EDIT_CONTACT_STYLE));
             profileEditController = profileLoader.getController();

@@ -19,6 +19,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
@@ -31,7 +32,10 @@ import java.util.List;
 
 public class ChatHomeController {
 
-
+    @FXML
+    private HBox inputContainer;
+    @FXML
+    private HBox tabButtonsContainer;
 
     @FXML
     private TextArea messageField;
@@ -114,10 +118,18 @@ public class ChatHomeController {
 
 
     private void setStartupPage() {
-        //fixme set startup page
+        tabButtonsContainer.setVisible(false);
         contactImage.setVisible(false);
+        inputContainer.setVisible(false);
         contactNameLabel.setText("");
         contactStatusLabel.setText("");
+
+    }
+
+    private void showChatComponents() {
+        contactImage.setVisible(true);
+        inputContainer.setVisible(true);
+        //tabButtonsContainer.setVisible(false);
     }
 
 
@@ -241,7 +253,7 @@ public class ChatHomeController {
         receiverProfile = presentable.getContactInfo(profileId);
         contactImage.setFill(new ImagePattern(receiverProfile.getPhoto()));
         contactNameLabel.setText(receiverProfile.getName());
-        contactImage.setVisible(true);
+        showChatComponents();
         //fixme add a status to contact
 
         Platform.runLater(() -> {
