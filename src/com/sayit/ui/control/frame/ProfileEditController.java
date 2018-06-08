@@ -27,8 +27,7 @@ public class ProfileEditController {
     private TextField nameField;
 
     public void initialize() {
-        //fixme remove default name
-        contact = new Contact("Lucas", new Image("com/sayit/resources/icons/avatar.png"), "127.0.1.1");
+        contact = new Contact("", new Image("com/sayit/resources/icons/avatar.png"), "127.0.1.1");
         setContact(contact);
     }
 

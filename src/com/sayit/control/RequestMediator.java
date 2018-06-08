@@ -1,14 +1,10 @@
 package com.sayit.control;
 
-import com.sayit.data.Contact;
 import com.sayit.data.ContactDao;
-import com.sayit.data.Message;
 import com.sayit.data.MessageType;
 import com.sayit.network.MessageProtocol;
 import com.sayit.network.NetworkAdapter;
-import javafx.scene.image.Image;
 
-import java.util.Date;
 import java.util.List;
 
 public class RequestMediator implements Requestable {
@@ -41,17 +37,6 @@ public class RequestMediator implements Requestable {
 
         var chatApp = ChatApplication.launchApplication(args, mediator, contactDao);
         mediator.setChatApplication(chatApp);
-
-
-        for (int i = 0; i < 3; i++) {
-            contactDao.addContact(new Contact("Name" + i, new Image("https://picsum.photos/300/300/?random"), Integer.toString(i)));
-            for (int j = 0; j < 25; j++) {
-                Message message = new Message(contactDao.getContact(i), Math.random() * 10 > 5, "Adamastor caiano de sousa pinto", MessageType.TEXT);
-                message.setMessageDate(new Date(System.currentTimeMillis() + (int) (Math.random() * 2000000)));
-                contactDao.addMessage(i, message);
-            }
-        }
-
 
         mediator.startServerThread();
         mediator.startMulticastServer();

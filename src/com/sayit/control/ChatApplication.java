@@ -13,10 +13,12 @@ import javafx.scene.image.PixelReader;
 import javafx.scene.image.PixelWriter;
 import javafx.scene.image.WritableImage;
 import javafx.stage.Modality;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -25,6 +27,7 @@ public class ChatApplication extends Application implements Presentable {
     public static final String HOME_TITLE = "Say It";
     public static final String ADD_TITLE = "Adicionar Contato";
     public static final String EDIT_TITLE = "Editar Perfil";
+    public static final String REQUEST_TITLE = "Solicitação";
     //Layouts
     public static final String HOME_LAYOUT = "/com/sayit/resources/layout/window/layout_chat_home.fxml";
     public static final String START_LAYOUT = "/com/sayit/resources/layout/window/layout_start.fxml";
@@ -155,6 +158,15 @@ public class ChatApplication extends Application implements Presentable {
         return stage;
     }
 
+    /**
+     * Centraliza a janela.
+     */
+    private void setWindowPosition() {
+        var screenBounds = Screen.getPrimary().getVisualBounds();
+
+        primaryStage.setX(screenBounds.getMaxX() * 0.5 - primaryStage.getWidth() * 0.5);
+        primaryStage.setY(screenBounds.getMaxY() * 0.5 - primaryStage.getHeight() * 0.5);
+    }
 
 
     /**
@@ -179,6 +191,7 @@ public class ChatApplication extends Application implements Presentable {
         long id = ContactDao.parseAddress(sid);
         Contact contact = contactDao.getContact(id);
         Message newMessage = new Message(contact, false, message, MessageType.TEXT);
+        newMessage.setMessageDate(new Date());
         contactDao.addMessage(id, newMessage);
         Platform.runLater(() -> {
             if(currentContact != null && currentContact.getId() == id) {
@@ -264,7 +277,7 @@ public class ChatApplication extends Application implements Presentable {
         addController.setContact(contact);
 
         Stage requestWindow = createModal(node, 300, 400);
-        //fixme add request title
+        requestWindow.setTitle(REQUEST_TITLE);
         addController.setConfirmCallback(contact1 -> {
             requestable.sendContactResult(contact.getIpAddress(), getUserName(), getUserImageBytes(), getImageWidth(), getImageHeight());
             contactDao.addContact(contact1);
@@ -293,6 +306,7 @@ public class ChatApplication extends Application implements Presentable {
         Platform.runLater(() -> {
             primaryStage.setScene(new Scene(parent));
             primaryStage.show();
+            setWindowPosition();
         });
     }
 
@@ -305,7 +319,6 @@ public class ChatApplication extends Application implements Presentable {
         chatHome = loader.getController();
         chatHome.setPresentable(this);
         chatHome.setParentWindow(primaryStage);
-        //fixme create window set center
         var res = getClass().getResource(HOME_STYLE);
 
         parent.getStylesheets().add(res.toExternalForm());
@@ -316,6 +329,7 @@ public class ChatApplication extends Application implements Presentable {
         Platform.runLater(() -> {
             primaryStage.setScene(new Scene(parent));
             primaryStage.show();
+            setWindowPosition();
         });
 
     }
@@ -538,6 +552,7 @@ public class ChatApplication extends Application implements Presentable {
     @Override
     public void sendMessage(String message) {
         Message sendMessage = new Message(currentContact, true, message, MessageType.TEXT);
+        sendMessage.setMessageDate(new Date());
         requestable.sendMessage(currentContact.getIpAddress(), message);
         contactDao.addMessage(currentContact.getId(), sendMessage);
         chatHome.setMessageList(contactDao.getMessageList(currentContact.getId()));
