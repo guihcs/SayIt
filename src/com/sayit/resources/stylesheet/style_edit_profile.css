@@ -16,7 +16,8 @@
 	-fx-background-color: white;
 	-fx-spacing: 2px;
 	-fx-background-color:
-linear-gradient(from 10px 20px to -10px 80px, secondary-dark, primary, #f95688 80%, white)
+	radial-gradient(center 0% -10%, radius 110%,rgb(235, 179, 27), primary-light, secondary-light)
+	,linear-gradient(from 10px 20px to -10px 80px, transparent 90%, white)
 }
 
 .header {

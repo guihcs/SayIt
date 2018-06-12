@@ -87,7 +87,8 @@ public class ProfileEditController {
     }
 
     public void setContact(Contact contact) {
-        this.contact = contact;
+        this.contact.setName(contact.getName());
+        this.contact.setPhoto(contact.getPhoto());
         roundImage.setFill(new ImagePattern(contact.getPhoto()));
         nameField.setText(contact.getName());
     }

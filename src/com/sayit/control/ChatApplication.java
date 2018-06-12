@@ -56,7 +56,6 @@ public class ChatApplication extends Application implements Presentable {
     private Requestable requestable;
     private ChatHomeController chatHome;
     private FindContactController findContactController;
-    private ProfileEditController profileEditController;
 
     private boolean isWaitingForContact;
     private final LinkedList<Contact> requestList = new LinkedList<>();
@@ -517,12 +516,14 @@ public class ChatApplication extends Application implements Presentable {
         Parent editLayout = (Parent)loadFromLoader(loader);
         editLayout.getStylesheets().add(getStyleSheet(EDIT_CONTACT_STYLE));
         ProfileEditController editController = loader.getController();
-
         var window = createModal(editLayout, 400, 300);
         window.setTitle(EDIT_TITLE);
 
+
         editController.setOwnerWindow(window);
-        if(getUserProfile() != null) editController.setContact(getUserProfile());
+        if(getUserProfile() != null) {
+            editController.setContact(getUserProfile());
+        }
         editController.setConcludeCallback(contact -> {
             contactDao.setUserProfile(contact);
             chatHome.setUserProfile(contact);
