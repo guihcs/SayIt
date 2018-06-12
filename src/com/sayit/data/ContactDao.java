@@ -37,6 +37,7 @@ public class ContactDao {
     public void addContact(Contact contact) {
 
         contactList.add(contact);
+        messageMap.put(contact.getId(), new MessageHistory(contact)); 
     }
 
     /**
