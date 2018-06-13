@@ -17,7 +17,7 @@
 .root-background {
 
     -fx-background-color: 
-    radial-gradient(radius 120%, primary, primary-light, secondary)
+    radial-gradient(radius 120%, primary, primary-light, secondary);
 
 }
 
@@ -32,6 +32,7 @@
 
     -fx-padding: 6px 12px 8px 12px;
     -fx-spacing: 20px;
+	-fx-background-color: white;
 }
 
 .content-text {
@@ -39,9 +40,11 @@
 }
 
 #start-header{
-
-    -fx-font-family: 'Work Sans Bold';
-    -fx-font-size: 32px;
+    -fx-background-repeat: no-repeat;
+	-fx-background-size: stretch;
+   -fx-background-image: url(../icons/sayit_logo.png);
+/*-fx-font-family: 'Work Sans Bold';
+    -fx-font-size: 32px;*/
 }
 
 #start-message {
