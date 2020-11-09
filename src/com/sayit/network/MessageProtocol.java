@@ -5,14 +5,14 @@ import java.util.Map;
 
 public enum MessageProtocol {
 
-    MESSAGE(1), CONTACT_INFO(2), ADD_REQUEST(3), ADD_RESPONSE(4), SEND_ARCHIVE(5);
+    MESSAGE(1), DISCOVERY_RESPONSE(2), CONTACT_ADD_REQUEST(3), CONTACT_ADD_RESPONSE(4), SEND_ARCHIVE(5);
 
     private int value;
     private static final Map<Integer, MessageProtocol> CAST_MAP =
             Map.of(1, MESSAGE
-                    , 2, CONTACT_INFO
-                    , 3, ADD_REQUEST
-                    , 4, ADD_RESPONSE
+                    , 2, DISCOVERY_RESPONSE
+                    , 3, CONTACT_ADD_REQUEST
+                    , 4, CONTACT_ADD_RESPONSE
                     , 5, SEND_ARCHIVE);
 
 

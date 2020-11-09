@@ -3,8 +3,10 @@ package com.sayit.ui.control.frame;
 import com.sayit.control.ChatApplication;
 import com.sayit.control.Presentable;
 import com.sayit.data.Contact;
+import com.sayit.data.ContactDao;
 import com.sayit.data.Message;
 import com.sayit.data.MessageHistory;
+import com.sayit.ui.control.FXMLManager;
 import com.sayit.ui.control.view.HistoryCell;
 import com.sayit.ui.control.view.MessageCell;
 import javafx.animation.Interpolator;
@@ -29,6 +31,7 @@ import javafx.stage.Window;
 import javafx.util.Duration;
 
 import java.util.List;
+import java.util.Objects;
 
 public class ChatHomeController {
 
@@ -65,12 +68,14 @@ public class ChatHomeController {
     private FindContactController findContactController;
     private ObservableList<Message> messageObservableList;
     private ObservableList<MessageHistory> historyObservableList;
+    private Contact currentContact;
+    private ContactDao contactDao;
 
     //Open contact animation
     private TranslateTransition translateTransition;
 
     //Resize text property
-    private Text messageText = new Text();
+    private final Text messageText = new Text();
 
     public void initialize() {
 
@@ -135,10 +140,10 @@ public class ChatHomeController {
 
     private void loadContactView() {
         //config contact list
-        FXMLLoader loader = ChatApplication.getLoader(ChatApplication.FIND_CONTACT_LAYOUT);
+        FXMLLoader loader = FXMLManager.getLoader(ChatApplication.FIND_CONTACT_LAYOUT);
 
-        findRoot = (Pane) ChatApplication.loadFromLoader(loader);
-        findRoot.getStylesheets().add(ChatApplication.getStyleSheet(ChatApplication.FIND_CONTACT_STYLE));
+        findRoot = (Pane) FXMLManager.loadFromLoader(loader);
+        Objects.requireNonNull(findRoot).getStylesheets().add(ChatApplication.getStyleSheet(ChatApplication.FIND_CONTACT_STYLE));
         findContactController = loader.getController();
 
         findContactController.setContactResult(contact -> {
@@ -197,7 +202,6 @@ public class ChatHomeController {
 
 
     private void resizeTextArea() {
-        //fixme upgrade height calculation
         messageText.setText(messageField.getText());
         messageText.setWrappingWidth(messageField.getWidth());
         messageText.setFont(messageField.getFont());
@@ -226,12 +230,8 @@ public class ChatHomeController {
         }
     }
 
-    private void getArchive() {
-
-    }
 
     public void sendArchive() {
-        //fixme sendArchive
         FileChooser fileChooser = new FileChooser();
         fileChooser.showOpenDialog(parentWindow);
     }
@@ -254,7 +254,6 @@ public class ChatHomeController {
         contactImage.setFill(new ImagePattern(receiverProfile.getPhoto()));
         contactNameLabel.setText(receiverProfile.getName());
         showChatComponents();
-        //fixme add a status to contact
 
         Platform.runLater(() -> {
 
@@ -279,5 +278,14 @@ public class ChatHomeController {
     public void setMessageList(List<Message> messageList) {
         messageObservableList.clear();
         if(messageList.size() > 0) messageObservableList.addAll(messageList);
+    }
+
+    private void contactAdd(Message message){
+        Platform.runLater(() -> {
+            if(currentContact != null && currentContact.getId() == ContactDao.parseAddress(message.getSenderAddress())) {
+                setMessageList(contactDao.getMessageList(ContactDao.parseAddress(message.getSenderAddress())));
+            }
+            setHistoryList(contactDao.getHistoryList());
+        });
     }
 }

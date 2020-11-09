@@ -1,15 +1,22 @@
 package com.sayit.data;
 
+import com.sayit.data.image.ImageBuilder;
+import com.sayit.message.Rebuildable;
+import com.sayit.message.Request;
+import com.sayit.network.MessageProtocol;
 import javafx.scene.image.Image;
 
-public class Contact {
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+
+public class Contact implements Rebuildable<Contact> {
 
     private Image photo;
     private String ipAddress;
     private long id;
     private String name;
 
-    /* incluido para testes, já que no contrutor paddrão tenho que ter uma imagem*/
     public Contact() {
     }
 
@@ -53,15 +60,34 @@ public class Contact {
         return ipAddress;
     }
 
-    /**
-     * Retorna a representação string desse contato. Formatada para
-     * armazenamento.
-     *
-     * @return
-     */
+
     @Override
     public String toString() {
 
         return name + "#" + photo + "#" + "#" + ipAddress;
+    }
+
+    @Override
+    public Contact fromRequest(Request request) {
+        return this;
+    }
+
+    @Override
+    public Request toRequest() {
+        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+        DataOutputStream dataOutputStream = new DataOutputStream(byteStream);
+
+        try {
+            dataOutputStream.writeUTF(getName());
+            dataOutputStream.write(ImageBuilder.readImageBytes(getPhoto()));
+            dataOutputStream.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return new Request(
+                byteStream.toByteArray(),
+                getIpAddress()
+        );
     }
 }

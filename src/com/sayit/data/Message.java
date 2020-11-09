@@ -1,18 +1,30 @@
 package com.sayit.data;
 
 
+import com.sayit.message.Rebuildable;
+import com.sayit.message.Request;
+import com.sayit.network.MessageProtocol;
+
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Message {
+public class Message implements Rebuildable<Message> {
 
     private Contact receiverProfile;
+    private String senderAddress;
     private String textContent;
     private boolean sendByMe;
     private byte[] content;
     private Date messageDate;
     private MessageType type;
-    private SimpleDateFormat dateForma = new SimpleDateFormat("HH:mm");
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
+
+
+    public Message() {
+    }
 
     public Message(Contact receiverProfile, boolean sendByMe, String content, MessageType type) {
         this.receiverProfile = receiverProfile;
@@ -28,20 +40,12 @@ public class Message {
         this.type = type;
     }
 
-    public Contact getReceiverProfile() {
-        return receiverProfile;
-    }
-
     public void setReceiverProfile(Contact receiverProfile) {
         this.receiverProfile = receiverProfile;
     }
 
     public boolean isSendByMe() {
         return sendByMe;
-    }
-
-    public void setSendByMe(boolean sendByMe) {
-        this.sendByMe = sendByMe;
     }
 
     public byte[] getContent() {
@@ -68,11 +72,7 @@ public class Message {
         return messageDate;
     }
 
-    /**
-     * Retorna uma representação String do objeto.
-     *
-     * @return
-     */
+
     @Override
     public String toString() {
         return "Message{" + "receiverProfile=" + receiverProfile + ", sendByMe=" + sendByMe + ", content=" + textContent + ", messageDate=" + messageDate + ", type=" + type + '}';
@@ -86,16 +86,44 @@ public class Message {
         this.messageDate = messageDate;
     }
 
-    /**
-     * Retorna uma representação de texto formatada da hora em que a mensagem foi transmitida.
-     * @return
-     */
-    public String getFormattedTime(){
+    public String getFormattedTime() {
 
         String time = "none";
-        if(messageDate != null) time = dateForma.format(messageDate.getTime());
+        if (messageDate != null) time = dateFormat.format(messageDate.getTime());
 
         return time;
 
+    }
+
+
+    public String getSenderAddress() {
+        return senderAddress;
+    }
+
+    public void setSenderAddress(String senderAddress) {
+        this.senderAddress = senderAddress;
+    }
+
+
+    @Override
+    public Message fromRequest(Request request) {
+        return this;
+    }
+
+    @Override
+    public Request toRequest() {
+        ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
+        DataOutputStream dataOutputStream = new DataOutputStream(byteStream);
+
+        try {
+            dataOutputStream.writeInt(MessageType.TEXT.getValue());
+            dataOutputStream.writeUTF(getTextContent());
+            dataOutputStream.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return new Request(byteStream.toByteArray(),
+                getSenderAddress());
     }
 }

@@ -2,21 +2,22 @@ package com.sayit.ui.control.view;
 
 import com.sayit.control.ChatApplication;
 import com.sayit.data.MessageHistory;
+import com.sayit.ui.control.FXMLManager;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.ListCell;
 
 public class HistoryCell extends ListCell<MessageHistory> {
 
-    private Parent root;
-    private ContactViewController contactController;
+    private final Parent root;
+    private final ContactViewController contactController;
 
 
     public HistoryCell() {
 
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(ChatApplication.CONTACT_VIEW));
 
-        root = (Parent) ChatApplication.loadFromLoader(fxmlLoader);
+        root = (Parent) FXMLManager.loadFromLoader(fxmlLoader);
         contactController = fxmlLoader.getController();
         getStylesheets().add(ChatApplication.getStyleSheet(ChatApplication.CONTACT_STYLE));
 
