@@ -29,6 +29,7 @@ import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.Duration;
 
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -116,6 +117,10 @@ public class ChatHomeController {
                 e.consume();
 
             }
+        });
+
+        contactDao.addUserProfileChangedListener(c -> {
+            if (c != null) setUserProfile(c);
         });
 
         setUserProfile(contactDao.getUserProfile());
@@ -215,11 +220,22 @@ public class ChatHomeController {
 
     public void showAddContact() {
 //        presentable.openAddScene();
-        Navigator.of(stage).pushNamedModal("/addContact", 400, 300, res -> {});
+        Navigator.of(stage)
+                .pushNamedModal("/addContact",
+                        400,
+                        300,
+                        res -> {});
     }
 
     public void showEditProfile() {
 //        presentable.openEditProfileScene();
+        Navigator.of(stage).pushNamedModal("/editProfile",
+                300,
+                400,
+                contactDao.getUserProfile(),
+                c -> {
+            contactDao.setUserProfile((Contact)c);
+                });
     }
 
 
@@ -273,7 +289,9 @@ public class ChatHomeController {
             }
         });
 
-        setMessageList(contactDao.getMessageList(profileId));
+        List<Message> messageList = contactDao.getMessageList(profileId);
+        messageList.sort(Comparator.comparing(Message::getMessageDate));
+        setMessageList(messageList);
         messageListView.scrollTo(messageObservableList.size() - 1);
     }
 
@@ -290,7 +308,9 @@ public class ChatHomeController {
     private void contactAdd(Message message){
         Platform.runLater(() -> {
             if(currentContact != null && currentContact.getId() == ContactDao.parseAddress(message.getSenderAddress())) {
-                setMessageList(contactDao.getMessageList(ContactDao.parseAddress(message.getSenderAddress())));
+                List<Message> messageList = contactDao.getMessageList(ContactDao.parseAddress(message.getSenderAddress()));
+                messageList.sort(Comparator.comparing(Message::getMessageDate));
+                setMessageList(messageList);
             }
             setHistoryList(contactDao.getHistoryList());
         });

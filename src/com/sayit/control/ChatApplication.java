@@ -22,6 +22,8 @@ public class ChatApplication extends Application {
     public static final String START_STYLE = "/stylesheet/style_start.css";
     //Constants
     public static final int MAX_NAME_LENGTH = 20;
+    private RequestMediator mediator;
+
 
     public static void main(String[] args) {
         launch(args);
@@ -36,26 +38,24 @@ public class ChatApplication extends Application {
         Injector.registerProvider(Stage.class, primaryStage);
         Navigator.loadFrom("routes/routes.json");
 
-//        RequestMediator mediator = new RequestMediator();
+        mediator = new RequestMediator();
         ContactDao contactDao = new ContactDao();
         Injector.registerProvider(ContactDao.class, contactDao);
-//
-//        setContactDao(contactDao);
-//        setRequestable(mediator);
-//
-//        mediator.start();
+        Injector.registerProvider(RequestMediator.class, mediator);
+
+        mediator.start();
         Navigator.of(primaryStage).pushNamed("/startScene");
     }
 
 
     @Override
     public void stop() {
-//        try {
-//            super.stop();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//        requestable.stopServices();
+        try {
+            super.stop();
+            mediator.stopServices();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
 }

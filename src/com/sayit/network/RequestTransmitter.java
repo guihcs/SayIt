@@ -42,4 +42,8 @@ public class RequestTransmitter {
     }
 
 
+    public void close() throws IOException {
+        serverSocket.close();
+    }
+
 }

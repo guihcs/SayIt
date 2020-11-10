@@ -19,7 +19,7 @@
       </HBox>
         <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
             <children>
-                <Button fx:id="startButton" mnemonicParsing="false" styleClass="material-button" text="CRIAR" />
+                <Button fx:id="startButton" mnemonicParsing="false" styleClass="material-button" text="CRIAR" onAction="#go"/>
             </children>
         </HBox>
     </children>

@@ -22,9 +22,8 @@ public class Navigator {
 
     private final Stage context;
     private static Map<String, SceneRoute> sceneRouteMap;
-    private static final Stack<String> routeStack = new Stack<>();
-    private static Stage lastModal;
-    private static Consumer<Object> lastConsumer;
+    private static final Stack<RenderedRoute> routeStack = new Stack<>();
+
 
     private Navigator(Stage context) {
         this.context = context;
@@ -36,10 +35,12 @@ public class Navigator {
     }
 
     public void pushNamed(String path) {
+        Navigator.routeStack.push(new RenderedRoute(path, RouteType.NORMAL));
+
         SceneRoute sceneRoute = Navigator.sceneRouteMap.get(path);
         var loader = FXMLManager.getLoader(sceneRoute.getLayout());
 
-        loader.setControllerFactory(this::instantiateInjected);
+        loader.setControllerFactory(Navigator::instantiateInjected);
 
         Parent node = (Parent) FXMLManager.loadFromLoader(loader);
 
@@ -54,11 +55,10 @@ public class Navigator {
             context.setScene(new Scene(node));
             context.show();
             centerWindow();
-            Navigator.routeStack.push(path);
         });
     }
 
-    private Object instantiateInjected(Class<?> type){
+    private static Object instantiateInjected(Class<?> type) {
         try {
             Object o = type.getConstructor().newInstance();
             Injector.inject(o);
@@ -76,59 +76,130 @@ public class Navigator {
         context.setY(screenBounds.getMaxY() * 0.5 - context.getHeight() * 0.5);
     }
 
-    public <T> void pushNamedModal(String path, int width, int height, Consumer<T> resultCallback) {
+    public void pushNamedModal(String path, int width, int height, Consumer<Object> resultCallback) {
+        Stage requestWindow = new Stage();
+
+        Navigator.routeStack.push(new RenderedRoute(path, RouteType.MODAL, requestWindow, resultCallback));
+
         SceneRoute sceneRoute = Navigator.sceneRouteMap.get(path);
         var loader = FXMLManager.getLoader(sceneRoute.getLayout());
+        loader.setControllerFactory(Navigator::instantiateInjected);
         Parent node = (Parent) FXMLManager.loadFromLoader(loader);
         Objects.requireNonNull(node).getStylesheets().add(sceneRoute.getStyle());
 
-        Stage requestWindow = createModal(node, width, height);
+        requestWindow.initModality(Modality.APPLICATION_MODAL);
+        Scene scene = new Scene(node, width, height);
+        requestWindow.setScene(scene);
         if (sceneRoute.getTitle() != null)
             requestWindow.setTitle(sceneRoute.getTitle());
 
-        Navigator.lastModal = requestWindow;
-        Navigator.routeStack.push(path);
+
         requestWindow.showAndWait();
     }
 
-    public static Node buildNamed(String path) {
+
+    public void pushNamedModal(String path, int width, int height, Object param, Consumer<Object> resultCallback) {
+        Stage requestWindow = new Stage();
+        Navigator.routeStack.push(new RenderedRoute(path, RouteType.MODAL, requestWindow, resultCallback, param));
+
         SceneRoute sceneRoute = Navigator.sceneRouteMap.get(path);
         var loader = FXMLManager.getLoader(sceneRoute.getLayout());
+        loader.setControllerFactory(Navigator::instantiateInjected);
+        Parent node = (Parent) FXMLManager.loadFromLoader(loader);
+        Objects.requireNonNull(node).getStylesheets().add(sceneRoute.getStyle());
+        Object controller = loader.getController();
+
+        if (controller instanceof Configurable) {
+            ((Configurable) controller).configure(param);
+        }
+
+        requestWindow.initModality(Modality.APPLICATION_MODAL);
+        Scene scene = new Scene(node, width, height);
+        requestWindow.setScene(scene);
+        if (sceneRoute.getTitle() != null)
+            requestWindow.setTitle(sceneRoute.getTitle());
+
+
+        requestWindow.showAndWait();
+    }
+
+    public static Node buildNamed(String path, Consumer<Object> resultCallback) {
+        Navigator.routeStack.push(new RenderedRoute(path, RouteType.BUILD, resultCallback));
+        SceneRoute sceneRoute = Navigator.sceneRouteMap.get(path);
+        var loader = FXMLManager.getLoader(sceneRoute.getLayout());
+        loader.setControllerFactory(Navigator::instantiateInjected);
         Parent node = (Parent) FXMLManager.loadFromLoader(loader);
         if (sceneRoute.getStyle() != null)
             Objects.requireNonNull(node).getStylesheets().add(sceneRoute.getStyle());
+
+
+        return node;
+    }
+
+
+    public static Node buildNamed(String path, Object param, Consumer<Object> resultCallback) {
+        Navigator.routeStack.push(new RenderedRoute(path, RouteType.BUILD, resultCallback, param));
+
+        SceneRoute sceneRoute = Navigator.sceneRouteMap.get(path);
+        var loader = FXMLManager.getLoader(sceneRoute.getLayout());
+        loader.setControllerFactory(Navigator::instantiateInjected);
+        Parent node = (Parent) FXMLManager.loadFromLoader(loader);
+        if (sceneRoute.getStyle() != null)
+            Objects.requireNonNull(node).getStylesheets().add(sceneRoute.getStyle());
+
+        Object controller = loader.getController();
+
+        if (controller instanceof Configurable) {
+            ((Configurable) controller).configure(param);
+        }
+
+
+        return node;
+    }
+
+
+    public static Node buildNamed(String path) {
+        Navigator.routeStack.push(new RenderedRoute(path, RouteType.BUILD));
+
+        SceneRoute sceneRoute = Navigator.sceneRouteMap.get(path);
+        var loader = FXMLManager.getLoader(sceneRoute.getLayout());
+        loader.setControllerFactory(Navigator::instantiateInjected);
+        Parent node = (Parent) FXMLManager.loadFromLoader(loader);
+        if (sceneRoute.getStyle() != null)
+            Objects.requireNonNull(node).getStylesheets().add(sceneRoute.getStyle());
+
 
         return node;
     }
 
     public void pop() {
         Navigator.routeStack.pop();
-        String peek = Navigator.routeStack.pop();
-        pushNamed(peek);
+        RenderedRoute peek = Navigator.routeStack.peek();
+        if (peek.getRouteType() == RouteType.NORMAL) {
+            Navigator.routeStack.pop();
+            pushNamed(peek.getPath());
+        }
+
     }
 
     public <T> void popResult(T result) {
-        pop();
 
-        if (lastModal != null) {
-            lastModal.close();
-            lastModal = null;
+        RenderedRoute lastRoute = Navigator.routeStack.pop();
+
+        if (lastRoute.getModal() != null) lastRoute.getModal().close();
+        if (lastRoute.getConsumer() != null) lastRoute.getConsumer().accept(result);
+
+        if (lastRoute.getRouteType() == RouteType.NORMAL
+                &&
+                Navigator.routeStack.peek().getRouteType() == RouteType.NORMAL) {
+            rebuildLastRoute();
         }
 
-        if (lastConsumer != null) {
-            lastConsumer.accept(result);
-            lastConsumer = null;
-        }
     }
 
-    private Stage createModal(Node root, double width, double height) {
-        Stage stage = new Stage();
-        Scene scene = new Scene((Parent) root, width, height);
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setScene(scene);
-        return stage;
+    public void rebuildLastRoute() {
+        pushNamed(Navigator.routeStack.pop().getPath());
     }
-
 
     public static void loadFrom(String path) {
         InputStream resource = Navigator.class.getClassLoader().getResourceAsStream(path);
@@ -144,5 +215,9 @@ public class Navigator {
         sceneRoutes.forEach(r -> sceneRouteMap.put(r.getRoute(), r));
 
         Navigator.sceneRouteMap = sceneRouteMap;
+    }
+
+    public static void clearStack() {
+        Navigator.routeStack.clear();
     }
 }

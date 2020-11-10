@@ -12,8 +12,9 @@ public class DiscoveryServer {
 
     private static final String MULTICAST_ADDRESS = "239.239.239.239";
     private static final int MULTICAST_PORT = 7777;
-    private static final String DISCOVER_MESSAGE_PREFIX = "sayitdiscovery:";
+    private static final String DISCOVER_MESSAGE_PREFIX = "sayitdiscovery";
     private static final int BUFFER_SIZE = 1024;
+    private final String packetID = String.valueOf((int)(Math.random() * 10000));
 
     private final MulticastSocket multicastSocket;
     private final InetAddress multicastGroup;
@@ -29,11 +30,7 @@ public class DiscoveryServer {
 
     public void multicastData(String data) throws IOException {
 
-        if (isDiscovering.get()) return;
-
-        isDiscovering.set(true);
-
-        String finalMessage = DISCOVER_MESSAGE_PREFIX + data;
+        String finalMessage = DISCOVER_MESSAGE_PREFIX + ":" + packetID + "|" + data;
 
         DatagramPacket packet = new DatagramPacket(
                 finalMessage.getBytes(),
@@ -45,11 +42,13 @@ public class DiscoveryServer {
     }
 
     public void startListening(){
-        while (isDiscovering.get()){
+        isDiscovering.set(true);
 
+        while (isDiscovering.get()){
             try {
                 receiveDiscoveryData();
-            } catch (IOException ignored) {
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
@@ -64,12 +63,16 @@ public class DiscoveryServer {
 
         String receivedData = new String(datagramReceivePacket.getData());
 
-        if (!receivedData.startsWith(DISCOVER_MESSAGE_PREFIX)) return;
+        String[] split = receivedData.split("[:|]");
+
+        if (split.length != 3
+                || !split[0].equals(DISCOVER_MESSAGE_PREFIX)
+                || split[1].equals(packetID)) return;
 
         DiscoveryData discoveryData =
                 new DiscoveryData(
                         datagramReceivePacket.getAddress().getHostAddress(),
-                        new String(buffer).split(":")[1]);
+                        split[2]);
 
         for (DiscoveryCallback discoveryListener : discoveryListeners) {
             discoveryListener.discoveryReceived(discoveryData);
@@ -81,9 +84,12 @@ public class DiscoveryServer {
         isDiscovering.set(false);
     }
     
-    
     public void addListener(DiscoveryCallback callback){
         discoveryListeners.add(callback);
     }
 
+    public void close(){
+        stopDiscover();
+        multicastSocket.close();
+    }
 }

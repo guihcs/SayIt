@@ -1,30 +1,20 @@
 package com.sayit.ui.control.frame;
 
-import com.sayit.control.ChatApplication;
+import com.sayit.data.Contact;
 import com.sayit.data.ContactDao;
 import com.sayit.di.Autowired;
-import com.sayit.ui.control.ContactManager;
 import com.sayit.ui.navigator.Navigator;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
+import javafx.scene.Node;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.stage.Window;
 
-import java.io.IOException;
 
 public class StartFrameController {
 
     @FXML
     private VBox rootContainer;
-
-    private StartController startController;
-    private ProfileEditController profileEditController;
-
-    private Parent startLayout;
-    private Parent profileLayout;
 
     @Autowired
     private Stage stage;
@@ -33,44 +23,33 @@ public class StartFrameController {
     private ContactDao contactDao;
 
     public void initialize() {
-        FXMLLoader startLoader = new FXMLLoader(getClass().getResource(ChatApplication.START_LAYOUT));
-        FXMLLoader profileLoader = new FXMLLoader(getClass().getResource(ChatApplication.EDIT_PROFILE_LAYOUT));
-
-        try {
-            startLayout = startLoader.load();
-            startController = startLoader.getController();
-            startLayout.getStylesheets().add(ChatApplication.getStyleSheet(ChatApplication.START_STYLE));
-            profileLayout = profileLoader.load();
-            profileLayout.getStylesheets().add(ChatApplication.getStyleSheet(ChatApplication.EDIT_CONTACT_STYLE));
-            profileEditController = profileLoader.getController();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        startController.setButtonAction(e -> loadProfile());
-        profileEditController.setBackCallback(this::loadStart);
-
-        profileEditController.setConcludeCallback((contact) -> {
-            contactDao.setUserProfile(contact);
-            Navigator.of(stage).pushNamed("/homeScene");
-        });
 
         loadStart();
     }
 
     public void loadStart() {
         if(rootContainer.getChildren().size() > 0) rootContainer.getChildren().clear();
-        rootContainer.getChildren().add(startLayout);
-        VBox.setVgrow(startLayout, Priority.ALWAYS);
+        Node node = Navigator.buildNamed("/startLayout", r -> {
+            loadProfile();
+        });
+        rootContainer.getChildren().add(node);
+        VBox.setVgrow(node, Priority.ALWAYS);
     }
 
     public void loadProfile() {
         if(rootContainer.getChildren().size() > 0) rootContainer.getChildren().clear();
-        rootContainer.getChildren().add(profileLayout);
-        VBox.setVgrow(profileLayout, Priority.ALWAYS);
+        Node node = Navigator.buildNamed("/editProfile", c -> {
+            if (c == null){
+                loadStart();
+            }else{
+                Navigator.clearStack();
+                contactDao.setUserProfile((Contact) c);
+                Navigator.of(stage).pushNamed("/homeScene");
+            }
+
+        });
+        rootContainer.getChildren().add(node);
+        VBox.setVgrow(node, Priority.ALWAYS);
     }
 
-    public void setOwnerWindow(Window window) {
-        profileEditController.setOwnerWindow(window);
-    }
 }

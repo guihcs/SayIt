@@ -3,6 +3,7 @@ package com.sayit.control;
 import com.sayit.network.Request;
 import com.sayit.network.MessageProtocol;
 import com.sayit.network.RequestTransmitter;
+import com.sayit.network.discovery.DiscoveryData;
 import com.sayit.network.discovery.DiscoveryServer;
 
 import java.io.IOException;
@@ -19,6 +20,7 @@ public class RequestMediator implements Requestable {
     private RequestTransmitter requestTransmitter;
     private Thread receiverThread;
     private Thread senderThread;
+    private Thread multicastThread;
     private final BlockingQueue<Request> blockingQueue = new LinkedBlockingQueue<>();
     private final List<RequestCallback> requestCallbacks = new LinkedList<>();
 
@@ -29,6 +31,9 @@ public class RequestMediator implements Requestable {
             isRunning = new AtomicBoolean(true);
             senderThread = new Thread(this::sendRequest);
             receiverThread = new Thread(this::receiveRequest);
+            multicastThread = new Thread(this::startListening);
+
+            discoveryServer.addListener(this::receiveContactPacket);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -38,7 +43,10 @@ public class RequestMediator implements Requestable {
     public void start() {
         senderThread.start();
         receiverThread.start();
-        discoveryServer.startListening();
+        multicastThread.start();
+    }
+
+    private void receiveContactPacket(DiscoveryData data){
     }
 
 
@@ -68,13 +76,15 @@ public class RequestMediator implements Requestable {
     }
 
 
-    public void stopApplication() {
-        isRunning.set(false);
+
+    public void stopDiscover() {
+
+        System.out.println("discover stopped.");
         discoveryServer.stopDiscover();
     }
 
-    public void stopDiscover() {
-        discoveryServer.stopDiscover();
+    private void startListening(){
+        discoveryServer.startListening();
     }
 
 
@@ -115,7 +125,18 @@ public class RequestMediator implements Requestable {
 
     @Override
     public void stopServices() {
-        stopApplication();
+
+        try {
+            isRunning.set(false);
+            discoveryServer.close();
+            requestTransmitter.close();
+            receiverThread.interrupt();
+            senderThread.interrupt();
+            multicastThread.interrupt();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 

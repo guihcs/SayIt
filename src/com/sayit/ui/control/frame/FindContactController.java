@@ -1,6 +1,8 @@
 package com.sayit.ui.control.frame;
 
+import com.sayit.control.RequestMediator;
 import com.sayit.data.Contact;
+import com.sayit.di.Autowired;
 import com.sayit.ui.control.ContactManager;
 import com.sayit.ui.control.SearchCallback;
 import com.sayit.ui.control.view.ContactCell;
@@ -23,6 +25,9 @@ public class FindContactController {
     @FXML
     private ListView<Contact> contactListView;
     private ObservableList<Contact> contactObservableList;
+
+    @Autowired
+    private RequestMediator requestMediator;
 
     public void initialize() {
         contactObservableList = FXCollections.observableArrayList();
@@ -61,16 +66,17 @@ public class FindContactController {
     }
 
     public void search() {
-        if(searchCallback != null) searchCallback.seachResult(nameField.getText());
-
-        if(contactObservableList.size() > 0) {
-            contactObservableList.sort((c1, c2) -> {
-                //fixme resolve match size
-                if(c1.getName().contains(nameField.getText())) return -1;
-                else if(c2.getName().contains(nameField.getText())) return 1;
-                return 0;
-            });
-        }
+        requestMediator.multicastContactNameDiscovery(nameField.getText());
+//        if(searchCallback != null) searchCallback.seachResult(nameField.getText());
+//
+//        if(contactObservableList.size() > 0) {
+//            contactObservableList.sort((c1, c2) -> {
+//                //fixme resolve match size
+//                if(c1.getName().contains(nameField.getText())) return -1;
+//                else if(c2.getName().contains(nameField.getText())) return 1;
+//                return 0;
+//            });
+//        }
 
     }
 
