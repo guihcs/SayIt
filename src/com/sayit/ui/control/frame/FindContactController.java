@@ -39,6 +39,22 @@ public class FindContactController {
 
     }
 
+    //        findContactController.setCloseCallback(() -> {
+//            chatManager.stopContactRequest();
+//            window.close();
+//        });
+//
+//        findContactController.setSearchCallback(searchInput -> requestable.multicastContactNameDiscovery(searchInput));
+//
+//        findContactController.setContactResult(contact -> {
+//            requestable.sendContactAddRequest(contact.toRequest());
+//            window.close();
+//            chatManager.stopContactRequest();
+//        });
+//
+//        findContactController.requestSearchFocus();
+//        chatManager.stopContactRequest();
+
 
     public void close() {
         if(closeCallback != null) closeCallback.run();

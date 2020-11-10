@@ -9,6 +9,6 @@
         <Insets bottom="20.0" top="20.0" />
     </padding>
     <children>
-        <VBox fx:id="rootContainter" prefHeight="360.0" prefWidth="411.0" styleClass="content-frame" />
+        <VBox fx:id="rootContainer" prefHeight="360.0" prefWidth="411.0" styleClass="content-frame" />
     </children>
 </HBox>

@@ -20,6 +20,19 @@ public class AddResponseController {
     private ContactManager confirmCallback;
 
 
+    //        addController.setContact(contact);
+
+//        Stage requestWindow = createModal(node, 300, 400);
+//        requestWindow.setTitle(REQUEST_TITLE);
+//        addController.setConfirmCallback(contact1 -> {
+//            requestable.sendContactDiscoveryResponse(contact.toRequest());
+////            contactDao.addContact(contact1);
+//            requestWindow.close();
+//        });
+//        addController.setCancelCallback(e -> requestWindow.close());
+//
+
+
     public void accept() {
         if(confirmCallback != null) confirmCallback.contactResult(contact);
     }

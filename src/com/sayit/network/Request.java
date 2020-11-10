@@ -1,6 +1,4 @@
-package com.sayit.message;
-
-import com.sayit.network.MessageProtocol;
+package com.sayit.network;
 
 public class Request {
 
@@ -9,6 +7,11 @@ public class Request {
     private String address;
 
     public Request(byte[] data, String address) {
+        this.data = data;
+        this.address = address;
+    }
+
+    public Request(MessageProtocol messageProtocol, byte[] data, String address) {
         this.data = data;
         this.address = address;
     }

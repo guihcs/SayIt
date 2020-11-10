@@ -1,6 +1,6 @@
 package com.sayit.control;
 
-import com.sayit.message.Request;
+import com.sayit.network.Request;
 
 public interface Requestable {
 

@@ -1,0 +1,65 @@
+
+[
+  {
+    "name": "ContactRequest",
+    "title": "Solicitação",
+    "route": "/contactRequest",
+    "layout": "/layout/window/layout_add_response.fxml",
+    "style": "/stylesheet/style_add_response.css"
+  },
+  {
+    "name": "StartScene",
+    "title": "Say It",
+    "route": "/startScene",
+    "layout": "/layout/window/layout_frame_start.fxml",
+    "style": "/stylesheet/style_start.css"
+  },
+  {
+    "name": "HomeScene",
+    "route": "/homeScene",
+    "layout": "/layout/window/layout_chat_home.fxml",
+    "style": "/stylesheet/style_chat_home.css"
+  },
+  {
+    "name": "AddScene",
+    "title": "Adicionar Contato",
+    "route": "/addContact",
+    "layout": "/layout/window/layout_find_contact.fxml",
+    "style": "/stylesheet/style_find_contact.css"
+  },
+  {
+    "name": "EditProfile",
+    "title": "Editar Perfil",
+    "route": "/editProfile",
+    "layout": "/layout/window/layout_edit_profile.fxml",
+    "style": "/stylesheet/style_edit_profile.css"
+  },
+  {
+    "name": "EditProfile",
+    "title": "Editar Perfil",
+    "route": "/editProfile",
+    "layout": "/layout/window/layout_edit_profile.fxml",
+    "style": "/stylesheet/style_edit_profile.css"
+  },
+  {
+    "name": "ContactView",
+    "route": "/contactView",
+    "layout": "/layout/view/view_contact_cell.fxml",
+    "style": "/stylesheet/style_contact.css"
+  },
+  {
+    "name": "MessageView",
+    "route": "/messageView",
+    "layout": "/layout/view/view_message_cell.fxml",
+    "style": "/stylesheet/style_message.css"
+  },
+  {
+    "name": "StartLayout",
+    "route": "/startLayout",
+    "layout": "/layout/window/layout_start.fxml"
+  }
+]
+
+
+
+

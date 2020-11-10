@@ -4,8 +4,7 @@ import com.sayit.data.Contact;
 import com.sayit.data.ContactDao;
 import com.sayit.data.Message;
 import com.sayit.di.Autowired;
-import com.sayit.message.Request;
-import com.sayit.ui.control.frame.FindContactController;
+import com.sayit.network.Request;
 import javafx.application.Platform;
 
 import java.util.Date;
@@ -33,7 +32,7 @@ public class ChatManager {
             Platform.runLater(() -> {
                 processingRequests = true;
                 while (processingRequests && requestList.size() > 0) {
-                    chatApplication.openContactRequest(requestList.pollFirst());
+//                    chatApplication.openContactRequest(requestList.pollFirst());
                 }
                 processingRequests = false;
             });
@@ -45,7 +44,8 @@ public class ChatManager {
     }
 
     public void addContactRequest(Contact contact) {
-        chatApplication.getFindContactController().addContact(contact);
+
+//        chatApplication.getFindContactController().addContact(contact);
     }
 
     public void addMessage(Message message) {

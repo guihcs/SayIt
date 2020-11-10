@@ -1,5 +1,7 @@
 package com.sayit.message;
 
+import com.sayit.network.Request;
+
 public class NetworkMessage {
 
 

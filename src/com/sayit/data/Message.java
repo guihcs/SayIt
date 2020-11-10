@@ -2,8 +2,7 @@ package com.sayit.data;
 
 
 import com.sayit.message.Rebuildable;
-import com.sayit.message.Request;
-import com.sayit.network.MessageProtocol;
+import com.sayit.network.Request;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;

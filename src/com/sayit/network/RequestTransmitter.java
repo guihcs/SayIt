@@ -1,7 +1,5 @@
 package com.sayit.network;
 
-import com.sayit.message.Request;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;

@@ -2,8 +2,7 @@ package com.sayit.data;
 
 import com.sayit.data.image.ImageBuilder;
 import com.sayit.message.Rebuildable;
-import com.sayit.message.Request;
-import com.sayit.network.MessageProtocol;
+import com.sayit.network.Request;
 import javafx.scene.image.Image;
 
 import java.io.ByteArrayOutputStream;

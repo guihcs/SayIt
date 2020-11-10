@@ -1,6 +1,6 @@
 package com.sayit.control;
 
-import com.sayit.message.Request;
+import com.sayit.network.Request;
 import com.sayit.network.MessageProtocol;
 import com.sayit.network.RequestTransmitter;
 import com.sayit.network.discovery.DiscoveryServer;

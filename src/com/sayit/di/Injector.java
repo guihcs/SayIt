@@ -17,7 +17,7 @@ public class Injector {
         return providerMap.get(type);
     }
 
-    public static void injectInto(Object object) throws IllegalAccessException{
+    public static void inject(Object object) throws IllegalAccessException{
 
         Field[] fields = object.getClass().getDeclaredFields();
 

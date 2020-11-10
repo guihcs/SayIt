@@ -12,6 +12,7 @@ public class ContactDao {
     private List<Message> messageList;
 
 
+
     public ContactDao() {
         contactList = new ArrayList<>();
         messageMap = new LinkedHashMap<>();

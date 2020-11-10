@@ -27,9 +27,21 @@ public class ProfileEditController {
     private TextField nameField;
 
     public void initialize() {
-        contact = new Contact("", new Image("com/sayit/resources/icons/avatar.png"), "127.0.1.1");
+        contact = new Contact("", new Image("icons/avatar.png"), "127.0.1.1");
         setContact(contact);
     }
+
+
+    //        editController.setOwnerWindow(window);
+////        if(getUserProfile() != null) {
+////            editController.setContact(getUserProfile());
+////        }
+////        editController.setConcludeCallback(contact -> {
+////            contactDao.setUserProfile(contact);
+////            chatHome.setUserProfile(contact);
+////            window.close();
+////        });
+//        editController.setBackCallback(window::close);
 
     public void requestEditFocus() {
         nameField.requestFocus();
@@ -43,7 +55,6 @@ public class ProfileEditController {
     public void confirm() {
         if(concludeCallback != null) {
             if(!nameField.getText().isEmpty()) {
-
                 contact.setName(nameField.getText());
                 concludeCallback.contactResult(contact);
             } else if(nameField.getText().length() > ChatApplication.MAX_NAME_LENGTH) {

@@ -1,12 +1,16 @@
 package com.sayit.ui.control.frame;
 
 import com.sayit.control.ChatApplication;
+import com.sayit.data.ContactDao;
+import com.sayit.di.Autowired;
 import com.sayit.ui.control.ContactManager;
+import com.sayit.ui.navigator.Navigator;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.stage.Window;
 
 import java.io.IOException;
@@ -14,13 +18,19 @@ import java.io.IOException;
 public class StartFrameController {
 
     @FXML
-    private VBox rootContainter;
+    private VBox rootContainer;
 
     private StartController startController;
     private ProfileEditController profileEditController;
 
     private Parent startLayout;
     private Parent profileLayout;
+
+    @Autowired
+    private Stage stage;
+
+    @Autowired
+    private ContactDao contactDao;
 
     public void initialize() {
         FXMLLoader startLoader = new FXMLLoader(getClass().getResource(ChatApplication.START_LAYOUT));
@@ -40,23 +50,23 @@ public class StartFrameController {
         startController.setButtonAction(e -> loadProfile());
         profileEditController.setBackCallback(this::loadStart);
 
+        profileEditController.setConcludeCallback((contact) -> {
+            contactDao.setUserProfile(contact);
+            Navigator.of(stage).pushNamed("/homeScene");
+        });
 
         loadStart();
     }
 
-    public void setConcludeCallback(ContactManager concludeCallback) {
-        profileEditController.setConcludeCallback(concludeCallback);
-    }
-
     public void loadStart() {
-        if(rootContainter.getChildren().size() > 0) rootContainter.getChildren().clear();
-        rootContainter.getChildren().add(startLayout);
+        if(rootContainer.getChildren().size() > 0) rootContainer.getChildren().clear();
+        rootContainer.getChildren().add(startLayout);
         VBox.setVgrow(startLayout, Priority.ALWAYS);
     }
 
     public void loadProfile() {
-        if(rootContainter.getChildren().size() > 0) rootContainter.getChildren().clear();
-        rootContainter.getChildren().add(profileLayout);
+        if(rootContainer.getChildren().size() > 0) rootContainer.getChildren().clear();
+        rootContainer.getChildren().add(profileLayout);
         VBox.setVgrow(profileLayout, Priority.ALWAYS);
     }
 

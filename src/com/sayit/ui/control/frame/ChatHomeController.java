@@ -1,14 +1,12 @@
 package com.sayit.ui.control.frame;
 
 import com.sayit.control.ChatApplication;
-import com.sayit.control.Presentable;
-import com.sayit.data.Contact;
-import com.sayit.data.ContactDao;
-import com.sayit.data.Message;
-import com.sayit.data.MessageHistory;
+import com.sayit.data.*;
+import com.sayit.di.Autowired;
 import com.sayit.ui.control.FXMLManager;
 import com.sayit.ui.control.view.HistoryCell;
 import com.sayit.ui.control.view.MessageCell;
+import com.sayit.ui.navigator.Navigator;
 import javafx.animation.Interpolator;
 import javafx.animation.TranslateTransition;
 import javafx.application.Platform;
@@ -27,9 +25,11 @@ import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import javafx.stage.Window;
 import javafx.util.Duration;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -64,12 +64,15 @@ public class ChatHomeController {
     private Window parentWindow;
     private Pane findRoot;
 
-    private Presentable presentable;
+
     private FindContactController findContactController;
     private ObservableList<Message> messageObservableList;
     private ObservableList<MessageHistory> historyObservableList;
     private Contact currentContact;
+    @Autowired
     private ContactDao contactDao;
+    @Autowired
+    private Stage stage;
 
     //Open contact animation
     private TranslateTransition translateTransition;
@@ -115,7 +118,7 @@ public class ChatHomeController {
             }
         });
 
-        //load content
+        setUserProfile(contactDao.getUserProfile());
 
         loadContactView();
         setStartupPage();
@@ -168,13 +171,9 @@ public class ChatHomeController {
         translateTransition.setInterpolator(Interpolator.EASE_OUT);
     }
 
-    public void setPresentable(Presentable presentable) {
-
-        this.presentable = presentable;
-    }
 
     public void showFindContact() {
-        findContactController.setContactList(presentable.getContactList());
+        findContactController.setContactList(contactDao.getContactList());
 
         findPane.setManaged(true);
         findPane.setVisible(true);
@@ -215,17 +214,25 @@ public class ChatHomeController {
     }
 
     public void showAddContact() {
-        presentable.openAddScene();
+//        presentable.openAddScene();
+        Navigator.of(stage).pushNamedModal("/addContact", 400, 300, res -> {});
     }
 
     public void showEditProfile() {
-        presentable.openEditProfileScene();
+//        presentable.openEditProfileScene();
     }
 
 
     public void sendMessage() {
         if(!messageField.getText().isEmpty()) {
-            presentable.sendMessage(messageField.getText());
+
+            Message sendMessage = new Message(currentContact, true, messageField.getText(), MessageType.TEXT);
+            sendMessage.setMessageDate(new Date());
+//            requestable.sendMessage(sendMessage.toRequest());
+//            contactDao.addMessage(currentContact.getId(), sendMessage);
+//            chatHome.setMessageList(contactDao.getMessageList(currentContact.getId()));
+//            chatHome.setHistoryList(contactDao.getHistoryList());
+
             messageField.setText("");
         }
     }
@@ -250,7 +257,7 @@ public class ChatHomeController {
 
         final var profileId = receiverProfile.getId();
 
-        receiverProfile = presentable.getContactInfo(profileId);
+        receiverProfile = contactDao.getContact(profileId);
         contactImage.setFill(new ImagePattern(receiverProfile.getPhoto()));
         contactNameLabel.setText(receiverProfile.getName());
         showChatComponents();
@@ -266,7 +273,7 @@ public class ChatHomeController {
             }
         });
 
-        setMessageList(presentable.requestMessageList(profileId));
+        setMessageList(contactDao.getMessageList(profileId));
         messageListView.scrollTo(messageObservableList.size() - 1);
     }
 
