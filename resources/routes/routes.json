@@ -28,11 +28,11 @@
     "style": "/stylesheet/style_find_contact.css"
   },
   {
-    "name": "EditProfile",
-    "title": "Editar Perfil",
-    "route": "/editProfile",
-    "layout": "/layout/window/layout_edit_profile.fxml",
-    "style": "/stylesheet/style_edit_profile.css"
+    "name": "SearchContact",
+    "route": "/searchContact",
+    "layout": "/layout/window/layout_find_contact.fxml",
+    "style": "/stylesheet/style_find_contact.css",
+    "controller": "com.sayit.ui.control.frame.SearchContactController.java"
   },
   {
     "name": "EditProfile",

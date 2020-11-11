@@ -10,7 +10,7 @@ public interface Requestable {
 
     void multicastContactNameDiscovery(String name);
 
-    void sendContactAddRequest(Request contact);
+    void sendContactAddResponse(Request contact);
 
     void stopServices();
 }

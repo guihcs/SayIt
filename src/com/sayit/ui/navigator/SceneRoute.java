@@ -7,6 +7,7 @@ public class SceneRoute {
     private String route;
     private String layout;
     private String style;
+    private String controller;
 
     public String getName() {
         return name;
@@ -28,6 +29,10 @@ public class SceneRoute {
         return style;
     }
 
+    public String getController() {
+        return controller;
+    }
+
     @Override
     public String toString() {
         return "SceneRoute{" +
@@ -36,6 +41,7 @@ public class SceneRoute {
                 ", route='" + route + '\'' +
                 ", layout='" + layout + '\'' +
                 ", style='" + style + '\'' +
+                ", controller='" + controller + '\'' +
                 '}';
     }
 }

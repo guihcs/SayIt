@@ -26,7 +26,7 @@ public class AddResponseController {
 //        requestWindow.setTitle(REQUEST_TITLE);
 //        addController.setConfirmCallback(contact1 -> {
 //            requestable.sendContactDiscoveryResponse(contact.toRequest());
-////            contactDao.addContact(contact1);
+////            contactDao.requestAddContact(contact1);
 //            requestWindow.close();
 //        });
 //        addController.setCancelCallback(e -> requestWindow.close());

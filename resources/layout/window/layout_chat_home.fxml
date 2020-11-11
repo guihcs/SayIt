@@ -34,7 +34,6 @@
                                 <HBox id="contact-action-container" fx:id="tabButtonsContainer" alignment="CENTER_RIGHT"
                                       HBox.hgrow="ALWAYS">
                                     <children>
-                                        <Button id="archive-button" mnemonicParsing="false" onAction="#sendArchive" prefHeight="26.0" prefWidth="26.0" styleClass="icon-button" />
                                         <Button id="more-button" mnemonicParsing="false" prefHeight="26.0" prefWidth="26.0" styleClass="icon-button">
                                             <HBox.margin>
                                                 <Insets />
@@ -91,7 +90,7 @@
                         </HBox>
                         <HBox id="user-action-container" alignment="CENTER" styleClass="profile-container">
                             <children>
-                                <Button id="chat-button" mnemonicParsing="false" onAction="#showFindContact" prefHeight="26.0" prefWidth="26.0" styleClass="icon-button" />
+                                <Button id="chat-button" mnemonicParsing="false" onAction="#showSearchContact" prefHeight="26.0" prefWidth="26.0" styleClass="icon-button" />
                                 <Button id="add-button" mnemonicParsing="false" onAction="#showAddContact" prefHeight="26.0" prefWidth="26.0" styleClass="icon-button" />
                                 <Button id="edit-button" mnemonicParsing="false" onAction="#showEditProfile" prefHeight="26.0" prefWidth="26.0" styleClass="icon-button" />
                             </children>

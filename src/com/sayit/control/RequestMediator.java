@@ -12,8 +12,9 @@ import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.function.Consumer;
 
-public class RequestMediator implements Requestable {
+public class RequestMediator {
 
     private AtomicBoolean isRunning;
     private DiscoveryServer discoveryServer;
@@ -23,6 +24,7 @@ public class RequestMediator implements Requestable {
     private Thread multicastThread;
     private final BlockingQueue<Request> blockingQueue = new LinkedBlockingQueue<>();
     private final List<RequestCallback> requestCallbacks = new LinkedList<>();
+    private final List<Consumer<DiscoveryData>> discoveryDataCallbacks = new LinkedList<>();
 
     public RequestMediator() {
         try {
@@ -47,6 +49,9 @@ public class RequestMediator implements Requestable {
     }
 
     private void receiveContactPacket(DiscoveryData data){
+        for (Consumer<DiscoveryData> discoveryDataCallback : discoveryDataCallbacks) {
+            discoveryDataCallback.accept(data);
+        }
     }
 
 
@@ -87,8 +92,6 @@ public class RequestMediator implements Requestable {
         discoveryServer.startListening();
     }
 
-
-    @Override
     public void sendMessage(Request request) {
         request.setProtocol(MessageProtocol.MESSAGE);
         putRequest(request);
@@ -102,13 +105,12 @@ public class RequestMediator implements Requestable {
         }
     }
 
-    @Override
     public void sendContactDiscoveryResponse(Request request) {
         request.setProtocol(MessageProtocol.DISCOVERY_RESPONSE);
         putRequest(request);
     }
 
-    @Override
+
     public void multicastContactNameDiscovery(String name) {
         try {
             discoveryServer.multicastData(name);
@@ -117,13 +119,17 @@ public class RequestMediator implements Requestable {
         }
     }
 
-    @Override
-    public void sendContactAddRequest(Request request) {
+    public void sendContactAddRequest(Request request){
+        request.setProtocol(MessageProtocol.CONTACT_ADD_REQUEST);
+        putRequest(request);
+    }
+
+    public void sendContactAddResponse(Request request) {
         request.setProtocol(MessageProtocol.CONTACT_ADD_RESPONSE);
         putRequest(request);
     }
 
-    @Override
+
     public void stopServices() {
 
         try {
@@ -140,9 +146,12 @@ public class RequestMediator implements Requestable {
     }
 
 
-    public void addListener(RequestCallback requestCallback) {
+    public void addRequestListener(RequestCallback requestCallback) {
         requestCallbacks.add(requestCallback);
     }
 
+    public void addDiscoveryListener(Consumer<DiscoveryData> discoveryDataConsumer){
+        discoveryDataCallbacks.add(discoveryDataConsumer);
+    }
 }
 

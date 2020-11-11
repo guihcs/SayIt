@@ -1,18 +1,22 @@
 package com.sayit.data;
 
 import java.util.*;
+import java.util.function.Consumer;
 
 public class ContactDao {
 
     private Contact userProfile;
     private final Map<Long, Contact> contactMap;
     private final Map<Long, MessageHistory> messageMap;
-    private List<ContactChanged> userProfileChangedListeners;
+    private final List<Consumer<Contact>> userProfileChangedListeners;
+    private final List<Consumer<Contact>> findContactChangedListener;
+    private List<Contact> findContacts;
 
     public ContactDao() {
         contactMap = new HashMap<>();
         messageMap = new HashMap<>();
         userProfileChangedListeners = new ArrayList<>();
+        findContactChangedListener = new ArrayList<>();
     }
 
     public static long parseAddress(String address) {
@@ -65,12 +69,34 @@ public class ContactDao {
     }
 
     public void setUserProfile(Contact userProfile) {
-        userProfileChangedListeners.forEach(c -> c.changed(userProfile));
+        userProfileChangedListeners.forEach(c -> c.accept(userProfile));
         this.userProfile = userProfile;
     }
 
-    public void addUserProfileChangedListener(ContactChanged contactChanged){
+    public void addUserProfileChangedListener(Consumer<Contact> contactChanged){
         userProfileChangedListeners.add(contactChanged);
     }
+
+    public void addFindContactChangedListener(Consumer<Contact> contactChanged){
+        findContactChangedListener.add(contactChanged);
+    }
+
+
+    public void startFindContacts(){
+        findContacts = new ArrayList<>();
+    }
+
+    public void addFindContact(Contact c){
+        findContacts.add(c);
+        for (Consumer<Contact> contactConsumer : findContactChangedListener) {
+            contactConsumer.accept(c);
+        }
+    }
+
+    public void endFindContacts(){
+        findContacts = null;
+    }
+
+
 
 }

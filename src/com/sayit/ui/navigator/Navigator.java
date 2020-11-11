@@ -40,7 +40,23 @@ public class Navigator {
         SceneRoute sceneRoute = Navigator.sceneRouteMap.get(path);
         var loader = FXMLManager.getLoader(sceneRoute.getLayout());
 
-        loader.setControllerFactory(Navigator::instantiateInjected);
+        if (sceneRoute.getController() != null){
+            loader.setControllerFactory(c -> {
+                try {
+                    Class<?> aClass = ClassLoader.getSystemClassLoader().loadClass(sceneRoute.getController());
+                    Object o = aClass.getConstructor().newInstance();
+                    Injector.inject(o);
+                    return o;
+                } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            });
+        } else {
+            loader.setControllerFactory(Navigator::instantiateInjected);
+        }
+
+
 
         Parent node = (Parent) FXMLManager.loadFromLoader(loader);
 
@@ -57,6 +73,8 @@ public class Navigator {
             centerWindow();
         });
     }
+
+
 
     private static Object instantiateInjected(Class<?> type) {
         try {
