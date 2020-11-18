@@ -1,7 +1,7 @@
 package com.sayit.ui.control.frame;
 
-import com.sayit.data.Contact;
-import com.sayit.data.ContactManager;
+import com.sayit.data.contact.Contact;
+import com.sayit.data.contact.ContactManager;
 import com.sayit.di.Autowired;
 import com.sayit.ui.navigator.Navigator;
 import javafx.fxml.FXML;

@@ -1,4 +1,4 @@
-package com.sayit.data;
+package com.sayit.data.message;
 
 import java.util.Map;
 

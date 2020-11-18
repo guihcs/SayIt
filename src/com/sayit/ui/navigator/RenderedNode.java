@@ -1,10 +1,11 @@
 package com.sayit.ui.navigator;
 
 import com.sayit.di.Injector;
-import com.sayit.ui.control.FXMLManager;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Objects;
 
@@ -25,7 +26,7 @@ public class RenderedNode {
             loader.setControllerFactory(RenderedNode::instantiateInjected);
         }
 
-        parent = (Parent) FXMLManager.loadFromLoader(loader);
+        parent = (Parent) RenderedNode.loadFromLoader(loader);
 
         if (parent == null) throw new RuntimeException("Path not registered.");
         if (sceneRoute.getStyle() != null)
@@ -45,8 +46,18 @@ public class RenderedNode {
 
 
     private static FXMLLoader getLoader(String path) {
-        return new FXMLLoader(Navigator.class.getResource(path));
+        return new FXMLLoader(RenderedNode.class.getResource(path));
     }
+
+    public static Node loadFromLoader(FXMLLoader loader) {
+        try {
+            return loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 
     private static Object getObject(SceneRoute sceneRoute) {
         try {

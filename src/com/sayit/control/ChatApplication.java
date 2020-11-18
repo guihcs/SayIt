@@ -1,11 +1,11 @@
 package com.sayit.control;
 
-import com.sayit.data.Contact;
-import com.sayit.data.ContactDao;
-import com.sayit.data.ContactManager;
-import com.sayit.data.Message;
+import com.sayit.data.contact.Contact;
+import com.sayit.data.contact.ContactDao;
+import com.sayit.data.contact.ContactManager;
+import com.sayit.data.message.Message;
 import com.sayit.di.Injector;
-import com.sayit.network.Request;
+import com.sayit.network.request.Request;
 import com.sayit.network.discovery.DiscoveryData;
 import com.sayit.ui.navigator.Navigator;
 import javafx.application.Application;

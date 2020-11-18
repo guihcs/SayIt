@@ -1,8 +1,8 @@
-package com.sayit.data;
+package com.sayit.data.contact;
 
 import com.sayit.data.image.ImageBuilder;
-import com.sayit.network.Rebuildable;
-import com.sayit.network.Request;
+import com.sayit.network.request.Rebuildable;
+import com.sayit.network.request.Request;
 import javafx.scene.image.Image;
 
 import java.io.ByteArrayOutputStream;

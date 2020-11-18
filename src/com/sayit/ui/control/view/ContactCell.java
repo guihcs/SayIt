@@ -1,6 +1,6 @@
 package com.sayit.ui.control.view;
 
-import com.sayit.data.Contact;
+import com.sayit.data.contact.Contact;
 import com.sayit.ui.navigator.Navigator;
 import com.sayit.ui.navigator.RenderedNode;
 import javafx.scene.Parent;

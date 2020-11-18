@@ -1,6 +1,6 @@
 package com.sayit.ui.control.frame;
 
-import com.sayit.data.Contact;
+import com.sayit.data.contact.Contact;
 import com.sayit.di.Autowired;
 import com.sayit.ui.navigator.Configurable;
 import com.sayit.ui.navigator.Navigator;

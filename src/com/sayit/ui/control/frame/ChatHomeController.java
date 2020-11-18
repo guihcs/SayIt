@@ -1,7 +1,11 @@
 package com.sayit.ui.control.frame;
 
 import com.sayit.control.ProtocolManager;
-import com.sayit.data.*;
+import com.sayit.data.contact.Contact;
+import com.sayit.data.contact.ContactManager;
+import com.sayit.data.message.Message;
+import com.sayit.data.message.MessageHistory;
+import com.sayit.data.message.MessageType;
 import com.sayit.di.Autowired;
 import com.sayit.ui.control.view.HistoryCell;
 import com.sayit.ui.control.view.MessageCell;

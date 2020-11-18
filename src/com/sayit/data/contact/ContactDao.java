@@ -1,4 +1,8 @@
-package com.sayit.data;
+package com.sayit.data.contact;
+
+import com.sayit.data.message.Message;
+import com.sayit.data.message.MessageHistory;
+import com.sayit.data.message.MessageType;
 
 import java.util.*;
 import java.util.function.Consumer;

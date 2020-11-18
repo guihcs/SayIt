@@ -1,6 +1,6 @@
 package com.sayit.ui.control.view;
 
-import com.sayit.data.Message;
+import com.sayit.data.message.Message;
 import com.sayit.ui.navigator.Navigator;
 import com.sayit.ui.navigator.RenderedNode;
 import javafx.geometry.Insets;

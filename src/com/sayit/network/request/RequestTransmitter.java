@@ -1,4 +1,4 @@
-package com.sayit.network;
+package com.sayit.network.request;
 
 import java.io.IOException;
 import java.io.InputStream;

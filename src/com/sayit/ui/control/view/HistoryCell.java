@@ -1,6 +1,6 @@
 package com.sayit.ui.control.view;
 
-import com.sayit.data.MessageHistory;
+import com.sayit.data.message.MessageHistory;
 import com.sayit.ui.navigator.Navigator;
 import com.sayit.ui.navigator.RenderedNode;
 import javafx.scene.Parent;

@@ -1,4 +1,4 @@
-package com.sayit.network;
+package com.sayit.network.request;
 
 public class Request {
 

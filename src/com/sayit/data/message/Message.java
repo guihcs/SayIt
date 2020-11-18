@@ -1,8 +1,9 @@
-package com.sayit.data;
+package com.sayit.data.message;
 
 
-import com.sayit.network.Rebuildable;
-import com.sayit.network.Request;
+import com.sayit.data.contact.Contact;
+import com.sayit.network.request.Rebuildable;
+import com.sayit.network.request.Request;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;

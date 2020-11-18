@@ -1,9 +1,9 @@
 package com.sayit.control;
 
-import com.sayit.network.MessageProtocol;
-import com.sayit.network.Request;
-import com.sayit.network.RequestCallback;
-import com.sayit.network.RequestTransmitter;
+import com.sayit.network.request.MessageProtocol;
+import com.sayit.network.request.Request;
+import com.sayit.network.request.RequestCallback;
+import com.sayit.network.request.RequestTransmitter;
 import com.sayit.network.discovery.DiscoveryData;
 import com.sayit.network.discovery.DiscoveryServer;
 

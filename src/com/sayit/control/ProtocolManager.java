@@ -1,8 +1,8 @@
 package com.sayit.control;
 
 
-import com.sayit.network.Request;
-import com.sayit.network.RequestCallback;
+import com.sayit.network.request.Request;
+import com.sayit.network.request.RequestCallback;
 import com.sayit.network.discovery.DiscoveryData;
 
 import java.util.function.Consumer;

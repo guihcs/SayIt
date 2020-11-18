@@ -1,4 +1,6 @@
-package com.sayit.data;
+package com.sayit.data.message;
+
+import com.sayit.data.contact.Contact;
 
 import java.util.ArrayList;
 import java.util.Date;
