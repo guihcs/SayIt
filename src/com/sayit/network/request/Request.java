@@ -4,7 +4,7 @@ public class Request {
 
     private MessageProtocol protocol;
     private byte[] data;
-    private String address;
+    private final String address;
 
     public Request(byte[] data, String address) {
         this.data = data;
@@ -12,6 +12,7 @@ public class Request {
     }
 
     public Request(MessageProtocol messageProtocol, byte[] data, String address) {
+        protocol = messageProtocol;
         this.data = data;
         this.address = address;
     }
@@ -35,11 +36,6 @@ public class Request {
     public String getAddress() {
         return address;
     }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
 
     @Override
     public String toString() {

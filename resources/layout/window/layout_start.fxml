@@ -5,22 +5,16 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox minHeight="-Infinity" minWidth="-Infinity" styleClass="root-frame" xmlns="http://javafx.com/javafx/10.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sayit.ui.control.frame.StartController">
-    <children>
-      <HBox alignment="CENTER">
-         <children>
-            <HBox id="start-header" prefHeight="100.0" prefWidth="100.0" />
-         </children>
-      </HBox>
-      <HBox alignment="CENTER">
-         <children>
-              <Label id="start-message" styleClass="content-text" text="Crie um perfil para iniciar." />
-         </children>
-      </HBox>
-        <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
-            <children>
-                <Button fx:id="startButton" mnemonicParsing="false" styleClass="material-button" text="CRIAR" onAction="#go"/>
-            </children>
-        </HBox>
-    </children>
+<VBox minHeight="-Infinity" minWidth="-Infinity" styleClass="root-frame" xmlns="http://javafx.com/javafx/10.0.1"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sayit.ui.control.frame.StartController">
+    <HBox alignment="CENTER">
+        <HBox id="start-header" prefHeight="100.0" prefWidth="100.0"/>
+    </HBox>
+    <HBox alignment="CENTER">
+        <Label id="start-message" styleClass="content-text" text="Crie um perfil para iniciar."/>
+    </HBox>
+    <HBox alignment="BOTTOM_CENTER" prefHeight="100.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+        <Button fx:id="startButton" mnemonicParsing="false" styleClass="material-button" text="CRIAR"
+                onAction="#go"/>
+    </HBox>
 </VBox>

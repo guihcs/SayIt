@@ -1,6 +1,6 @@
 ## Say It - P2P Chat Application
 
-Say It is a enterprise chat solution.
+Say It is an enterprise chat solution.
 Send messages to your contacts in no time.
 
 ![](https://raw.githubusercontent.com/guilherme-fafic/SayIt/master/Home.png)
