@@ -1,9 +1,8 @@
 package com.sayit.ui.control.view;
 
-import com.sayit.control.ChatApplication;
 import com.sayit.data.Contact;
-import com.sayit.ui.control.FXMLManager;
-import javafx.fxml.FXMLLoader;
+import com.sayit.ui.navigator.Navigator;
+import com.sayit.ui.navigator.RenderedNode;
 import javafx.scene.Parent;
 import javafx.scene.control.ListCell;
 
@@ -15,20 +14,16 @@ public class ContactCell extends ListCell<Contact> {
 
 
     public ContactCell() {
-
-        FXMLLoader fxmlLoader = FXMLManager.getLoader(ChatApplication.CONTACT_VIEW);
-
-        root = (Parent) FXMLManager.loadFromLoader(fxmlLoader);
-        contactController = fxmlLoader.getController();
-
-        getStylesheets().add(ChatApplication.getStyleSheet(ChatApplication.CONTACT_STYLE));
+        RenderedNode renderedNode = Navigator.getRenderedNode("/contactView");
+        root = renderedNode.getParent();
+        contactController = (ContactViewController) renderedNode.getController();
     }
 
 
     @Override
     protected void updateItem(Contact item, boolean empty) {
         super.updateItem(item, empty);
-        if(!empty) {
+        if (!empty) {
             contactController.setName(item.getName());
             contactController.setRoundedImage(item.getPhoto());
             contactController.setDescription("");

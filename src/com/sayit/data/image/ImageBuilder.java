@@ -10,7 +10,7 @@ import java.nio.ByteBuffer;
 public class ImageBuilder {
 
 
-    public static Image buildImage(byte[] imgBytes, int width, int height){
+    public static Image buildImage(byte[] imgBytes, int width, int height) {
         WritableImage writableImage = new WritableImage(width, height);
         ByteBuffer pixelBuffer = ByteBuffer.wrap(imgBytes);
         PixelWriter pixelWriter = writableImage.getPixelWriter();

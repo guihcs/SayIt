@@ -16,9 +16,7 @@ public class DiscoveryServerTest {
 
         discoveryServer.multicastData("hue");
 
-        discoveryServer.addListener(e -> {
-            System.out.println(e.getSenderData());
-        });
+        discoveryServer.addListener(e -> System.out.println(e.getSenderData()));
         discoveryServer.startListening();
     }
 

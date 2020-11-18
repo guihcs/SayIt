@@ -1,9 +1,8 @@
 package com.sayit.ui.control.view;
 
-import com.sayit.control.ChatApplication;
 import com.sayit.data.MessageHistory;
-import com.sayit.ui.control.FXMLManager;
-import javafx.fxml.FXMLLoader;
+import com.sayit.ui.navigator.Navigator;
+import com.sayit.ui.navigator.RenderedNode;
 import javafx.scene.Parent;
 import javafx.scene.control.ListCell;
 
@@ -15,11 +14,9 @@ public class HistoryCell extends ListCell<MessageHistory> {
 
     public HistoryCell() {
 
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource(ChatApplication.CONTACT_VIEW));
-
-        root = (Parent) FXMLManager.loadFromLoader(fxmlLoader);
-        contactController = fxmlLoader.getController();
-        getStylesheets().add(ChatApplication.getStyleSheet(ChatApplication.CONTACT_STYLE));
+        RenderedNode renderedNode = Navigator.getRenderedNode("/contactView");
+        root = renderedNode.getParent();
+        contactController = (ContactViewController) renderedNode.getController();
 
     }
 
@@ -27,7 +24,7 @@ public class HistoryCell extends ListCell<MessageHistory> {
     @Override
     protected void updateItem(MessageHistory item, boolean empty) {
         super.updateItem(item, empty);
-        if(!empty) {
+        if (!empty) {
             contactController.setName(item.getContact().getName());
             contactController.setRoundedImage(item.getContact().getPhoto());
             contactController.setDescription(item.getLastMessage());

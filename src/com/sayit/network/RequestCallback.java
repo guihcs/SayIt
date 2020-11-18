@@ -1,6 +1,4 @@
-package com.sayit.control;
-
-import com.sayit.network.Request;
+package com.sayit.network;
 
 public interface RequestCallback {
     void requestCallback(Request request);

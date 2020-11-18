@@ -20,24 +20,32 @@ public class Request {
         return protocol;
     }
 
-    public byte[] getData() {
-        return data;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-
     public void setProtocol(MessageProtocol protocol) {
         this.protocol = protocol;
+    }
+
+    public byte[] getData() {
+        return data;
     }
 
     public void setData(byte[] data) {
         this.data = data;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
     public void setAddress(String address) {
         this.address = address;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Request{" +
+                "protocol=" + protocol +
+                ", address='" + address + '\'' +
+                '}';
     }
 }

@@ -1,6 +1,9 @@
 package com.sayit.control;
 
-import com.sayit.data.*;
+import com.sayit.data.Contact;
+import com.sayit.data.ContactDao;
+import com.sayit.data.ContactManager;
+import com.sayit.data.Message;
 import com.sayit.di.Injector;
 import com.sayit.network.Request;
 import com.sayit.network.discovery.DiscoveryData;
@@ -12,26 +15,12 @@ import java.util.Date;
 
 public class ChatApplication extends Application {
 
-    //Layouts
-    public static final String CONTACT_VIEW = "/layout/view/view_contact_cell.fxml";
-    public static final String MESSAGE_VIEW = "/layout/view/view_message_cell.fxml";
-    //Styles
-    public static final String CONTACT_STYLE = "/stylesheet/style_contact.css";
-    public static final String MESSAGE_STYLE = "/stylesheet/style_message.css";
-
-    //Constants
-    public static final int MAX_NAME_LENGTH = 20;
-    private RequestMediator mediator;
-    private ContactDao contactDao;
+    private ProtocolManager mediator;
+    private ContactManager contactDao;
     private Stage stage;
-
 
     public static void main(String[] args) {
         launch(args);
-    }
-
-    public static String getStyleSheet(String path) {
-        return ChatApplication.class.getResource(path).toExternalForm();
     }
 
     @Override
@@ -42,15 +31,14 @@ public class ChatApplication extends Application {
 
         mediator = new RequestMediator();
         contactDao = new ContactDao();
-        Injector.registerProvider(ContactDao.class, contactDao);
-        Injector.registerProvider(RequestMediator.class, mediator);
+        Injector.registerProvider(ContactManager.class, contactDao);
+        Injector.registerProvider(ProtocolManager.class, mediator);
 
         mediator.addRequestListener(this::processRequest);
         mediator.addDiscoveryListener(this::contactDiscovery);
         mediator.start();
         Navigator.of(primaryStage).pushNamed("/startScene");
     }
-
 
 
     public void requestAddContact(Request request) {

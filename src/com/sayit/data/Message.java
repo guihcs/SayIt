@@ -1,7 +1,7 @@
 package com.sayit.data;
 
 
-import com.sayit.message.Rebuildable;
+import com.sayit.network.Rebuildable;
 import com.sayit.network.Request;
 
 import java.io.ByteArrayOutputStream;
@@ -12,6 +12,7 @@ import java.util.Date;
 
 public class Message implements Rebuildable<Message> {
 
+    private final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
     private Contact receiverProfile;
     private String senderAddress;
     private String textContent;
@@ -19,7 +20,6 @@ public class Message implements Rebuildable<Message> {
     private byte[] content;
     private Date messageDate;
     private MessageType type;
-    private final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
 
 
     public Message() {
@@ -67,22 +67,21 @@ public class Message implements Rebuildable<Message> {
         return textContent;
     }
 
-    public Date getMessageDate() {
-        return messageDate;
-    }
-
-
-    @Override
-    public String toString() {
-        return "Message{" + "receiverProfile=" + receiverProfile + ", sendByMe=" + sendByMe + ", content=" + textContent + ", messageDate=" + messageDate + ", type=" + type + '}';
-    }
-
     public void setTextContent(String textContent) {
         this.textContent = textContent;
     }
 
+    public Date getMessageDate() {
+        return messageDate;
+    }
+
     public void setMessageDate(Date messageDate) {
         this.messageDate = messageDate;
+    }
+
+    @Override
+    public String toString() {
+        return "Message{" + "receiverProfile=" + receiverProfile + ", sendByMe=" + sendByMe + ", content=" + textContent + ", messageDate=" + messageDate + ", type=" + type + '}';
     }
 
     public String getFormattedTime() {

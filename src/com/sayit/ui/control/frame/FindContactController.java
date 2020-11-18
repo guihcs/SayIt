@@ -1,11 +1,10 @@
 package com.sayit.ui.control.frame;
 
-import com.sayit.control.RequestMediator;
+import com.sayit.control.ProtocolManager;
 import com.sayit.data.Contact;
-import com.sayit.data.ContactDao;
+import com.sayit.data.ContactManager;
 import com.sayit.di.Autowired;
 import com.sayit.ui.control.view.ContactCell;
-import com.sayit.ui.navigator.Configurable;
 import com.sayit.ui.navigator.Navigator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -14,7 +13,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 
-public class FindContactController implements Configurable {
+public class FindContactController {
 
     @FXML
     private TextField nameField;
@@ -23,10 +22,10 @@ public class FindContactController implements Configurable {
     private ObservableList<Contact> contactObservableList;
 
     @Autowired
-    private RequestMediator requestMediator;
+    private ProtocolManager requestMediator;
 
     @Autowired
-    private ContactDao contactDao;
+    private ContactManager contactDao;
 
     @Autowired
     private Stage stage;
@@ -65,9 +64,4 @@ public class FindContactController implements Configurable {
         nameField.requestFocus();
     }
 
-
-    @Override
-    public void configure(Object param) {
-
-    }
 }

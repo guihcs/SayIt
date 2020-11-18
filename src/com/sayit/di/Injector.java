@@ -9,21 +9,21 @@ public class Injector {
     private static final Map<Class<?>, Object> providerMap = new HashMap<>();
 
 
-    public static void registerProvider(Class<?> type, Object provider){
+    public static void registerProvider(Class<?> type, Object provider) {
         providerMap.put(type, provider);
     }
 
-    public static Object getProvider(Class<?> type){
+    public static Object getProvider(Class<?> type) {
         return providerMap.get(type);
     }
 
-    public static void inject(Object object) throws IllegalAccessException{
+    public static void inject(Object object) throws IllegalAccessException {
 
         Field[] fields = object.getClass().getDeclaredFields();
 
         for (Field field : fields) {
             Autowired annotation = field.getAnnotation(Autowired.class);
-            if (annotation != null){
+            if (annotation != null) {
                 field.setAccessible(true);
                 field.set(object, getProvider(field.getType()));
             }

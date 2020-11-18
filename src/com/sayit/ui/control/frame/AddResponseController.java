@@ -1,56 +1,39 @@
 package com.sayit.ui.control.frame;
 
 import com.sayit.data.Contact;
-import com.sayit.ui.control.ContactManager;
+import com.sayit.di.Autowired;
+import com.sayit.ui.navigator.Configurable;
+import com.sayit.ui.navigator.Navigator;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
+import javafx.stage.Stage;
 
-public class AddResponseController {
-
-    private Contact contact;
+public class AddResponseController implements Configurable {
 
     @FXML
     private Circle imageView;
     @FXML
     private Label nameLabel;
 
-    private ContactManager cancelCallback;
-    private ContactManager confirmCallback;
+    @Autowired
+    private Stage stage;
 
-
-    //        addController.setContact(contact);
-
-//        Stage requestWindow = createModal(node, 300, 400);
-//        requestWindow.setTitle(REQUEST_TITLE);
-//        addController.setConfirmCallback(contact1 -> {
-//            requestable.sendContactDiscoveryResponse(contact.toRequest());
-////            contactDao.requestAddContact(contact1);
-//            requestWindow.close();
-//        });
-//        addController.setCancelCallback(e -> requestWindow.close());
-//
+    private Contact contact;
 
 
     public void accept() {
-        if(confirmCallback != null) confirmCallback.contactResult(contact);
+        Navigator.of(stage).popResult(contact);
     }
 
     public void cancel() {
-        if(cancelCallback != null) cancelCallback.contactResult(contact);
+        Navigator.of(stage).popResult(null);
     }
 
-    public void setCancelCallback(ContactManager cancelCallback) {
-        this.cancelCallback = cancelCallback;
-    }
-
-    public void setConfirmCallback(ContactManager confirmCallback) {
-        this.confirmCallback = confirmCallback;
-    }
-
-    public void setContact(Contact contact) {
-        this.contact = contact;
+    @Override
+    public void configure(Object param) {
+        contact = (Contact) param;
         nameLabel.setText(contact.getName());
         imageView.setFill(new ImagePattern(contact.getPhoto()));
     }

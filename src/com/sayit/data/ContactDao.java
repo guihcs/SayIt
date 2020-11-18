@@ -3,13 +3,13 @@ package com.sayit.data;
 import java.util.*;
 import java.util.function.Consumer;
 
-public class ContactDao {
+public class ContactDao implements ContactManager {
 
-    private Contact userProfile;
     private final Map<Long, Contact> contactMap;
     private final Map<Long, MessageHistory> messageMap;
     private final List<Consumer<Contact>> userProfileChangedListeners;
     private final List<Consumer<Contact>> findContactChangedListener;
+    private Contact userProfile;
     private List<Contact> findContacts;
 
     public ContactDao() {
@@ -17,6 +17,28 @@ public class ContactDao {
         messageMap = new HashMap<>();
         userProfileChangedListeners = new ArrayList<>();
         findContactChangedListener = new ArrayList<>();
+
+        for (int i = 0; i < 10; i++) {
+            String id = i + "." + i;
+            contactMap.put(parseAddress(id), new Contact("" + i, null, id));
+        }
+
+        for (int i = 0; i < 10; i++) {
+
+            String id = i + "." + i;
+
+            messageMap.put(parseAddress(id), new MessageHistory(contactMap.get(parseAddress(id))));
+
+            for (int j = 0; j < 10; j++) {
+
+                int value = (int) (Math.random() * 10);
+                String randomID = value + "." + value;
+                Message message = new Message(contactMap.get(parseAddress(randomID)), Math.random() > 0.5, "uahscuasc" + j, MessageType.TEXT);
+                message.setMessageDate(new Date());
+                messageMap.get(parseAddress(id))
+                        .addMessage(message);
+            }
+        }
     }
 
     public static long parseAddress(String address) {
@@ -36,7 +58,7 @@ public class ContactDao {
 
 
     public void addMessage(long id, Message message) {
-        if(!messageMap.containsKey(id)) {
+        if (!messageMap.containsKey(id)) {
             messageMap.put(id, new MessageHistory(getContact(id)));
         }
         messageMap.get(id).addMessage(message);
@@ -64,39 +86,38 @@ public class ContactDao {
         return userProfile;
     }
 
-    public List<Contact> getContactList() {
-        return new ArrayList<>(contactMap.values());
-    }
-
     public void setUserProfile(Contact userProfile) {
         userProfileChangedListeners.forEach(c -> c.accept(userProfile));
         this.userProfile = userProfile;
     }
 
-    public void addUserProfileChangedListener(Consumer<Contact> contactChanged){
+    public List<Contact> getContactList() {
+        return new ArrayList<>(contactMap.values());
+    }
+
+    public void addUserProfileChangedListener(Consumer<Contact> contactChanged) {
         userProfileChangedListeners.add(contactChanged);
     }
 
-    public void addFindContactChangedListener(Consumer<Contact> contactChanged){
+    public void addFindContactChangedListener(Consumer<Contact> contactChanged) {
         findContactChangedListener.add(contactChanged);
     }
 
 
-    public void startFindContacts(){
+    public void startFindContacts() {
         findContacts = new ArrayList<>();
     }
 
-    public void addFindContact(Contact c){
+    public void addFindContact(Contact c) {
         findContacts.add(c);
         for (Consumer<Contact> contactConsumer : findContactChangedListener) {
             contactConsumer.accept(c);
         }
     }
 
-    public void endFindContacts(){
+    public void endFindContacts() {
         findContacts = null;
     }
-
 
 
 }

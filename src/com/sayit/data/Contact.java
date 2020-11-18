@@ -1,13 +1,14 @@
 package com.sayit.data;
 
 import com.sayit.data.image.ImageBuilder;
-import com.sayit.message.Rebuildable;
+import com.sayit.network.Rebuildable;
 import com.sayit.network.Request;
 import javafx.scene.image.Image;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.Objects;
 
 public class Contact implements Rebuildable<Contact> {
 
@@ -21,38 +22,34 @@ public class Contact implements Rebuildable<Contact> {
 
     public Contact(String name, Image photo, String ipAddress) {
         this.name = name;
-        this.photo = photo;
+        this.photo = Objects.requireNonNullElseGet(photo, () -> new Image("icons/avatar.png"));
         this.ipAddress = ipAddress;
         id = ContactDao.parseAddress(ipAddress);
 
-    }
-
-    public void setId(long id) {
-        this.id = id;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setPhoto(Image photo) {
-        this.photo = photo;
-    }
-
-    public void setIpAddress(String ipAddress) {
-        this.ipAddress = ipAddress;
     }
 
     public long getId() {
         return id;
     }
 
+    public void setId(long id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public Image getPhoto() {
         return photo;
+    }
+
+    public void setPhoto(Image photo) {
+        this.photo = photo;
     }
 
     public String getIpAddress() {

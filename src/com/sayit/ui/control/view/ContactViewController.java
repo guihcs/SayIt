@@ -25,10 +25,6 @@ public class ContactViewController {
         nameLabel.setText(name);
     }
 
-    public String getDescription() {
-        return descLabel.getText();
-    }
-
     public void setDescription(String description) {
         descLabel.setText(description);
     }

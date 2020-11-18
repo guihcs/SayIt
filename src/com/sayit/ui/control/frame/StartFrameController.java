@@ -1,7 +1,7 @@
 package com.sayit.ui.control.frame;
 
 import com.sayit.data.Contact;
-import com.sayit.data.ContactDao;
+import com.sayit.data.ContactManager;
 import com.sayit.di.Autowired;
 import com.sayit.ui.navigator.Navigator;
 import javafx.fxml.FXML;
@@ -20,7 +20,7 @@ public class StartFrameController {
     private Stage stage;
 
     @Autowired
-    private ContactDao contactDao;
+    private ContactManager contactDao;
 
     public void initialize() {
 
@@ -28,26 +28,24 @@ public class StartFrameController {
     }
 
     public void loadStart() {
-        if(rootContainer.getChildren().size() > 0) rootContainer.getChildren().clear();
-        Node node = Navigator.buildNamed("/startLayout", r -> {
-            loadProfile();
-        });
+        if (rootContainer.getChildren().size() > 0) rootContainer.getChildren().clear();
+        Node node = Navigator.buildNamed("/startLayout", r -> loadProfile()).getParent();
         rootContainer.getChildren().add(node);
         VBox.setVgrow(node, Priority.ALWAYS);
     }
 
     public void loadProfile() {
-        if(rootContainer.getChildren().size() > 0) rootContainer.getChildren().clear();
+        if (rootContainer.getChildren().size() > 0) rootContainer.getChildren().clear();
         Node node = Navigator.buildNamed("/editProfile", c -> {
-            if (c == null){
+            if (c == null) {
                 loadStart();
-            }else{
+            } else {
                 Navigator.clearStack();
                 contactDao.setUserProfile((Contact) c);
                 Navigator.of(stage).pushNamed("/homeScene");
             }
 
-        });
+        }).getParent();
         rootContainer.getChildren().add(node);
         VBox.setVgrow(node, Priority.ALWAYS);
     }

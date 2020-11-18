@@ -1,6 +1,6 @@
 package com.sayit.ui.control.frame;
 
-import com.sayit.control.RequestMediator;
+import com.sayit.control.ProtocolManager;
 import com.sayit.data.*;
 import com.sayit.di.Autowired;
 import com.sayit.ui.control.view.HistoryCell;
@@ -32,11 +32,11 @@ import java.util.List;
 
 public class ChatHomeController {
 
+    private final Text messageText = new Text();
     @FXML
     private HBox inputContainer;
     @FXML
     private HBox tabButtonsContainer;
-
     @FXML
     private TextArea messageField;
     @FXML
@@ -45,45 +45,45 @@ public class ChatHomeController {
     private ListView<Message> messageListView;
     @FXML
     private ListView<MessageHistory> historyListView;
-
     @FXML
     private Label userNameLabel;
     @FXML
     private Label contactNameLabel;
     @FXML
     private Label contactStatusLabel;
-
     @FXML
     private Circle userImage;
     @FXML
     private Circle contactImage;
-
     private Pane findRoot;
-
-
     private ObservableList<Message> messageObservableList;
     private ObservableList<MessageHistory> historyObservableList;
     private Contact currentContact;
     @Autowired
-    private ContactDao contactDao;
+    private ContactManager contactDao;
     @Autowired
     private Stage stage;
     @Autowired
-    private RequestMediator mediator;
-
+    private ProtocolManager mediator;
     private TranslateTransition translateTransition;
-    private final Text messageText = new Text();
 
     public void initialize() {
 
-        messageObservableList = FXCollections.observableArrayList();
+        configMessageView();
+        configHistoryView();
+
+        contactDao.addUserProfileChangedListener(c -> {
+            if (c != null) setUserProfile(c);
+        });
+
+        setUserProfile(contactDao.getUserProfile());
+        setHistoryList(contactDao.getHistoryList());
+        setStartupPage();
+    }
+
+    private void configHistoryView() {
         historyObservableList = FXCollections.observableArrayList();
-
-        messageListView.setItems(messageObservableList);
         historyListView.setItems(historyObservableList);
-
-        messageListView.setCellFactory(e -> new MessageCell());
-
         historyListView.setCellFactory(e -> {
             HistoryCell historyCell = new HistoryCell();
             historyCell.setOnMouseClicked(ev -> {
@@ -94,12 +94,17 @@ public class ChatHomeController {
 
             return historyCell;
         });
+    }
 
+
+    private void configMessageView() {
+        messageObservableList = FXCollections.observableArrayList();
+        messageListView.setItems(messageObservableList);
+        messageListView.setCellFactory(e -> new MessageCell());
         messageField.setOnKeyReleased(e -> resizeTextArea());
-
         messageField.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
-            if(e.getCode() == KeyCode.ENTER) {
-                if(e.isShiftDown()) {
+            if (e.getCode() == KeyCode.ENTER) {
+                if (e.isShiftDown()) {
                     messageField.insertText(messageField.getCaretPosition(), "\n");
                 } else {
                     sendMessage();
@@ -108,14 +113,6 @@ public class ChatHomeController {
 
             }
         });
-
-        contactDao.addUserProfileChangedListener(c -> {
-            if (c != null) setUserProfile(c);
-        });
-
-        setUserProfile(contactDao.getUserProfile());
-
-        setStartupPage();
     }
 
 
@@ -137,7 +134,7 @@ public class ChatHomeController {
     private void loadContactView(List<Contact> contactList) {
 
         Node node = Navigator.buildNamed(
-                "/addContact",
+                "/searchContact",
                 contactList,
                 o -> {
                     if (o != null) {
@@ -145,7 +142,7 @@ public class ChatHomeController {
                     }
                     closeSearchContact();
                 }
-        );
+        ).getParent();
 
         findRoot = (Pane) node;
         findPane.getChildren().add(node);
@@ -192,7 +189,7 @@ public class ChatHomeController {
         messageText.setWrappingWidth(messageField.getWidth());
         messageText.setFont(messageField.getFont());
 
-        if(messageText.getLayoutBounds().getHeight() >= (messageText.getFont().getSize() + messageText.getLineSpacing()) * 5) {
+        if (messageText.getLayoutBounds().getHeight() >= (messageText.getFont().getSize() + messageText.getLineSpacing()) * 5) {
             messageText.setText("\n\n\n\n");
         }
 
@@ -207,8 +204,8 @@ public class ChatHomeController {
                         400,
                         300,
                         res -> {
-                            if (res != null){
-                                mediator.sendContactAddRequest(((Contact)res).toRequest());
+                            if (res != null) {
+                                mediator.sendContactAddRequest(((Contact) res).toRequest());
                             }
                         });
     }
@@ -218,12 +215,12 @@ public class ChatHomeController {
                 300,
                 400,
                 contactDao.getUserProfile(),
-                c -> contactDao.setUserProfile((Contact)c));
+                c -> contactDao.setUserProfile((Contact) c));
     }
 
 
     public void sendMessage() {
-        if(!messageField.getText().isEmpty()) {
+        if (!messageField.getText().isEmpty()) {
 
             Message sendMessage = new Message(currentContact, true, messageField.getText(), MessageType.TEXT);
             sendMessage.setMessageDate(new Date());
@@ -237,8 +234,6 @@ public class ChatHomeController {
     }
 
 
-
-
     public void setUserProfile(Contact userProfile) {
         userImage.setFill(new ImagePattern(userProfile.getPhoto()));
         userNameLabel.setText(userProfile.getName());
@@ -249,45 +244,51 @@ public class ChatHomeController {
         final var profileId = receiverProfile.getId();
 
         receiverProfile = contactDao.getContact(profileId);
-        contactImage.setFill(new ImagePattern(receiverProfile.getPhoto()));
-        contactNameLabel.setText(receiverProfile.getName());
+
+        updateReceiverProfileView(receiverProfile);
+
         showChatComponents();
 
+        refreshHistoryList(profileId);
+
+        List<Message> messageList = contactDao.getMessageList(profileId);
+        setAndScrollMessageView(messageList);
+
+        currentContact = receiverProfile;
+    }
+
+    private void setAndScrollMessageView(List<Message> messageList) {
+        messageList.sort(Comparator.comparing(Message::getMessageDate));
+        setMessageList(messageList);
+        messageListView.scrollTo(messageObservableList.size() - 1);
+    }
+
+    private void updateReceiverProfileView(Contact receiverProfile) {
+        contactImage.setFill(new ImagePattern(receiverProfile.getPhoto()));
+        contactNameLabel.setText(receiverProfile.getName());
+    }
+
+    private void refreshHistoryList(long profileId) {
         Platform.runLater(() -> {
 
             for (int i = 0; i < historyObservableList.size(); i++) {
-                if(profileId == historyObservableList.get(i).getContact().getId()) {
+                if (profileId == historyObservableList.get(i).getContact().getId()) {
                     historyListView.getSelectionModel().select(i);
                     historyListView.scrollTo(i);
                     break;
                 }
             }
         });
-
-        List<Message> messageList = contactDao.getMessageList(profileId);
-        messageList.sort(Comparator.comparing(Message::getMessageDate));
-        setMessageList(messageList);
-        messageListView.scrollTo(messageObservableList.size() - 1);
     }
 
     public void setHistoryList(List<MessageHistory> messageHistories) {
         historyObservableList.clear();
-        if(messageHistories.size() > 0) historyObservableList.addAll(messageHistories);
+        if (messageHistories.size() > 0) historyObservableList.addAll(messageHistories);
     }
 
     public void setMessageList(List<Message> messageList) {
         messageObservableList.clear();
-        if(messageList.size() > 0) messageObservableList.addAll(messageList);
+        if (messageList.size() > 0) messageObservableList.addAll(messageList);
     }
 
-//    private void contactAdd(Message message){
-//        Platform.runLater(() -> {
-//            if(currentContact != null && currentContact.getId() == ContactDao.parseAddress(message.getSenderAddress())) {
-//                List<Message> messageList = contactDao.getMessageList(ContactDao.parseAddress(message.getSenderAddress()));
-//                messageList.sort(Comparator.comparing(Message::getMessageDate));
-//                setMessageList(messageList);
-//            }
-//            setHistoryList(contactDao.getHistoryList());
-//        });
-//    }
 }

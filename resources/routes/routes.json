@@ -32,7 +32,7 @@
     "route": "/searchContact",
     "layout": "/layout/window/layout_find_contact.fxml",
     "style": "/stylesheet/style_find_contact.css",
-    "controller": "com.sayit.ui.control.frame.SearchContactController.java"
+    "controller": "com.sayit.ui.control.frame.SearchContactController"
   },
   {
     "name": "EditProfile",

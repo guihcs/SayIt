@@ -6,8 +6,8 @@ import java.util.List;
 
 public class MessageHistory {
 
-    private Contact contact;
-    private List<Message> messageList;
+    private final Contact contact;
+    private final List<Message> messageList;
     private String lastMessage;
     private String lastDateText;
     private Date lastDateTime;
@@ -17,11 +17,6 @@ public class MessageHistory {
         this.contact = contact;
     }
 
-    /**
-     * Adiciona uma mensagem à lista de mensagens.
-     *
-     * @param message
-     */
     public void addMessage(Message message) {
 
         messageList.add(message);

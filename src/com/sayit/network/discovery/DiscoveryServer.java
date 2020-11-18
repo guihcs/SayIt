@@ -14,7 +14,7 @@ public class DiscoveryServer {
     private static final int MULTICAST_PORT = 7777;
     private static final String DISCOVER_MESSAGE_PREFIX = "sayitdiscovery";
     private static final int BUFFER_SIZE = 1024;
-    private final String packetID = String.valueOf((int)(Math.random() * 10000));
+    private final String packetID = String.valueOf((int) (Math.random() * 10000));
 
     private final MulticastSocket multicastSocket;
     private final InetAddress multicastGroup;
@@ -41,10 +41,10 @@ public class DiscoveryServer {
         multicastSocket.send(packet);
     }
 
-    public void startListening(){
+    public void startListening() {
         isDiscovering.set(true);
 
-        while (isDiscovering.get()){
+        while (isDiscovering.get()) {
             try {
                 receiveDiscoveryData();
             } catch (IOException e) {
@@ -80,15 +80,15 @@ public class DiscoveryServer {
     }
 
 
-    public void stopDiscover(){
+    public void stopDiscover() {
         isDiscovering.set(false);
     }
-    
-    public void addListener(DiscoveryCallback callback){
+
+    public void addListener(DiscoveryCallback callback) {
         discoveryListeners.add(callback);
     }
 
-    public void close(){
+    public void close() {
         stopDiscover();
         multicastSocket.close();
     }
