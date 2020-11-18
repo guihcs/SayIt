@@ -17,20 +17,12 @@ public class ContactViewController {
     @FXML
     private Circle roundedImage;
 
-    public String getName() {
-        return nameLabel.getText();
-    }
-
     public void setName(String name) {
         nameLabel.setText(name);
     }
 
     public void setDescription(String description) {
         descLabel.setText(description);
-    }
-
-    public String getTime() {
-        return timeLabel.getText();
     }
 
     public void setTime(String time) {

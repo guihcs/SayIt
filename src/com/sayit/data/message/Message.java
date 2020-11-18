@@ -105,7 +105,7 @@ public class Message implements Rebuildable<Message> {
 
 
     @Override
-    public Message fromRequest(Request request) {
+    public Message fromRequest() {
         return this;
     }
 

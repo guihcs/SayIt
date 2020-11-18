@@ -42,7 +42,7 @@ public class ChatApplication extends Application {
 
 
     public void requestAddContact(Request request) {
-        Contact contact = new Contact().fromRequest(request);
+        Contact contact = new Contact().fromRequest();
         Navigator.of(stage).pushNamedModal(
                 "/contactRequest",
                 400,
@@ -61,17 +61,17 @@ public class ChatApplication extends Application {
     }
 
     public void addContactResult(Request request) {
-        Contact contact = new Contact().fromRequest(request);
+        Contact contact = new Contact().fromRequest();
         contactDao.addContact(contact);
     }
 
     public void addContactToFindResults(Request request) {
-        Contact contact = new Contact().fromRequest(request);
+        Contact contact = new Contact().fromRequest();
         contactDao.addFindContact(contact);
     }
 
     public void addMessage(Request request) {
-        Message message = new Message().fromRequest(request);
+        Message message = new Message().fromRequest();
         message.setReceiverProfile(contactDao.getContact(ContactDao.parseAddress(message.getSenderAddress())));
         message.setMessageDate(new Date());
         contactDao.addMessage(ContactDao.parseAddress(message.getSenderAddress()), message);

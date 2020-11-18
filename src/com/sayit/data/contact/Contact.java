@@ -32,10 +32,6 @@ public class Contact implements Rebuildable<Contact> {
         return id;
     }
 
-    public void setId(long id) {
-        this.id = id;
-    }
-
     public String getName() {
         return name;
     }
@@ -64,7 +60,7 @@ public class Contact implements Rebuildable<Contact> {
     }
 
     @Override
-    public Contact fromRequest(Request request) {
+    public Contact fromRequest() {
         return this;
     }
 
